@@ -4,7 +4,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', config('app.name'))</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Direct link to pre-compiled Vite CSS to avoid XAMPP path and CDN network issues -->
+    <link rel="stylesheet" href="{{ asset('build/assets/app-T3EHGAm9.css') }}">
 </head>
 <body class="min-h-screen bg-slate-50 text-slate-900">
     <div class="min-h-screen bg-gradient-to-b from-sky-50 via-white to-slate-100">
