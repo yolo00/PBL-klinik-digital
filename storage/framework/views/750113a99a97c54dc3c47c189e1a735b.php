@@ -1,8 +1,6 @@
-@extends('layouts.app')
+<?php $__env->startSection('title', 'Masuk | UniHealth'); ?>
 
-@section('title', 'Masuk | UniHealth')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
     <section class="mx-auto max-w-md rounded-[32px] border border-slate-200 bg-white p-8 shadow-sm">
         <div class="space-y-6">
             <div>
@@ -12,7 +10,7 @@
             </div>
 
             <form action="#" method="POST" class="space-y-5">
-                @csrf
+                <?php echo csrf_field(); ?>
                 <div>
                     <label for="email" class="mb-2 block text-sm font-medium text-slate-700">Alamat Email</label>
                     <input id="email" name="email" type="email" placeholder="anda@kampus.ac.id" class="w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 focus:border-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-100" />
@@ -29,13 +27,15 @@
             <div class="space-y-2 text-center">
                 <p class="text-sm text-slate-500">
                     Belum punya akun?
-                    <a href="{{ route('register') }}" class="font-semibold text-emerald-600 hover:text-emerald-700">Daftar sekarang</a>
+                    <a href="<?php echo e(route('register')); ?>" class="font-semibold text-emerald-600 hover:text-emerald-700">Daftar sekarang</a>
                 </p>
                 <p class="text-sm text-slate-500">
                     Punya pertanyaan?
-                    <a href="{{ route('contact') }}" class="font-semibold text-sky-600 hover:text-sky-700">Hubungi kami</a>
+                    <a href="<?php echo e(route('contact')); ?>" class="font-semibold text-sky-600 hover:text-sky-700">Hubungi kami</a>
                 </p>
             </div>
         </div>
     </section>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xampp\htdocs\SEM2\PBL\PBL-klinik-digital\resources\views/login.blade.php ENDPATH**/ ?>

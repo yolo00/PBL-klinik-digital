@@ -1,8 +1,6 @@
-@extends('layouts.app')
+<?php $__env->startSection('title', 'Tentang Kami | UniHealth'); ?>
 
-@section('title', 'Tentang Kami | UniHealth')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
     <section class="rounded-[32px] border border-slate-200 bg-white p-8 shadow-sm">
         <div class="space-y-6">
             <div class="max-w-3xl">
@@ -31,4 +29,6 @@
             </div>
         </div>
     </section>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xampp\htdocs\SEM2\PBL\PBL-klinik-digital\resources\views/about.blade.php ENDPATH**/ ?>

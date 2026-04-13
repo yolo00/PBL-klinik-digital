@@ -1,8 +1,6 @@
-@extends('layouts.app')
+<?php $__env->startSection('title', 'UniHealth | Beranda'); ?>
 
-@section('title', 'UniHealth | Beranda')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
     <section class="rounded-[32px] border border-slate-200 bg-white p-8 shadow-sm">
         <div class="grid gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
             <div class="space-y-6">
@@ -10,8 +8,8 @@
                 <h1 class="text-5xl font-bold tracking-tight text-slate-900">UniHealth menghadirkan pendaftaran klinik dan penjadwalan janji temu ke kampus Anda.</h1>
                 <p class="max-w-2xl text-lg leading-8 text-slate-600">Mahasiswa dapat mendaftar sebagai pasien, menjadwalkan pemeriksaan, dan dokter dapat melihat jadwal harian mereka dalam satu platform klinik digital yang bersih.</p>
                 <div class="flex flex-col gap-4 sm:flex-row">
-                    <a href="{{ route('login') }}" class="inline-flex items-center justify-center rounded-full bg-emerald-600 px-7 py-3 text-base font-semibold text-white shadow-sm hover:bg-emerald-700">Masuk</a>
-                    <a href="{{ route('about') }}" class="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-7 py-3 text-base font-semibold text-slate-900 hover:bg-slate-50">Pelajari Lebih Lanjut</a>
+                    <a href="<?php echo e(route('login')); ?>" class="inline-flex items-center justify-center rounded-full bg-emerald-600 px-7 py-3 text-base font-semibold text-white shadow-sm hover:bg-emerald-700">Masuk</a>
+                    <a href="<?php echo e(route('about')); ?>" class="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-7 py-3 text-base font-semibold text-slate-900 hover:bg-slate-50">Pelajari Lebih Lanjut</a>
                 </div>
             </div>
 
@@ -39,4 +37,6 @@
             </div>
         </div>
     </section>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xampp\htdocs\SEM2\PBL\PBL-klinik-digital\resources\views/welcome.blade.php ENDPATH**/ ?>
