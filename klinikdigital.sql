@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 30, 2026 at 06:47 AM
--- Server version: 10.4.24-MariaDB
--- PHP Version: 8.1.6
+-- Generation Time: Apr 15, 2026 at 01:00 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -29,10 +29,16 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `akun_user` (
   `id_user` int(11) NOT NULL,
-  `username` varchar(24) NOT NULL,
-  `password` varchar(100) NOT NULL,
-  `role` enum('P','D','A') NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `email` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `nama` varchar(100) DEFAULT NULL,
+  `no_hp` varchar(15) DEFAULT NULL,
+  `jenis_kelamin` enum('L','P') DEFAULT NULL,
+  `tgl_lahir` date DEFAULT NULL,
+  `foto_profil` varchar(255) DEFAULT NULL,
+  `role` enum('A','D','P') NOT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -43,10 +49,8 @@ CREATE TABLE `akun_user` (
 CREATE TABLE `dokter` (
   `id_dokter` int(11) NOT NULL,
   `id_user` int(11) NOT NULL,
-  `spesialis` varchar(30) NOT NULL,
-  `nama` varchar(100) NOT NULL,
-  `no_hp` int(15) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `spesialis` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -60,8 +64,9 @@ CREATE TABLE `jadwal` (
   `id_pasien` int(11) DEFAULT NULL,
   `tanggal` date NOT NULL,
   `jam` time NOT NULL,
-  `status` enum('tersedia','terisi','cuti') NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `status` enum('menunggu','dikonfirmasi','selesai','dibatalkan') NOT NULL DEFAULT 'menunggu',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -72,11 +77,8 @@ CREATE TABLE `jadwal` (
 CREATE TABLE `pasien` (
   `id_pasien` int(11) NOT NULL,
   `id_user` int(11) NOT NULL,
-  `username` varchar(26) NOT NULL,
-  `jenis_kelamin` enum('L','P') NOT NULL,
-  `tgl_lahir` date NOT NULL,
-  `no_hp` int(15) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `nimnik` varchar(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -89,8 +91,10 @@ CREATE TABLE `pembayaran` (
   `id_jadwal` int(11) NOT NULL,
   `jumlah` decimal(10,2) NOT NULL,
   `metode` enum('cash','qris') NOT NULL,
-  `status` enum('pending','lunas','batal') NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `status` enum('pending','lunas','batal') NOT NULL DEFAULT 'pending',
+  `nomor_struk` varchar(50) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -101,9 +105,11 @@ CREATE TABLE `pembayaran` (
 CREATE TABLE `rekam_medis` (
   `id_rekam` int(11) NOT NULL,
   `id_jadwal` int(11) NOT NULL,
-  `diagnosa` text NOT NULL,
-  `catatan` text DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `diagnosa` text DEFAULT NULL,
+  `catatan` text DEFAULT NULL,
+  `keluhan` text DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -115,8 +121,9 @@ CREATE TABLE `resep` (
   `id_resep` int(11) NOT NULL,
   `id_rekam` int(11) NOT NULL,
   `obat` varchar(100) NOT NULL,
-  `dosis` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `dosis` varchar(50) DEFAULT NULL,
+  `aturan_pakai` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Indexes for dumped tables
@@ -140,6 +147,7 @@ ALTER TABLE `dokter`
 --
 ALTER TABLE `jadwal`
   ADD PRIMARY KEY (`id_jadwal`),
+  ADD UNIQUE KEY `jadwai_unique` (`id_dokter`,`tanggal`,`jam`),
   ADD KEY `id_dokter` (`id_dokter`,`id_pasien`);
 
 --
