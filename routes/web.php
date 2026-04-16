@@ -18,3 +18,7 @@ Route::view('/about', 'about')->name('about');
 Route::view('/login', 'login')->name('login');
 Route::view('/register', 'register')->name('register');
 Route::view('/contact', 'contact')->name('contact');
+
+Route::get('/dashboard-dokter', function () {
+    return view('dashboard_dokter'); 
+});
