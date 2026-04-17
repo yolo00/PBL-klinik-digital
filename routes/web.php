@@ -13,8 +13,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::view('/', 'welcome')->name('home');
-Route::view('/about', 'about')->name('about');
+Route::view('/', 'home')->name('home');
 Route::view('/login', 'login')->name('login');
 Route::view('/register', 'register')->name('register');
-Route::view('/contact', 'contact')->name('contact');
+Route::post('/register', [\App\Http\Controllers\RegisterController::class, 'submit'])->name('register.submit');
+
+// Admin Routes
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::view('/dashboard', 'admin.dashboard')->name('dashboard');
+    Route::view('/pasien', 'admin.pasien')->name('pasien');
+    Route::view('/dokter', 'admin.dokter')->name('dokter');
+    Route::view('/jadwal', 'admin.jadwal')->name('jadwal');
+    Route::view('/rekam-medis', 'admin.rekam-medis')->name('rekam-medis');
+    Route::view('/pembayaran', 'admin.pembayaran')->name('pembayaran');
+});
