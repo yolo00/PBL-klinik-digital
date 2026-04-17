@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'home')->name('home');
 Route::view('/login', 'login')->name('login');
+Route::view('/about', 'about')->name('about'); //incase kalian belum up to date
+Route::view('/contact', 'contact')->name('contact'); //incase kalian belum up to date
 Route::view('/register', 'register')->name('register');
 Route::post('/register', [\App\Http\Controllers\RegisterController::class, 'submit'])->name('register.submit');
 
@@ -26,4 +28,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::view('/jadwal', 'admin.jadwal')->name('jadwal');
     Route::view('/rekam-medis', 'admin.rekam-medis')->name('rekam-medis');
     Route::view('/pembayaran', 'admin.pembayaran')->name('pembayaran');
+});
+
+//Rout Dokter
+Route::get('/dashboard-dokter', function () {
+    return view('dashboard_dokter'); 
 });
