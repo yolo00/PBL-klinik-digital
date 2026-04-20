@@ -30,7 +30,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::view('/pembayaran', 'admin.pembayaran')->name('pembayaran');
 });
 
-//Rout Dokter
-Route::get('/dashboard-dokter', function () {
-    return view('dashboard_dokter'); 
+//Route Dokter
+Route::prefix('dokter')->name('dokter.')->group(function () {
+    // 'dokter.dashboard-dokter' merujuk ke folder 'dokter' dan file 'dashboard-dokter'
+    Route::view('/dashboard-dokter', 'dokter.dashboard-dokter')->name('dashboard-dokter');
 });
