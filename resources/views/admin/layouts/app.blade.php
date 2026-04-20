@@ -10,6 +10,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Outfit', sans-serif; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.98) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
     </style>
 </head>
 <body class="min-h-screen bg-slate-50 text-slate-800 flex">
@@ -60,21 +67,31 @@
 
     <!-- Main Content -->
     <div class="flex-1 flex flex-col min-h-screen overflow-hidden relative">
-        <!-- Topbar -->
         <header class="h-[80px] flex justify-end items-center px-10 shrink-0 sticky top-0 z-20">
-            <div class="flex items-center gap-3 cursor-pointer">
-                <div class="text-right">
-                    <p class="text-[14px] font-bold text-slate-800 hover:text-emerald-600 transition">Michael Admin</p>
-                    <p class="text-[13px] text-emerald-600 font-semibold">Admin</p>
+            <div class="relative group">
+                <div class="flex items-center gap-3 cursor-pointer">
+                    <div class="text-right">
+                        <p class="text-[14px] font-bold text-slate-800 group-hover:text-emerald-600 transition">Michael Admin</p>
+                        <p class="text-[13px] text-emerald-600 font-semibold">Admin</p>
+                    </div>
+                    <img src="https://placehold.co/100x100/059669/ffffff?text=MA" alt="Admin Profile" class="w-10 h-10 rounded-full shadow-sm group-hover:ring-2 ring-emerald-500/30 transition">
+                    <svg class="w-4 h-4 text-slate-500 ml-1 transition group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                 </div>
-                <img src="https://placehold.co/100x100/059669/ffffff?text=MA" alt="Admin Profile" class="w-10 h-10 rounded-full shadow-sm hover:ring-2 ring-emerald-500/30 transition">
-                <svg class="w-4 h-4 text-slate-500 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                
+                <!-- Dropdown Menu -->
+                <div class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-slate-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                    <div class="py-2 flex flex-col">
+                        <a href="#" class="px-4 py-2 text-sm font-medium text-slate-700 hover:bg-emerald-50 hover:text-emerald-600 transition">See Profile</a>
+                        <div class="border-t border-slate-100 my-1"></div>
+                        <a href="{{ route('home') }}" class="px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 transition">Logout</a>
+                    </div>
+                </div>
             </div>
         </header>
 
         <!-- Page Content -->
         <main class="flex-1 overflow-x-hidden overflow-y-auto bg-slate-50 p-8 md:p-10 relative">
-            <div class="relative z-10 w-full max-w-[1200px] mx-auto">
+            <div class="relative z-10 w-full max-w-[1200px] mx-auto animate-fade-in">
                 @yield('content')
             </div>
         </main>
