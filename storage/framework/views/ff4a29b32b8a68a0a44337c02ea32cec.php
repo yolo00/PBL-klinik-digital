@@ -14,6 +14,11 @@
 </head>
 <body class="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-emerald-100 flex items-center justify-center p-6 py-12 bg-fixed">
     <div class="w-full max-w-[650px] rounded-[40px] bg-white/90 backdrop-blur-xl p-10 px-12 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white relative">
+        <!-- Back Button -->
+        <a href="/" class="absolute top-8 left-8 flex items-center justify-center w-10 h-10 rounded-full bg-slate-50 text-slate-500 hover:bg-emerald-50 hover:text-emerald-600 transition-all border border-slate-200 hover:border-emerald-200 shadow-sm group" title="Kembali ke Beranda">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="group-hover:-translate-x-0.5 transition-transform"><path d="m15 18-6-6 6-6"/></svg>
+        </a>
+
         <div class="flex justify-center mb-4">
             <img src="https://placehold.co/100x100/059669/ffffff?text=U" alt="UniHealth Logo" class="w-14 h-14 rounded-[18px] shadow-sm">
         </div>
@@ -38,25 +43,25 @@
             <div class="grid grid-cols-2 gap-5">
                 <div class="col-span-2 md:col-span-1">
                     <label class="mb-1.5 block text-[15px] font-semibold text-slate-700">Nama Lengkap</label>
-                    <input type="text" name="nama" value="<?php echo e(old('nama')); ?>" required placeholder="Masukkan nama" class="w-full rounded-[20px] border border-slate-200 bg-slate-50 px-5 py-3.5 text-[15px] text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:bg-white transition-all shadow-sm" />
+                    <input type="text" name="nama" value="<?php echo e(old('nama')); ?>" required placeholder="Masukkan nama" class="w-full rounded-[20px] border border-slate-200 bg-slate-50 px-5 py-3.5 text-[15px] text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:bg-white transition-all shadow-sm focus:shadow-md focus:shadow-emerald-500/30" />
                 </div>
 
                 <div class="col-span-2 md:col-span-1">
                     <label class="mb-1.5 block text-[15px] font-semibold text-slate-700">Email</label>
-                    <input type="email" name="email" value="<?php echo e(old('email')); ?>" required placeholder="Masukkan email" class="w-full rounded-[20px] border border-slate-200 bg-slate-50 px-5 py-3.5 text-[15px] text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:bg-white transition-all shadow-sm" />
+                    <input type="email" name="email" value="<?php echo e(old('email')); ?>" required placeholder="Masukkan email" class="w-full rounded-[20px] border border-slate-200 bg-slate-50 px-5 py-3.5 text-[15px] text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:bg-white transition-all shadow-sm focus:shadow-md focus:shadow-emerald-500/30" />
                 </div>
             </div>
 
             <div class="grid grid-cols-2 gap-5">
                 <div class="col-span-2 md:col-span-1">
                     <label class="mb-1.5 block text-[15px] font-semibold text-slate-700">NIM/NIK</label>
-                    <input type="text" name="nimnik" value="<?php echo e(old('nimnik')); ?>" required placeholder="Masukkan NIM/NIK" class="w-full rounded-[20px] border border-slate-200 bg-slate-50 px-5 py-3.5 text-[15px] text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:bg-white transition-all shadow-sm" />
+                    <input type="text" name="nimnik" value="<?php echo e(old('nimnik')); ?>" required placeholder="Masukkan NIM/NIK" class="w-full rounded-[20px] border border-slate-200 bg-slate-50 px-5 py-3.5 text-[15px] text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:bg-white transition-all shadow-sm focus:shadow-md focus:shadow-emerald-500/30" />
                 </div>
 
                 <div class="col-span-2 md:col-span-1">
                     <label class="mb-1.5 block text-[15px] font-semibold text-slate-700">Tanggal Lahir</label>
                     <div class="relative">
-                        <input type="date" name="tgl_lahir" value="<?php echo e(old('tgl_lahir')); ?>" required class="w-full rounded-[20px] border border-slate-200 bg-slate-50 px-5 py-3.5 text-[15px] text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:bg-white transition-all shadow-sm cursor-pointer" style="color-scheme: light;" />
+                        <input type="date" name="tgl_lahir" value="<?php echo e(old('tgl_lahir')); ?>" required class="w-full rounded-[20px] border border-slate-200 bg-slate-50 px-5 py-3.5 text-[15px] text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:bg-white transition-all shadow-sm focus:shadow-md focus:shadow-emerald-500/30 cursor-pointer" style="color-scheme: light;" />
                     </div>
                 </div>
             </div>
@@ -84,7 +89,7 @@
 
                 <div class="col-span-2 md:col-span-1">
                     <label class="mb-1.5 block text-[15px] font-semibold text-slate-700">Nomor Kontak</label>
-                    <input type="text" name="no_hp" value="<?php echo e(old('no_hp')); ?>" required placeholder="Masukkan nomor HP" class="w-full rounded-[20px] border border-slate-200 bg-slate-50 px-5 py-3.5 text-[15px] text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:bg-white transition-all shadow-sm" />
+                    <input type="text" name="no_hp" value="<?php echo e(old('no_hp')); ?>" required placeholder="Masukkan nomor HP" class="w-full rounded-[20px] border border-slate-200 bg-slate-50 px-5 py-3.5 text-[15px] text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:bg-white transition-all shadow-sm focus:shadow-md focus:shadow-emerald-500/30" />
                 </div>
             </div>
 
@@ -92,7 +97,7 @@
                 <div class="col-span-2 md:col-span-1">
                     <label class="mb-1.5 block text-[15px] font-semibold text-slate-700">Kata Sandi</label>
                     <div class="relative">
-                        <input type="password" name="password" required placeholder="Buat kata sandi anda" class="w-full rounded-[20px] border border-slate-200 bg-slate-50 px-5 py-3.5 text-[15px] text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:bg-white transition-all shadow-sm" />
+                        <input type="password" name="password" required placeholder="Buat kata sandi anda" class="w-full rounded-[20px] border border-slate-200 bg-slate-50 px-5 py-3.5 text-[15px] text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:bg-white transition-all shadow-sm focus:shadow-md focus:shadow-emerald-500/30" />
                         <button type="button" class="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-emerald-600 transition-colors" onclick="const p=this.previousElementSibling; p.type=p.type==='password'?'text':'password';">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
                         </button>
@@ -102,7 +107,7 @@
                 <div class="col-span-2 md:col-span-1">
                     <label class="mb-1.5 block text-[15px] font-semibold text-slate-700">Konfirmasi Sandi</label>
                     <div class="relative">
-                        <input type="password" name="password_confirmation" required placeholder="Ulangi kata sandi" class="w-full rounded-[20px] border border-slate-200 bg-slate-50 px-5 py-3.5 text-[15px] text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:bg-white transition-all shadow-sm" />
+                        <input type="password" name="password_confirmation" required placeholder="Ulangi kata sandi" class="w-full rounded-[20px] border border-slate-200 bg-slate-50 px-5 py-3.5 text-[15px] text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:bg-white transition-all shadow-sm focus:shadow-md focus:shadow-emerald-500/30" />
                         <button type="button" class="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-emerald-600 transition-colors" onclick="const p=this.previousElementSibling; p.type=p.type==='password'?'text':'password';">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
                         </button>
