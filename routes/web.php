@@ -34,3 +34,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
 Route::get('/dashboard-dokter', function () {
     return view('dashboard_dokter'); 
 });
+
+
+//Routes Pasien
+Route::prefix('pasien')->name('pasien.')->group(function () {
+    Route::get('/dashboard', function () {
+        return view('pasien.dashboard');
+    })->name('dashboard');
+    Route::get('/buat-janji', function () {
+        return view('pasien.buat-janji');
+    })->name('buat-janji');
+});
