@@ -5,7 +5,13 @@
 @section('content')
 <div class="bg-gray-200/50 rounded-[32px] overflow-hidden p-8">
     
-    <h2 class="text-[20px] font-bold text-slate-800 mb-6">Cari Data Dokter</h2>
+    <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+        <h2 class="text-[20px] font-bold text-slate-800">Cari Data Dokter</h2>
+        <button class="px-5 py-2.5 bg-emerald-500 text-white font-medium rounded-[12px] text-[14px] hover:bg-emerald-600 transition-colors shadow-sm flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+            Tambah Data
+        </button>
+    </div>
 
     <!-- Filters -->
     <div class="flex flex-wrap gap-4 mb-4">

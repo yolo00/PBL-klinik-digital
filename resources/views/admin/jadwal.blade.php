@@ -5,9 +5,15 @@
 @section('content')
 <div class="bg-gray-200/50 rounded-[32px] overflow-hidden p-8">
     
-    <h2 class="text-[20px] font-bold text-slate-800 mb-6">Cari Data Jadwal Konsultasi</h2>
+    <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+        <h2 class="text-[20px] font-bold text-slate-800">Cari Data Jadwal Konsultasi</h2>
+        <button class="px-5 py-2.5 bg-emerald-500 text-white font-medium rounded-[12px] text-[14px] hover:bg-emerald-600 transition-colors shadow-sm flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+            Tambah Data
+        </button>
+    </div>
 
-    <!-- Filters -->
+    <!-- Search -->
     <div class="flex flex-wrap gap-4 mb-4">
         <input type="text" placeholder="Cari" class="flex-1 min-w-[200px] max-w-[600px] px-5 py-3 bg-white border border-slate-200 rounded-[12px] text-[14px] focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all shadow-[0_2px_10px_rgb(0,0,0,0.02)]">
         <select class="px-5 py-3 bg-gray-400 text-white font-medium border-0 rounded-[12px] text-[14px] focus:outline-none shadow-sm min-w-[150px] appearance-none cursor-pointer">
@@ -19,7 +25,7 @@
         <button class="px-6 py-3 bg-gray-400 text-white font-medium rounded-[12px] text-[14px] hover:bg-gray-500 transition-colors shadow-sm">Reset Filter</button>
     </div>
 
-    <!-- Sub-filter -->
+    <!-- Sub filter -->
     <div class="mb-6">
         <select class="px-5 py-3 bg-gray-400 text-white font-medium border-0 rounded-[12px] text-[14px] focus:outline-none shadow-sm min-w-[200px] appearance-none cursor-pointer">
             <option>Sortir : terbaru</option>

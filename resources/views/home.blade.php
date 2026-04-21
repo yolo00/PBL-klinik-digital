@@ -19,7 +19,7 @@
         <div class="flex items-center justify-between px-8 py-4 w-full max-w-[1500px] mx-auto">
             <!-- Logo area -->
             <a href="/" class="flex items-center gap-3 md:gap-4 group">
-                <img src="https://placehold.co/100x100/059669/ffffff?text=U" alt="UniHealth Logo" class="w-11 h-11 md:w-[52px] md:h-[52px] rounded-xl shadow-sm border border-emerald-100 group-hover:scale-105 transition-transform">
+                <img src="{{ asset('images/logo.png') }}" alt="UniHealth Logo" class="w-11 h-11 md:w-[52px] md:h-[52px] rounded-xl shadow-sm border border-emerald-100 group-hover:scale-105 group-hover:-rotate-3 transition-transform duration-300">
                 <span class="text-[22px] md:text-[26px] font-bold tracking-tight text-emerald-800">UniHealth</span>
             </a>
             
@@ -27,7 +27,7 @@
             <nav class="hidden md:flex items-center gap-8">
                 
                 <div class="flex items-center gap-3 ml-4">
-                    <a href="/register" class="text-[15px] font-bold border border-emerald-200 text-emerald-700 bg-emerald-50 px-6 py-2.5 rounded-full hover:bg-emerald-100 transition-all">Daftar</a>
+                    <a href="/register" class="text-[15px] font-bold border border-emerald-200 text-emerald-700 bg-emerald-50 px-6 py-2.5 rounded-full hover:bg-emerald-600 hover:text-white hover:border-emerald-600 shadow-sm shadow-emerald-500/20 hover:shadow-lg hover:-translate-y-0.5 transition-all">Daftar</a>
                     <a href="/login" class="text-[15px] font-bold bg-emerald-600 text-white px-6 py-2.5 rounded-full hover:bg-emerald-700 shadow-md shadow-emerald-500/25 hover:shadow-lg hover:-translate-y-0.5 transition-all">Masuk</a>
                 </div>
             </nav>
@@ -53,8 +53,8 @@
                     <h1 class="text-[40px] md:text-[56px] font-bold text-slate-800 leading-[1.1] tracking-tight">Semua Layanan Klinik<br><span class="text-emerald-600">Kampus, Satu Tempat</span></h1>
                     <p class="text-[18px] text-slate-600 pt-2 leading-relaxed max-w-[550px] font-medium">UniHealth menghadirkan pengalaman pendaftaran dan penjadwalan konsultasi klinik yang mudah dan revolusioner di dalam lingkungan kampus.</p>
                     <div class="pt-6 flex flex-col sm:flex-row gap-4">
-                        <button class="bg-emerald-600 text-white px-8 py-4 rounded-full font-bold text-[16px] hover:bg-emerald-700 shadow-lg shadow-emerald-500/30 transform hover:-translate-y-0.5 transition-all">Mulai Konsultasi</button>
-                        <button class="bg-white border-2 border-emerald-100 text-emerald-700 px-8 py-4 rounded-full font-bold text-[16px] hover:bg-emerald-50 transition-all">Pelajari Lebih Lanjut</button>
+                        <button class="bg-emerald-600 text-white px-8 py-4 rounded-full font-bold text-[16px] hover:bg-emerald-700 shadow-lg shadow-emerald-500/30 transform hover:-translate-y-0.5 transition-all duration-300">Mulai Konsultasi</button>
+                        <button class="bg-white border-2 border-emerald-100 text-emerald-700 px-8 py-4 rounded-full font-bold text-[16px] hover:bg-emerald-600 hover:text-white hover:border-emerald-600 shadow-sm shadow-emerald-500/20 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 cursor-pointer">Pelajari Lebih Lanjut</button>
                     </div>
                 </div>
                 

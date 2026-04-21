@@ -7,6 +7,15 @@
 
     <!-- Direct link to pre-compiled Vite CSS to avoid XAMPP path and CDN network issues -->
     <link rel="stylesheet" href="{{ asset('build/assets/app-T3EHGAm9.css') }}">
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.98) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+    </style>
 </head>
 <body class="min-h-screen bg-slate-50 text-slate-900">
     <div class="min-h-screen bg-gradient-to-b from-sky-50 via-white to-slate-100">
@@ -29,7 +38,7 @@
             </div>
         </header>
 
-        <main class="mx-auto max-w-7xl px-6 py-10">
+        <main class="mx-auto max-w-7xl px-6 py-10 animate-fade-in">
             @yield('content')
         </main>
     </div>
