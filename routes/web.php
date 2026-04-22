@@ -32,17 +32,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 //Route Dokter
 Route::prefix('dokter')->name('dokter.')->group(function () {
-    // 'dokter.dashboard-dokter' merujuk ke folder 'dokter' dan file 'dashboard-dokter'
     Route::view('/dashboard-dokter', 'dokter.dashboard-dokter')->name('dashboard-dokter');
 });
 
 
 //Routes Pasien
 Route::prefix('pasien')->name('pasien.')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('pasien.dashboard');
-    })->name('dashboard');
-    Route::get('/buat-janji', function () {
-        return view('pasien.buat-janji');
-    })->name('buat-janji');
+    Route::get('/dashboard', function () {return view('pasien.dashboard');})->name('dashboard');
+    Route::get('/buat-janji', function () {return view('pasien.buat-janji');})->name('buat-janji');
 });

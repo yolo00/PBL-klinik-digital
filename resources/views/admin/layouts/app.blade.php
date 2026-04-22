@@ -21,43 +21,43 @@
 </head>
 <body class="min-h-screen bg-slate-50 text-slate-800 flex">
     <!-- Sidebar -->
-    <aside class="w-[280px] bg-emerald-950 text-emerald-50 h-screen sticky top-0 flex flex-col shrink-0">
-        <a href="{{ route('admin.dashboard') }}" class="px-8 py-8 flex items-center gap-4 border-b border-emerald-900/50 hover:bg-emerald-900/20 transition">
-            <img src="https://placehold.co/100x100/10b981/ffffff?text=U" alt="Logo" class="w-11 h-11 rounded-[14px]">
+    <aside class="w-[280px] bg-slate-950 text-slate-50 h-screen sticky top-0 flex flex-col shrink-0">
+        <a href="{{ route('admin.dashboard') }}" class="px-8 py-8 flex items-center gap-4 border-b border-slate-900/50 hover:bg-slate-900/20 transition">
+            <img src="https://placehold.co/100x100/64748b/ffffff?text=U" alt="Logo" class="w-11 h-11 rounded-[14px]">
             <span class="font-bold text-[24px] text-white">UniHealth</span>
         </a>
         
         <div class="px-0 py-8 flex-1 overflow-y-auto w-full">
             <nav class="space-y-1 w-full flex flex-col">
-                <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-4 px-6 py-4 transition-all {{ request()->routeIs('admin.dashboard') ? 'bg-emerald-800 text-white font-bold' : 'text-emerald-100/70 hover:bg-emerald-900/50 hover:text-white font-medium' }}">
+                <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-4 px-6 py-4 transition-all {{ request()->routeIs('admin.dashboard') ? 'bg-slate-800 text-white font-bold' : 'text-slate-100/70 hover:bg-slate-900/50 hover:text-white font-medium' }}">
                     Dashboard
                 </a>
                 
-                <div class="pt-4 pb-2 px-6 flex items-center justify-between text-emerald-500/70">
+                <div class="pt-4 pb-2 px-6 flex items-center justify-between text-slate-500/70">
                     <span class="text-[14px] font-bold">Manajemen</span>
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                 </div>
                 
                 <div class="pl-4 pr-0 flex flex-col">
-                    <a href="{{ route('admin.pasien') }}" class="w-full flex items-center gap-4 pl-6 pr-4 py-4 transition-all {{ request()->routeIs('admin.pasien') ? 'bg-emerald-800/80 text-white font-bold' : 'text-emerald-100/70 hover:bg-emerald-900/40 hover:text-white font-medium' }}">
+                    <a href="{{ route('admin.pasien') }}" class="w-full flex items-center gap-4 pl-6 pr-4 py-4 transition-all {{ request()->routeIs('admin.pasien') ? 'bg-slate-800/80 text-white font-bold' : 'text-slate-100/70 hover:bg-slate-900/40 hover:text-white font-medium' }}">
                         Data Pasien
                     </a>
-                    <a href="{{ route('admin.dokter') }}" class="w-full flex items-center gap-4 pl-6 pr-4 py-4 transition-all {{ request()->routeIs('admin.dokter') ? 'bg-emerald-800/80 text-white font-bold' : 'text-emerald-100/70 hover:bg-emerald-900/40 hover:text-white font-medium' }}">
+                    <a href="{{ route('admin.dokter') }}" class="w-full flex items-center gap-4 pl-6 pr-4 py-4 transition-all {{ request()->routeIs('admin.dokter') ? 'bg-slate-800/80 text-white font-bold' : 'text-slate-100/70 hover:bg-slate-900/40 hover:text-white font-medium' }}">
                         Data Dokter
                     </a>
-                    <a href="{{ route('admin.jadwal') }}" class="w-full flex items-center gap-4 pl-6 pr-4 py-4 transition-all {{ request()->routeIs('admin.jadwal') ? 'bg-emerald-800/80 text-white font-bold' : 'text-emerald-100/70 hover:bg-emerald-900/40 hover:text-white font-medium' }}">
+                    <a href="{{ route('admin.jadwal') }}" class="w-full flex items-center gap-4 pl-6 pr-4 py-4 transition-all {{ request()->routeIs('admin.jadwal') ? 'bg-slate-800/80 text-white font-bold' : 'text-slate-100/70 hover:bg-slate-900/40 hover:text-white font-medium' }}">
                         Data Jadwal
                     </a>
-                    <a href="{{ route('admin.rekam-medis') }}" class="w-full flex items-center gap-4 pl-6 pr-4 py-4 transition-all {{ request()->routeIs('admin.rekam-medis') ? 'bg-emerald-800/80 text-white font-bold' : 'text-emerald-100/70 hover:bg-emerald-900/40 hover:text-white font-medium' }}">
+                    <a href="{{ route('admin.rekam-medis') }}" class="w-full flex items-center gap-4 pl-6 pr-4 py-4 transition-all {{ request()->routeIs('admin.rekam-medis') ? 'bg-slate-800/80 text-white font-bold' : 'text-slate-100/70 hover:bg-slate-900/40 hover:text-white font-medium' }}">
                         Data Rekam Medis
                     </a>
-                    <a href="{{ route('admin.pembayaran') }}" class="w-full flex items-center gap-4 pl-6 pr-4 py-4 transition-all {{ request()->routeIs('admin.pembayaran') ? 'bg-emerald-800/80 text-white font-bold' : 'text-emerald-100/70 hover:bg-emerald-900/40 hover:text-white font-medium' }}">
+                    <a href="{{ route('admin.pembayaran') }}" class="w-full flex items-center gap-4 pl-6 pr-4 py-4 transition-all {{ request()->routeIs('admin.pembayaran') ? 'bg-slate-800/80 text-white font-bold' : 'text-slate-100/70 hover:bg-slate-900/40 hover:text-white font-medium' }}">
                         Data Pembayaran
                     </a>
                 </div>
 
                 <div class="pt-4">
-                    <a href="#" class="flex items-center gap-4 px-6 py-4 transition-all text-emerald-100/70 hover:bg-emerald-900/50 hover:text-white font-medium">
+                    <a href="#" class="flex items-center gap-4 px-6 py-4 transition-all text-slate-100/70 hover:bg-slate-900/50 hover:text-white font-medium">
                         Pengaturan Sistem
                     </a>
                 </div>
@@ -71,17 +71,17 @@
             <div class="relative group">
                 <div class="flex items-center gap-3 cursor-pointer">
                     <div class="text-right">
-                        <p class="text-[14px] font-bold text-slate-800 group-hover:text-emerald-600 transition">Michael Admin</p>
-                        <p class="text-[13px] text-emerald-600 font-semibold">Admin</p>
+                        <p class="text-[14px] font-bold text-slate-800 group-hover:text-slate-600 transition">Michael Admin</p>
+                        <p class="text-[13px] text-slate-600 font-semibold">Admin</p>
                     </div>
-                    <img src="https://placehold.co/100x100/059669/ffffff?text=MA" alt="Admin Profile" class="w-10 h-10 rounded-full shadow-sm group-hover:ring-2 ring-emerald-500/30 transition">
+                    <img src="https://placehold.co/100x100/475569/ffffff?text=MA" alt="Admin Profile" class="w-10 h-10 rounded-full shadow-sm group-hover:ring-2 ring-slate-500/30 transition">
                     <svg class="w-4 h-4 text-slate-500 ml-1 transition group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                 </div>
                 
                 <!-- Dropdown Menu -->
                 <div class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-slate-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
                     <div class="py-2 flex flex-col">
-                        <a href="#" class="px-4 py-2 text-sm font-medium text-slate-700 hover:bg-emerald-50 hover:text-emerald-600 transition">See Profile</a>
+                        <a href="#" class="px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 hover:text-slate-600 transition">See Profile</a>
                         <div class="border-t border-slate-100 my-1"></div>
                         <a href="{{ route('home') }}" class="px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 transition">Logout</a>
                     </div>
