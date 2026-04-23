@@ -39,26 +39,26 @@
                 </div>
                 
                 <div class="pl-4 pr-0 flex flex-col">
-                    <a href="{{ route('admin.pasien') }}" class="w-full flex items-center gap-4 pl-6 pr-4 py-4 transition-all {{ request()->routeIs('admin.pasien') ? 'bg-slate-800/80 text-white font-bold' : 'text-slate-100/70 hover:bg-slate-900/40 hover:text-white font-medium' }}">
+                    <a href="{{ route('admin.pasien.index') }}" class="w-full flex items-center gap-4 pl-6 pr-4 py-4 transition-all {{ request()->routeIs('admin.pasien') ? 'bg-slate-800/80 text-white font-bold' : 'text-slate-100/70 hover:bg-slate-900/40 hover:text-white font-medium' }}">
                         Data Pasien
                     </a>
-                    <a href="{{ route('admin.dokter') }}" class="w-full flex items-center gap-4 pl-6 pr-4 py-4 transition-all {{ request()->routeIs('admin.dokter') ? 'bg-slate-800/80 text-white font-bold' : 'text-slate-100/70 hover:bg-slate-900/40 hover:text-white font-medium' }}">
+                    <a href="{{ route('admin.dokter.index') }}" class="w-full flex items-center gap-4 pl-6 pr-4 py-4 transition-all {{ request()->routeIs('admin.dokter') ? 'bg-slate-800/80 text-white font-bold' : 'text-slate-100/70 hover:bg-slate-900/40 hover:text-white font-medium' }}">
                         Data Dokter
                     </a>
-                    <a href="{{ route('admin.jadwal') }}" class="w-full flex items-center gap-4 pl-6 pr-4 py-4 transition-all {{ request()->routeIs('admin.jadwal') ? 'bg-slate-800/80 text-white font-bold' : 'text-slate-100/70 hover:bg-slate-900/40 hover:text-white font-medium' }}">
+                    <a href="{{ route('admin.jadwal.index') }}" class="w-full flex items-center gap-4 pl-6 pr-4 py-4 transition-all {{ request()->routeIs('admin.jadwal') ? 'bg-slate-800/80 text-white font-bold' : 'text-slate-100/70 hover:bg-slate-900/40 hover:text-white font-medium' }}">
                         Data Jadwal
                     </a>
-                    <a href="{{ route('admin.rekam-medis') }}" class="w-full flex items-center gap-4 pl-6 pr-4 py-4 transition-all {{ request()->routeIs('admin.rekam-medis') ? 'bg-slate-800/80 text-white font-bold' : 'text-slate-100/70 hover:bg-slate-900/40 hover:text-white font-medium' }}">
+                    <a href="{{ route('admin.rekam-medis.index') }}" class="w-full flex items-center gap-4 pl-6 pr-4 py-4 transition-all {{ request()->routeIs('admin.rekam-medis') ? 'bg-slate-800/80 text-white font-bold' : 'text-slate-100/70 hover:bg-slate-900/40 hover:text-white font-medium' }}">
                         Data Rekam Medis
                     </a>
-                    <a href="{{ route('admin.pembayaran') }}" class="w-full flex items-center gap-4 pl-6 pr-4 py-4 transition-all {{ request()->routeIs('admin.pembayaran') ? 'bg-slate-800/80 text-white font-bold' : 'text-slate-100/70 hover:bg-slate-900/40 hover:text-white font-medium' }}">
+                    <a href="{{ route('admin.pembayaran.index') }}" class="w-full flex items-center gap-4 pl-6 pr-4 py-4 transition-all {{ request()->routeIs('admin.pembayaran') ? 'bg-slate-800/80 text-white font-bold' : 'text-slate-100/70 hover:bg-slate-900/40 hover:text-white font-medium' }}">
                         Data Pembayaran
                     </a>
                 </div>
 
                 <div class="pt-4">
-                    <a href="#" class="flex items-center gap-4 px-6 py-4 transition-all text-slate-100/70 hover:bg-slate-900/50 hover:text-white font-medium">
-                        Pengaturan Sistem
+                    <a href="{{ route('admin.jadwal-sistem') }}" class="flex items-center gap-4 px-6 py-4 transition-all {{ request()->routeIs('admin.jadwal-sistem') ? 'bg-slate-800/80 text-white font-bold' : 'text-slate-100/70 hover:bg-slate-900/50 hover:text-white font-medium' }}">
+                        Jadwal Sistem
                     </a>
                 </div>
             </nav>
@@ -81,9 +81,10 @@
                 <!-- Dropdown Menu -->
                 <div class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-slate-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
                     <div class="py-2 flex flex-col">
-                        <a href="#" class="px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 hover:text-slate-600 transition">See Profile</a>
-                        <div class="border-t border-slate-100 my-1"></div>
-                        <a href="{{ route('home') }}" class="px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 transition">Logout</a>
+                        <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 transition">Logout</a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+                            @csrf
+                        </form>
                     </div>
                 </div>
             </div>
@@ -92,6 +93,21 @@
         <!-- Page Content -->
         <main class="flex-1 overflow-x-hidden overflow-y-auto bg-slate-50 p-8 md:p-10 relative">
             <div class="relative z-10 w-full max-w-[1200px] mx-auto animate-fade-in">
+
+                {{-- Flash Messages --}}
+                @if(session('success'))
+                    <div class="mb-6 px-5 py-4 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-[14px] text-[14px] font-medium flex items-center gap-3">
+                        <svg class="w-5 h-5 text-emerald-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                        {{ session('success') }}
+                    </div>
+                @endif
+                @if(session('error'))
+                    <div class="mb-6 px-5 py-4 bg-rose-50 border border-rose-200 text-rose-800 rounded-[14px] text-[14px] font-medium flex items-center gap-3">
+                        <svg class="w-5 h-5 text-rose-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                        {{ session('error') }}
+                    </div>
+                @endif
+
                 @yield('content')
             </div>
         </main>

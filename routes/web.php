@@ -21,13 +21,38 @@ Route::view('/register', 'register')->name('register');
 Route::post('/register', [\App\Http\Controllers\RegisterController::class, 'submit'])->name('register.submit');
 
 // Admin Routes
+use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\AdminPasienController;
+use App\Http\Controllers\Admin\AdminDokterController;
+use App\Http\Controllers\Admin\AdminJadwalController;
+use App\Http\Controllers\Admin\AdminRekamMedisController;
+use App\Http\Controllers\Admin\AdminPembayaranController;
+use App\Http\Controllers\Admin\AdminJadwalSistemController;
+
 Route::prefix('admin')->name('admin.')->group(function () {
-    Route::view('/dashboard', 'admin.dashboard')->name('dashboard');
-    Route::view('/pasien', 'admin.pasien')->name('pasien');
-    Route::view('/dokter', 'admin.dokter')->name('dokter');
-    Route::view('/jadwal', 'admin.jadwal')->name('jadwal');
-    Route::view('/rekam-medis', 'admin.rekam-medis')->name('rekam-medis');
-    Route::view('/pembayaran', 'admin.pembayaran')->name('pembayaran');
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+
+    Route::resource('pasien', AdminPasienController::class)
+        ->only(['index', 'create', 'store', 'show', 'edit']);
+
+    Route::resource('dokter', AdminDokterController::class)
+        ->only(['index', 'create', 'store', 'show', 'edit']);
+
+    Route::resource('jadwal', AdminJadwalController::class)
+        ->only(['index', 'create', 'store', 'show', 'edit']);
+
+    Route::resource('rekam-medis', AdminRekamMedisController::class)
+        ->only(['index', 'create', 'store', 'show', 'edit'])
+        ->parameters(['rekam-medis' => 'rekamMedis']);
+
+    Route::resource('pembayaran', AdminPembayaranController::class)
+        ->only(['index', 'create', 'store', 'show', 'edit']);
+
+    // Jadwal Sistem & Cuti Dokter
+    Route::get('/jadwal-sistem', [AdminJadwalSistemController::class, 'index'])->name('jadwal-sistem');
+    Route::post('/cuti-dokter/{id}/terima', [AdminJadwalSistemController::class, 'approve'])->name('cuti-dokter.terima');
+    Route::post('/cuti-dokter/{id}/tolak', [AdminJadwalSistemController::class, 'reject'])->name('cuti-dokter.tolak');
+    Route::get('/cuti-dokter/{id}', [AdminJadwalSistemController::class, 'show'])->name('cuti-dokter.detail');
 });
 
 //Route Dokter
