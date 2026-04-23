@@ -1,54 +1,61 @@
-@extends('admin.layouts.app')
+@extends('layouts.dokter')
 
 @section('title', 'Dashboard Dokter')
 
 @section('content')
-<div class="p-6">
-    <h1 class="text-[26px] font-black text-slate-800 mb-8">Selamat datang, Dr. Fenni 👋</h1>
+<div class="mb-10">
+    <h1 class="text-[32px] font-black text-slate-800 leading-tight">Selamat datang, Dr. Fenni 👋</h1>
+    <p class="text-slate-400 font-medium mt-1">Berikut ringkasan jadwal dan aktivitas medis Anda hari ini.</p>
+</div>
 
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div class="bg-[#edf2f4] p-7 rounded-[32px] border border-white shadow-sm hover:shadow-md transition-all">
-            <p class="text-[13px] font-bold text-slate-500 mb-2">Jadwal hari ini</p>
-            <p class="text-xl font-black text-slate-800">1 Jadwal</p>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
+    @php
+        $stats = [
+            ['title' => 'Jadwal Hari Ini', 'value' => '1 Jadwal', 'icon' => 'fa-clock'],
+            ['title' => 'Semua Jadwal', 'value' => '2 Jadwal', 'icon' => 'fa-calendar-check'],
+            ['title' => 'Rekam Belum Terisi', 'value' => '1 Rekam', 'icon' => 'fa-clipboard-list'],
+            ['title' => 'Status Anda', 'value' => 'Aktif', 'icon' => 'fa-circle-check', 'color' => 'text-emerald-500'],
+        ];
+    @endphp
+
+    @foreach($stats as $s)
+    <div class="bg-white p-7 rounded-[32px] border border-slate-100 shadow-sm hover:shadow-md transition-all group">
+        <div class="flex items-center justify-between mb-4">
+            <div class="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400 group-hover:bg-emerald-50 group-hover:text-emerald-500 transition-all">
+                <i class="fa-solid {{ $s['icon'] }} text-sm"></i>
+            </div>
         </div>
-        <div class="bg-[#edf2f4] p-7 rounded-[32px] border border-white shadow-sm hover:shadow-md transition-all">
-            <p class="text-[13px] font-bold text-slate-500 mb-2">Semua Jadwal Mendatang</p>
-            <p class="text-xl font-black text-slate-800">2 Jadwal</p>
-        </div>
-        <div class="bg-[#edf2f4] p-7 rounded-[32px] border border-white shadow-sm hover:shadow-md transition-all">
-            <p class="text-[13px] font-bold text-slate-500 mb-2">Rekam Belum Terisi</p>
-            <p class="text-xl font-black text-slate-800">1 Rekam</p>
-        </div>
-        <div class="bg-[#edf2f4] p-7 rounded-[32px] border border-white shadow-sm hover:shadow-md transition-all">
-            <p class="text-[13px] font-bold text-slate-500 mb-2">Status anda hari ini</p>
-            <p class="text-xl font-black text-emerald-600">Aktif</p>
-        </div>
+        <p class="text-[12px] font-black text-slate-400 uppercase tracking-wider">{{ $s['title'] }}</p>
+        <p class="text-2xl font-black {{ $s['color'] ?? 'text-slate-800' }} mt-1">{{ $s['value'] }}</p>
     </div>
+    @endforeach
+</div>
 
-    <div class="bg-[#edf2f4] rounded-[32px] p-8 mb-8 border border-white shadow-sm">
-        <h2 class="text-[14px] font-black text-slate-800 mb-6 uppercase tracking-widest">Jadwal hari ini:</h2>
-        
-        <div class="bg-white rounded-[24px] overflow-hidden shadow-sm border border-slate-50">
-            <table class="w-full text-left">
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <div class="lg:col-span-2 bg-white rounded-[40px] border border-slate-100 shadow-sm overflow-hidden">
+        <div class="p-8 border-b border-slate-50 flex items-center justify-between">
+            <h2 class="font-black text-slate-800 uppercase tracking-wider text-sm">Jadwal Hari Ini</h2>
+            <button class="text-emerald-600 font-bold text-xs hover:underline">Lihat Semua</button>
+        </div>
+        <div class="p-2">
+            <table class="w-full">
                 <thead>
-                    <tr class="text-[13px] text-slate-400 font-bold border-b border-slate-50">
-                        <th class="px-8 py-5">Nama</th>
-                        <th class="px-8 py-5">Jam</th>
-                        <th class="px-8 py-5">Status</th>
-                        <th class="px-8 py-5 text-center">Aksi</th>
+                    <tr class="text-[11px] font-black text-slate-400 uppercase">
+                        <th class="px-6 py-4 text-left">Nama Pasien</th>
+                        <th class="px-6 py-4 text-left">Jam</th>
+                        <th class="px-6 py-4 text-left">Status</th>
+                        <th class="px-6 py-4 text-center">Aksi</th>
                     </tr>
                 </thead>
-                <tbody class="text-[14px] text-slate-800 font-bold">
-                    <tr class="hover:bg-slate-50/50 transition-all">
-                        <td class="px-8 py-6">Budi</td>
-                        <td class="px-8 py-6 text-slate-500 font-semibold">11.00</td>
-                        <td class="px-8 py-6">
-                            <span class="px-4 py-1.5 bg-amber-50 text-amber-600 rounded-full text-[12px]">Mendatang</span>
+                <tbody class="text-sm font-bold">
+                    <tr class="hover:bg-slate-50 rounded-2xl transition-all">
+                        <td class="px-6 py-5 text-slate-700">Budi Santoso</td>
+                        <td class="px-6 py-5 text-slate-400 font-semibold text-xs uppercase tracking-tighter">11.00 WIB</td>
+                        <td class="px-6 py-5">
+                            <span class="px-4 py-1.5 bg-amber-50 text-amber-600 rounded-full text-[10px] font-black uppercase">Mendatang</span>
                         </td>
-                        <td class="px-8 py-6 text-center">
-                            <button class="bg-[#a0a6b1] text-white px-6 py-2 rounded-full text-[12px] font-bold uppercase tracking-wider hover:bg-slate-500 transition-all shadow-sm">
-                                mulai
-                            </button>
+                        <td class="px-6 py-5 text-center">
+                            <button class="bg-slate-800 text-white px-6 py-2 rounded-full text-[10px] font-black uppercase hover:bg-emerald-600 transition-all shadow-lg shadow-slate-200">Mulai</button>
                         </td>
                     </tr>
                 </tbody>
@@ -56,53 +63,30 @@
         </div>
     </div>
 
-    <div class="bg-white rounded-[40px] p-10 border border-slate-100 shadow-sm flex flex-col lg:flex-row gap-12">
-        <div class="flex-1">
-            <div class="flex justify-between items-center mb-10">
-                <button class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 hover:bg-emerald-50 hover:text-emerald-600 transition-all shadow-sm">
-                    <i class="fa-solid fa-chevron-left"></i>
-                </button>
-                <h3 class="font-black text-slate-800 text-xl tracking-tight">April 2026</h3>
-                <button class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 hover:bg-emerald-50 hover:text-emerald-600 transition-all shadow-sm">
-                    <i class="fa-solid fa-chevron-right"></i>
-                </button>
-            </div>
-            
-            <div class="grid grid-cols-7 gap-y-8 text-center text-sm font-bold text-slate-400">
-                <div class="text-[11px] uppercase tracking-widest text-slate-300">Min</div>
-                <div class="text-[11px] uppercase tracking-widest text-slate-300">Sen</div>
-                <div class="text-[11px] uppercase tracking-widest text-slate-300">Sel</div>
-                <div class="text-[11px] uppercase tracking-widest text-slate-300">Rab</div>
-                <div class="text-[11px] uppercase tracking-widest text-slate-300">Kam</div>
-                <div class="text-[11px] uppercase tracking-widest text-slate-300">Jum</div>
-                <div class="text-[11px] uppercase tracking-widest text-slate-300">Sab</div>
-
-                <span class="opacity-20">30</span><span class="opacity-20">31</span>
-                <span class="text-slate-800">1</span><span class="text-slate-800">2</span><span class="text-slate-800">3</span><span class="text-slate-800">4</span><span class="text-slate-800">5</span>
-                <span class="text-slate-800">6</span><span class="text-slate-800">7</span>
-                <span class="relative inline-block mx-auto">
-                    <span class="text-slate-900 z-10 relative border-b-4 border-emerald-400 pb-1">8</span>
-                </span>
-                <span class="text-slate-800">9</span><span class="text-slate-800">10</span><span class="text-slate-800">11</span><span class="text-slate-800">12</span>
-                <span class="text-slate-800">13</span><span class="text-slate-800">14</span><span class="text-slate-800">15</span><span class="text-slate-800">16</span><span class="text-slate-800">17</span><span class="text-slate-800">18</span><span class="text-slate-800">19</span>
+    <div class="bg-white rounded-[40px] border border-slate-100 shadow-sm p-8">
+        <div class="flex items-center justify-between mb-8">
+            <h2 class="font-black text-slate-800 uppercase tracking-wider text-sm">April 2026</h2>
+            <div class="flex gap-2">
+                <button class="w-8 h-8 rounded-full border border-slate-100 flex items-center justify-center text-slate-400 hover:bg-slate-50 transition-all text-xs"><i class="fa-solid fa-chevron-left"></i></button>
+                <button class="w-8 h-8 rounded-full border border-slate-100 flex items-center justify-center text-slate-400 hover:bg-slate-50 transition-all text-xs"><i class="fa-solid fa-chevron-right"></i></button>
             </div>
         </div>
+        
+        <div class="grid grid-cols-7 gap-y-4 text-center mb-8">
+            @php $days = ['S','S','R','K','J','S','M']; @endphp
+            @foreach($days as $d)
+                <span class="text-[10px] font-black text-slate-300 uppercase">{{ $d }}</span>
+            @endforeach
+            @for($i = 1; $i <= 30; $i++)
+                <span class="text-sm font-bold {{ $i == 23 ? 'bg-emerald-500 text-white w-8 h-8 flex items-center justify-center rounded-xl mx-auto shadow-lg shadow-emerald-100' : 'text-slate-700 py-1' }}">{{ $i }}</span>
+            @endfor
+        </div>
 
-        <div class="w-full lg:w-80 border-t lg:border-t-0 lg:border-l border-slate-100 pt-10 lg:pt-0 lg:pl-12">
-            <h4 class="text-[11px] font-black text-slate-400 uppercase tracking-[2px] mb-6">Informasi :</h4>
-            <div class="space-y-6">
-                <div class="flex items-start gap-3">
-                    <span class="text-emerald-500 font-black text-lg leading-none">*</span>
-                    <p class="text-[13px] text-slate-500 font-medium leading-relaxed">Klinik libur atau cuti</p>
-                </div>
-                <p class="text-[13px] text-slate-900 font-bold border-b-2 border-emerald-100 inline-block">Garis bawah menandakan hari ini</p>
-                
-                <div class="mt-8 p-6 bg-red-50 rounded-[24px] border border-red-100 shadow-sm">
-                    <p class="text-[13px] font-bold text-red-600 leading-relaxed">
-                        <i class="fa-solid fa-calendar-minus mr-2"></i>
-                        24 April - 25 April anda mengajukan cuti
-                    </p>
-                </div>
+        <div class="pt-6 border-t border-slate-50">
+            <p class="text-[10px] font-black text-slate-400 uppercase mb-3 tracking-widest">Informasi Penting</p>
+            <div class="flex items-start gap-3">
+                <div class="w-1.5 h-1.5 bg-emerald-500 rounded-full mt-1.5"></div>
+                <p class="text-xs font-bold text-slate-600 leading-relaxed">24 April - 25 April Anda mengajukan cuti tahunan.</p>
             </div>
         </div>
     </div>
