@@ -7,6 +7,8 @@
 
     <!-- Direct link to pre-compiled Vite CSS to avoid XAMPP path and CDN network issues -->
     <link rel="stylesheet" href="{{ asset('build/assets/app-T3EHGAm9.css') }}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ asset('build/assets/app-T3EHGAm9.css') }}">
     <style>
         @keyframes fadeIn {
             from { opacity: 0; transform: scale(0.98) translateY(10px); }
