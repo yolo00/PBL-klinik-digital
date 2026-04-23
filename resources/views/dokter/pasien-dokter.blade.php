@@ -1,4 +1,4 @@
-@extends('layouts.dokter')
+@extends('dokter.layouts.dokter')
 
 @section('title', 'Semua Pasien')
 
