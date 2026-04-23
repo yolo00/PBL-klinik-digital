@@ -42,19 +42,19 @@
                         <td class="px-6 py-5 align-middle">Jadwal Baru</td>
                         <td class="px-6 py-5 align-middle">Aprillia Bunga dijadwalkan dengan Dr. Fenni</td>
                         <td class="px-6 py-5 align-middle text-slate-500">2 menit yang lalu</td>
-                        <td class="px-6 py-5 align-middle text-emerald-600 font-bold">Terjadwal</td>
+                        <td class="px-6 py-5 align-middle text-slate-600 font-bold">Terjadwal</td>
                     </tr>
                     <tr class="hover:bg-gray-50 transition-colors">
                         <td class="px-6 py-5 align-middle">Pembayaran</td>
                         <td class="px-6 py-5 align-middle">INV-202604-001 dari Aprillia Bunga</td>
                         <td class="px-6 py-5 align-middle text-slate-500">15 menit yang lalu</td>
-                        <td class="px-6 py-5 align-middle text-emerald-600 font-bold">Lunas</td>
+                        <td class="px-6 py-5 align-middle text-slate-600 font-bold">Lunas</td>
                     </tr>
                     <tr class="hover:bg-gray-50 transition-colors">
                         <td class="px-6 py-5 align-middle">Pendaftaran Baru</td>
                         <td class="px-6 py-5 align-middle">Budi Prasetyo mendaftar sebagai pasien baru</td>
                         <td class="px-6 py-5 align-middle text-slate-500">1 jam yang lalu</td>
-                        <td class="px-6 py-5 align-middle text-emerald-600 font-bold">Sukses</td>
+                        <td class="px-6 py-5 align-middle text-slate-600 font-bold">Sukses</td>
                     </tr>
                 </tbody>
             </table>
