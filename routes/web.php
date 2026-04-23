@@ -31,8 +31,42 @@ Route::prefix('admin')->name('admin.')->group(function () {
 });
 
 //Route Dokter
-Route::prefix('dokter')->name('dokter.')->group(function () {
-    Route::view('/dashboard-dokter', 'dokter.dashboard-dokter')->name('dashboard-dokter');
+// Rute khusus untuk akses Dokter
+Route::prefix('dokter')->group(function () {
+
+    // Halaman Utama Dashboard
+    Route::get('/dashboard', function () {
+        return view('dokter.dashboard-dokter');
+    })->name('dokter.dashboard');
+
+    // Halaman Jadwal Harian
+    Route::get('/jadwal', function () {
+        return view('dokter.jadwal-saya');
+    })->name('dokter.jadwal');
+
+    // Halaman Data Pasien Khusus Dokter
+    Route::get('/pasien', function () {
+        return view('dokter.pasien-dokter');
+    })->name('dokter.pasien');
+
+    // Halaman Pengaturan Operasional & Cuti
+    Route::get('/pengaturan-jadwal', function () {
+        return view('dokter.pengaturan-jadwal');
+    })->name('dokter.pengaturan');
+
+    // Halaman Riwayat Rekam Medis
+    Route::get('/rekam-medis', function () {
+        return view('dokter.rekam-medis-dokter');
+    })->name('dokter.rekam-medis');
+
+    Route::get('/rekam-medis/edit/{id}', function ($id) {
+        return view('dokter.edit-rekam-medis', ['id' => $id]);
+    })->name('dokter.edit-rekam');
+
+    Route::get('/profil', function() { 
+        return view('dokter.profil-dokter'); 
+    })->name('dokter.profil');
+
 });
 
 
