@@ -36,8 +36,21 @@ Route::prefix('dokter')->name('dokter.')->group(function () {
 });
 
 
-//Routes Pasien
+// Routes Pasien
 Route::prefix('pasien')->name('pasien.')->group(function () {
-    Route::get('/dashboard', function () {return view('pasien.dashboard');})->name('dashboard');
-    Route::get('/buat-janji', function () {return view('pasien.buat-janji');})->name('buat-janji');
+    Route::get('/dashboard', function () {
+        return view('pasien.dashboard');
+    })->name('dashboard');
+
+    Route::get('/buat-janji', function () {
+        return view('pasien.buat-janji');
+    })->name('buat-janji');
 });
+
+
+Route::post('/logout', function () {
+    auth()->logout();
+    request()->session()->invalidate();
+    request()->session()->regenerateToken();
+    return redirect('/');
+})->name('logout');
