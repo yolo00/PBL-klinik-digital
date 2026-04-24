@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Barryvdh\DomPDF\Facade\Pdf; //untuk pdf rekam medis
 
 /*
 |--------------------------------------------------------------------------
@@ -104,12 +105,42 @@ Route::prefix('pasien')->name('pasien.')->group(function () {
     Route::get('/buat-janji', function () {
         return view('pasien.buat-janji');
     })->name('buat-janji');
+
+    Route::get('/riwayat-jadwal', function () {
+        return view('pasien.riwayat-jadwal');
+    })->name('riwayat');
 });
+// Pindahkan keluar dari area routes pasien, karena tidak mau kebaca routenya
+Route::get('/pasien/riwayat-rekam-medis', function () {
+    return view('pasien.riwayat-rekam-medis');
+})->name('pasien.rekam-medis');
+// Route detail rekam medis
+Route::get('/pasien/rekam-medis/detail', function () {
+    return view('pasien.lihat'); 
+})->name('pasien.rekam-medis.detail');
 
 
 Route::post('/logout', function () {
     auth()->logout();
     request()->session()->invalidate();
     request()->session()->regenerateToken();
-    return redirect('/');
+    return redirect('/'); 
 })->name('logout');
+
+Route::get('/pasien/rekam-medis/export-pdf', function () {
+    // Sementara pakai data statis dulu agar muncul hasilnya
+    $data = [
+        'no_rm' => '#00164',
+        'dokter' => 'Dr. Fenni',
+        'tanggal' => '12 April 2026',
+        'keluhan' => 'Pasien merasa hangat dan meriang sejak 2 hari yang lalu, disertai batuk ringan.',
+        'diagnosa' => 'Demam Ringan (Influenza awal)',
+        'resep' => [
+            'Paracetamol 500mg (3x1 hari setelah makan)',
+            'Vitamin C, 1 tablet setiap hari'
+        ]
+    ];
+
+    $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pasien.pdf-rekam-medis', $data);
+    return $pdf->download('Rekam-Medis-UniHealth.pdf');
+})->name('pasien.rekam-medis.pdf');
