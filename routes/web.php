@@ -109,14 +109,33 @@ Route::prefix('pasien')->name('pasien.')->group(function () {
     Route::get('/riwayat-jadwal', function () {
         return view('pasien.riwayat-jadwal');
     })->name('riwayat');
+   Route::get('/pembayaran', function () {
+        return view('pasien.pembayaran');
+    })->name('pembayaran'); 
+    Route::get('/riwayat-pembayaran', function () {
+        return view('pasien.riwayat-pembayaran');
+    })->name('riwayat-pembayaran');
 });
 // Pindahkan keluar dari area routes pasien, karena tidak mau kebaca routenya
+// 1. Route untuk HALAMAN DAFTAR (Menampilkan Tabel)
 Route::get('/pasien/riwayat-rekam-medis', function () {
-    return view('pasien.riwayat-rekam-medis');
+    // Data dummy untuk isi tabel
+    $rekamMedis = collect([
+        (object) ['id' => 1, 'tanggal' => '12 April 2026', 'dokter' => 'Dr. Fenni', 'diagnosa' => 'Influenza & Demam'],
+        (object) ['id' => 2, 'tanggal' => '28 Maret 2026', 'dokter' => 'Dr. Andi', 'diagnosa' => 'Gastritis Akut'],
+        (object) ['id' => 3, 'tanggal' => '15 Februari 2026', 'dokter' => 'Dr. Siti', 'diagnosa' => 'Scaling Gigi'],
+        (object) ['id' => 4, 'tanggal' => '10 Januari 2026', 'dokter' => 'Dr. Budi', 'diagnosa' => 'Hipertensi'],
+        (object) ['id' => 5, 'tanggal' => '22 Desember 2025', 'dokter' => 'Dr. Fenni', 'diagnosa' => 'Cek Rutin Pasca Flu'],
+        (object) ['id' => 6, 'tanggal' => '05 November 2025', 'dokter' => 'Dr. Andi', 'diagnosa' => 'Radang Tenggorokan']
+    ]);
+
+    return view('pasien.riwayat-rekam-medis', compact('rekamMedis'));
 })->name('pasien.rekam-medis');
-// Route detail rekam medis
-Route::get('/pasien/rekam-medis/detail', function () {
-    return view('pasien.lihat'); 
+
+// 2. Route untuk HALAMAN DETAIL (Dibutuhkan saat klik tombol "Lihat Detail")
+Route::get('/pasien/riwayat-rekam-medis/detail/{id}', function ($id) {
+    // Variabel $id ini yang akan menangkap angka 1, 2, atau 3 dari URL
+    return view('pasien.lihat', ['id' => $id]);
 })->name('pasien.rekam-medis.detail');
 
 

@@ -29,6 +29,7 @@
             </div>
         </div>
     </header>
+
 <div class="animate-fade-in px-4 py-6 md:px-8">
     <div class="mb-10">
         <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">Rekam Medis</h1>
@@ -60,74 +61,36 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100">
+                    {{-- @foreach diletakkan di sini untuk membungkus SELURUH baris --}}
+                    @foreach ($rekamMedis as $history)
                     <tr class="hover:bg-slate-50/80 transition-all duration-200">
                         <td class="px-8 py-6">
-                            <div class="text-lg font-bold text-slate-800">12 April 2026</div>
+                            <div class="text-lg font-bold text-slate-800">{{ $history->tanggal }}</div>
                             <div class="text-sm text-slate-400 font-medium mt-0.5">09:00 WIB</div>
                         </td>
                         <td class="px-8 py-6">
-                            <div class="text-lg font-bold text-slate-700">Dr. Fenni</div>
+                            <div class="text-lg font-bold text-slate-700">{{ $history->dokter }}</div>
                             <div class="text-xs text-emerald-600 font-black uppercase tracking-wider mt-0.5">Dokter Umum</div>
                         </td>
                         <td class="px-8 py-6">
                             <span class="px-4 py-1.5 bg-blue-50 text-blue-600 text-sm font-bold rounded-full border border-blue-100 shadow-sm">
-                                Influenza & Demam
+                                {{ $history->diagnosa }}
                             </span>
                         </td>
-                        <td class="px-8 py-6 text-center">                
-                            <a href="{{ route('pasien.rekam-medis.detail') }}" class="inline-block bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-2.5 rounded-xl text-sm font-bold shadow-sm shadow-emerald-200 transition-all transform active:scale-95">
+                        <td class="px-8 py-6 text-center">
+                            <a href="{{ route('pasien.rekam-medis.detail', ['id' => $history->id]) }}" 
+                               class="inline-block bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-2.5 rounded-xl text-sm font-bold shadow-sm shadow-emerald-200 transition-all transform active:scale-95">
                                 Lihat Detail
                             </a>
                         </td>
                     </tr>
-
-                    <tr class="hover:bg-slate-50/80 transition-all duration-200">
-                        <td class="px-8 py-6">
-                            <div class="text-lg font-bold text-slate-800">28 Maret 2026</div>
-                            <div class="text-sm text-slate-400 font-medium mt-0.5">14:00 WIB</div>
-                        </td>
-                        <td class="px-8 py-6">
-                            <div class="text-lg font-bold text-slate-700">Dr. Andi</div>
-                            <div class="text-xs text-blue-600 font-black uppercase tracking-wider mt-0.5">Spesialis Penyakit Dalam</div>
-                        </td>
-                        <td class="px-8 py-6">
-                            <span class="px-4 py-1.5 bg-amber-50 text-amber-600 text-sm font-bold rounded-full border border-amber-100 shadow-sm">
-                                Gastritis Akut
-                            </span>
-                        </td>
-                        <td class="px-8 py-6 text-center">
-                            <button class="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-2.5 rounded-xl text-sm font-bold shadow-sm shadow-emerald-200 transition-all transform active:scale-95">
-                                Lihat Detail
-                            </button>
-                        </td>
-                    </tr>
-
-                    <tr class="hover:bg-slate-50/50 transition opacity-70 bg-slate-50/20">
-                        <td class="px-8 py-6">
-                            <div class="text-lg font-bold text-slate-500 text-slate-400">15 Februari 2026</div>
-                            <div class="text-sm text-slate-400 font-medium mt-0.5">10:30 WIB</div>
-                        </td>
-                        <td class="px-8 py-6">
-                            <div class="text-lg font-bold text-slate-500 text-slate-400">Dr. Siti</div>
-                            <div class="text-xs text-slate-400 font-black uppercase tracking-wider mt-0.5">Dokter Gigi</div>
-                        </td>
-                        <td class="px-8 py-6">
-                            <span class="px-4 py-1.5 bg-slate-100 text-slate-500 text-sm font-bold rounded-full border border-slate-200 shadow-sm">
-                                Pembersihan Karang Gigi
-                            </span>
-                        </td>
-                        <td class="px-8 py-6 text-center">
-                            <button class="bg-slate-200 text-slate-500 px-6 py-2.5 rounded-xl text-sm font-bold cursor-not-allowed">
-                                Terarsipkan
-                            </button>
-                        </td>
-                    </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>
         
         <div class="p-8 bg-slate-50 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-4">
-            <span class="text-sm font-medium text-slate-500 italic">Menampilkan <span class="text-slate-900 font-bold">1 - 3</span> dari <span class="text-slate-900 font-bold">3</span> Rekam Medis</span>
+            <span class="text-sm font-medium text-slate-500 italic">Menampilkan <span class="text-slate-900 font-bold">1 - {{ count($rekamMedis) }}</span> dari <span class="text-slate-900 font-bold">{{ count($rekamMedis) }}</span> Rekam Medis</span>
             <div class="flex gap-3">
                 <button class="px-5 py-2 bg-white border border-slate-200 rounded-xl text-sm font-bold text-slate-400 cursor-not-allowed transition hover:bg-slate-50">Sebelumnya</button>
                 <button class="px-5 py-2 bg-white border border-slate-200 rounded-xl text-sm font-bold text-emerald-600 transition hover:border-emerald-500 hover:bg-emerald-50 active:scale-95">Selanjutnya</button>
