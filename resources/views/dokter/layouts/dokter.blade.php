@@ -19,10 +19,11 @@
 <body class="bg-[#f8fafc] text-slate-800">
     <div class="flex h-screen overflow-hidden">
 
-        <aside class="w-72 bg-[#064e3b] flex flex-col h-full text-white">
-            <div class="p-8">
-                <img src="/path-to-logo/unihealth.png" alt="UniHealth" class="h-8">
-            </div>
+            <aside class="w-[280px] bg-emerald-950 text-emerald-50 h-screen sticky top-0 flex flex-col shrink-0 z-50">
+                <div class="px-8 py-8 flex items-center gap-4 border-b border-emerald-900/50">
+                <img src="{{ asset('images/logo.png') }}" alt="UniHealth Logo" class="w-11 h-11 md:w-[52px] md:h-[52px] rounded-xl shadow-sm border border-emerald-100 group-hover:scale-105 group-hover:-rotate-3 transition-transform duration-300">
+                    <span class="font-bold text-[24px] text-white">UniHealth</span>
+                </div>
             
             <nav class="flex-1 px-4 space-y-1 overflow-y-auto custom-scroll">
                 <a href="{{ route('dokter.dashboard') }}" class="flex items-center gap-4 px-4 py-4 rounded-xl {{ request()->routeIs('dokter.dashboard') ? 'sidebar-active' : 'hover:bg-white/5' }}">
