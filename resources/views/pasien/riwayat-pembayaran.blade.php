@@ -1,8 +1,5 @@
-
 @extends('pasien.layouts.app')
-
 @section('title', 'Riwayat Pembayaran')
-
 @section('content')
 <div class="max-w-2xl mx-auto">
     <div class="mb-6 flex items-center gap-2">

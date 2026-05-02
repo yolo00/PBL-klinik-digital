@@ -1,47 +1,6 @@
 @extends('pasien.layouts.app')
-
 @section('title', 'Dashboard Pasien')
-
 @section('content')
-   <header class="flex justify-between items-center mb-8 bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
-    <h2 class="text-xl font-bold text-gray-800">Dashboard Pasien</h2>
-    
-    <div class="relative" x-data="{ open: false }">
-        <div @click="open = !open" class="flex items-center gap-4 cursor-pointer hover:bg-gray-50 p-1 rounded-xl transition">
-            <div class="text-right">
-                <p class="font-bold text-gray-800 text-sm">Aprillia Bunga</p>
-                <span class="text-[10px] bg-blue-100 text-klinik-blue px-2 py-0.5 rounded-full font-bold uppercase">Pasien</span>
-            </div>
-            <div class="w-10 h-10 bg-klinik-blue rounded-full flex items-center justify-center text-white font-bold relative">
-                AB
-                <div class="absolute -right-1 -bottom-1 bg-white rounded-full shadow-sm">
-                    <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </div>
-            </div>
-        </div>
-
-        <div x-show="open" 
-             @click.away="open = false"
-             x-transition:enter="transition ease-out duration-100"
-             x-transition:enter-start="transform opacity-0 scale-95"
-             x-transition:enter-end="transform opacity-100 scale-100"
-             class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 py-2 z-50">
-            
-            <a href="#" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition">
-                <span>Lihat Profil</span>
-            </a>
-            
-            <hr class="my-1 border-gray-100">
-            
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button type="submit" class="flex items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition w-full text-left font-medium">
-                    <span>Logout</span>
-                </button>
-            </form>
-        </div>
-    </div>
-</header>
 
     <section class="mb-10">
         <h1 class="text-3xl font-extrabold text-gray-900 mb-2">Halo, Aprillia Bunga 👋</h1>

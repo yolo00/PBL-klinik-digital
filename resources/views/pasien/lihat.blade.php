@@ -1,6 +1,4 @@
-
 @extends('pasien.layouts.app')
-
 @section('title', 'Detail Rekam Medis')
 @section('content')
 <div class="animate-fade-in px-4 py-6 md:px-8">
