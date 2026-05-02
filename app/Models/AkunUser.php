@@ -9,7 +9,6 @@ class AkunUser extends Authenticatable
     protected $table = 'akun_user';
     protected $primaryKey = 'id_user';
 
-    // akun_user hanya punya created_at (tidak ada updated_at)
     const UPDATED_AT = null;
 
     protected $fillable = [
@@ -19,7 +18,6 @@ class AkunUser extends Authenticatable
 
     protected $hidden = ['password'];
 
-    // ─── Relasi ───────────────────────────────────────────────
 
     public function pasien()
     {
@@ -31,9 +29,6 @@ class AkunUser extends Authenticatable
         return $this->hasOne(Dokter::class, 'id_user', 'id_user');
     }
 
-    // ─── Helper ───────────────────────────────────────────────
-
-    /** Kembalikan "Dr. [nama pertama]" */
     public function getDrNameAttribute(): string
     {
         $firstName = explode(' ', $this->nama)[0];

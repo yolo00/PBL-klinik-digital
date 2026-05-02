@@ -15,7 +15,8 @@ use Barryvdh\DomPDF\Facade\Pdf; //untuk pdf rekam medis
 */
 
 Route::view('/', 'home')->name('home');
-Route::view('/login', 'login')->name('login');
+Route::get('/login', fn() => view('login'))->name('login');
+Route::post('/login', [\App\Http\Controllers\LoginController::class, 'submit'])->name('login.submit');
 Route::view('/about', 'about')->name('about'); //incase kalian belum up to date
 Route::view('/contact', 'contact')->name('contact'); //incase kalian belum up to date
 Route::view('/register', 'register')->name('register');

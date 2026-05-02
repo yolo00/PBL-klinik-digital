@@ -1,6 +1,25 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
+    <!-- Dope Ass Wizard Hat                           -->
+    <!--                 0*
+                       /|\
+                      / | \
+                     /  *  \
+                    / .*.*. \
+                   / .*.*.*. \
+                  /  .*.*.*  \
+                 / .*.*.*.*.  \
+                / .*.*.*.*.*.. \
+               /  .*. ☆  .*.*  \
+              / .*.*.*.  *.*.*.. \
+             / .*.*. ✦ ✦ .*.*.*..\
+            /  .*.✧   ☆    ✧.*.*  \___
+           /______________________________\
+    ,,----/________________________________\---------,,,,
+--`|                                                    |;;====
+----\___________________________________________________/
+    -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', 'Admin Dashboard') - UniHealth</title>

@@ -9,7 +9,6 @@
 /storage/framework/views
 /storage/logs
 /vendor
-/vendorajg
 .env
 .env.backup
 .env.production
@@ -27,3 +26,5 @@ yarn-error.log
 /old_tes
 /wireframe
 /aaaaa
+/tests
+.env.testing

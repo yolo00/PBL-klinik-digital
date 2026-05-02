@@ -9,7 +9,6 @@ class Jadwal extends Model
     protected $table = 'jadwal';
     protected $primaryKey = 'id_jadwal';
 
-    // Hanya punya created_at
     const UPDATED_AT = null;
 
     protected $fillable = [
@@ -20,7 +19,7 @@ class Jadwal extends Model
         'tanggal' => 'date',
     ];
 
-    // ─── Relasi ───────────────────────────────────────────────
+    //Relasi
 
     public function dokter()
     {
