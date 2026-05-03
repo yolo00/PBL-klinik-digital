@@ -1,5 +1,5 @@
 @extends('pasien.layouts.app')
-@section('title', 'Dashboard Pasien')
+@section('title', 'Riwayat Rekam Medis Pasien')
 @section('content')
 
 <div class="animate-fade-in px-4 py-6 md:px-8">

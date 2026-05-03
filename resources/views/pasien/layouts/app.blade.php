@@ -78,7 +78,7 @@
     <div class="flex-1 flex flex-col h-screen overflow-hidden">
 
         <!-- ===== HEADER (sticky, hijau medis) ===== -->
-        <header class="h-[72px] bg-green-500 flex justify-between items-center px-10 shrink-0 sticky top-0 z-20">
+        <header class="h-[72px] bg-[#4ed28e] flex justify-between items-center px-10 shrink-0 sticky top-0 z-20">
             <p class="text-[15px] font-bold text-white">@yield('page-title', '')</p>
 
             <div class="relative group">
@@ -98,7 +98,7 @@
                 <!-- Dropdown Menu -->
                 <div class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-slate-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                     <div class="py-2 flex flex-col">
-                        <a href="{{ route('pasien.profil') }}" class="px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 transition">
+                        <a href="{{ route('pasien.profil.edit') }}" class="px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 transition">
                             <i class="fa-solid fa-user mr-2 text-slate-400"></i>Profil Saya
                         </a>
                         <div class="border-t border-slate-100 my-1"></div>
@@ -120,6 +120,8 @@
             </div>
         </main>
     </div>
+
+    @stack('scripts')
 
 </body>
 </html>

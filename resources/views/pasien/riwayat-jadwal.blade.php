@@ -114,10 +114,10 @@
                     </td>
 
                     <td class="px-5 py-4 text-center">
-                        <button
-                            class="inline-flex px-4 py-2 rounded-full bg-emerald-50 text-emerald-600 text-[11px] font-semibold uppercase hover:bg-emerald-500 hover:text-white transition">
+                     {{-- Ganti button ke tag 'a' agar bisa navigasi ke halaman lain --}}
+                        <a href="{{ route('pasien.buat-janji') }}" class="inline-flex px-4 py-2 rounded-full bg-emerald-50 text-emerald-600 text-[11px] font-semibold uppercase hover:bg-emerald-500 hover:text-white transition decoration-none">
                             Pesan Lagi
-                        </button>
+                        </a>
                     </td>
                 </tr>
             </tbody>
