@@ -103,27 +103,46 @@ Route::prefix('pasien')->name('pasien.')->group(function () {
         return view('pasien.dashboard');
     })->name('dashboard');
 
+    // route booking janji temu
     Route::get('/buat-janji', function () {
         return view('pasien.buat-janji');
     })->name('buat-janji');
 
+    // route riwayat jadwal
     Route::get('/riwayat-jadwal', function () {
         return view('pasien.riwayat-jadwal');
     })->name('riwayat');
-   Route::get('/pembayaran', function () {
+
+    // route pembayaran pasien
+    Route::get('/pembayaran', function () {
         return view('pasien.pembayaran');
     })->name('pembayaran'); 
+
+    // route riwayat pembayaran pasien
     Route::get('/riwayat-pembayaran', function () {
         return view('pasien.riwayat-pembayaran');
     })->name('riwayat-pembayaran');
 
+    // Route Profil Pasien
     Route::get('/profil', function () {
         return view('pasien.profil');
     })->name('profil');
+
+    // Route Edit Profil
+    Route::get('/profil/edit', function () {
+        return view('pasien.edit-profil');
+    })->name('profil.edit');
+
+    // Route untuk simulasi simpan data
+    Route::post('/profil/update', function () {
+    // Di sini nanti tempat kode simpan ke database
+        return back()->with('success', 'Profil Anda berhasil diperbarui!');
+    })->name('profil.update');
 });
+
 // Pindahkan keluar dari area routes pasien, karena tidak mau kebaca routenya
-// 1. Route untuk HALAMAN DAFTAR (Menampilkan Tabel)
-Route::get('/pasien/riwayat-rekam-medis', function () {
+    // 1. Route untuk HALAMAN DAFTAR pasien pada riwayat rekam medis (Menampilkan Tabel)
+    Route::get('/pasien/riwayat-rekam-medis', function () {
     // Data dummy untuk isi tabel
     $rekamMedis = collect([
         (object) ['id' => 1, 'tanggal' => '12 April 2026', 'dokter' => 'Dr. Fenni', 'diagnosa' => 'Influenza & Demam']
@@ -132,7 +151,7 @@ Route::get('/pasien/riwayat-rekam-medis', function () {
     return view('pasien.riwayat-rekam-medis', compact('rekamMedis'));
 })->name('pasien.rekam-medis');
 
-// 2. Route untuk HALAMAN DETAIL (Dibutuhkan saat klik tombol "Lihat Detail")
+// 2. Route untuk HALAMAN DETAIL rekam medis (Dibutuhkan saat klik tombol "Lihat Detail")
 Route::get('/pasien/riwayat-rekam-medis/detail/{id}', function ($id) {
     // Variabel $id ini yang akan menangkap angka 1, 2, atau 3 dari URL
     return view('pasien.lihat', ['id' => $id]);
