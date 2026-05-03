@@ -1,7 +1,5 @@
 @extends('dokter.layouts.dokter')
-
 @section('title', 'Jadwal Saya')
-
 @section('content')
 <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
     <div>
@@ -50,12 +48,10 @@
             <tbody class="divide-y divide-slate-50">
                 <tr class="hover:bg-slate-50/80 transition-all group">
                     <td class="px-8 py-6">
-                        <span class="text-sm font-black text-slate-800">11.00 WIB</span>
-                        <p class="text-[10px] text-slate-400 font-bold uppercase mt-0.5">Sesi Pagi</p>
+                        <span class="text-sm font-black text-slate-800">09.00 WIB</span>
                     </td>
                     <td class="px-8 py-6">
                         <span class="text-sm font-bold text-slate-700 block">Aprillia Bunga</span>
-                        <span class="text-[11px] text-slate-400 font-medium italic">Pasien Umum</span>
                     </td>
                     <td class="px-8 py-6">
                         <span class="inline-flex items-center gap-1.5 px-4 py-1.5 bg-amber-50 text-amber-600 rounded-full text-[10px] font-black uppercase tracking-wider">
@@ -68,22 +64,20 @@
                     </td>
                     <td class="px-8 py-6">
                         <div class="flex justify-center">
-                        <a href="{{ route('dokter.edit-rekam', ['id' => 'JDWL001']) }}" 
-                        class="inline-block px-4 py-2 bg-slate-100 text-slate-600 rounded-lg text-[10px] font-black uppercase hover:bg-emerald-500 hover:text-white transition-all text-center">
-                            Lihat Rekam Medis
-                        </a>
+                            <a href="{{ route('dokter.edit-rekam', ['id' => 'JDWL001']) }}" 
+                            class="inline-block px-4 py-2 bg-slate-100 text-slate-600 rounded-lg text-[10px] font-black uppercase hover:bg-emerald-500 hover:text-white transition-all text-center">
+                                Buat Rekam Medis
+                            </a>
                         </div>
                     </td>
                 </tr>
 
-                <tr class="hover:bg-slate-50/80 transition-all opacity-70">
+                <tr class="hover:bg-slate-50/80 transition-all">
                     <td class="px-8 py-6">
-                        <span class="text-sm font-black text-slate-800">09.30 WIB</span>
-                        <p class="text-[10px] text-slate-400 font-bold uppercase mt-0.5">Sesi Pagi</p>
+                        <span class="text-sm font-black text-slate-800">09.00 WIB</span>
                     </td>
                     <td class="px-8 py-6">
-                        <span class="text-sm font-bold text-slate-700 block">Budi Santoso</span>
-                        <span class="text-[11px] text-slate-400 font-medium italic">Karyawan Polibatam</span>
+                        <span class="text-sm font-bold text-slate-700 block">Aprillia Bunga</span>
                     </td>
                     <td class="px-8 py-6">
                         <span class="inline-flex items-center gap-1.5 px-4 py-1.5 bg-emerald-50 text-emerald-600 rounded-full text-[10px] font-black uppercase tracking-wider">
@@ -92,29 +86,31 @@
                     </td>
                     <td class="px-8 py-6">
                         <button class="text-emerald-600 text-xs font-black underline hover:text-emerald-800">
+                            <a href="{{ route('dokter.edit-rekam', ['id' => 'JDWL001']) }}">
                             Lihat Rekam Medis
+                            </a>
                         </button>
                     </td>
                     <td class="px-8 py-6">
                         <div class="flex justify-center">
-                            <span class="text-slate-300 text-[10px] font-bold uppercase tracking-widest italic">Tidak ada aksi</span>
-                        </div>
+                            <a href="{{ route('dokter.edit-rekam', ['id' => 'JDWL001']) }}" 
+                            class="inline-block px-4 py-2 bg-slate-100 text-slate-600 rounded-lg text-[10px] font-black uppercase hover:bg-emerald-500 hover:text-white transition-all text-center">
+                                Edit Rekam Medis
+                            </a>
+                        </div> 
                     </td>
                 </tr>
             </tbody>
         </table>
     </div>
+    <div class="p-8 bg-slate-50 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-4">
+        <span class="text-sm font-medium text-slate-500">Menampilkan <span class="text-slate-900 font-bold">1 - 1</span> dari <span class="text-slate-900 font-bold"> 1 </span> Rekam </span>
+        <div class="flex gap-3">
+            <button class="px-5 py-2 bg-white border border-slate-200 rounded-xl text-sm font-bold text-slate-400 cursor-not-allowed transition hover:bg-slate-50">Sebelumnya</button>
+            <button class="w-10 h-10 rounded-xl bg-emerald-600 text-white font-black text-xs shadow-lg shadow-emerald-100">1</button>
+            <button class="px-5 py-2 bg-white border border-slate-200 rounded-xl text-sm font-bold text-slate-400 cursor-not-allowed transition hover:bg-slate-50">Selanjutnya</button>
+        </div>
+    </div>
 </div>
 
-<div class="mt-8 flex items-center justify-center gap-4">
-    <button class="w-10 h-10 rounded-xl border border-slate-100 flex items-center justify-center text-slate-400 hover:bg-white hover:text-emerald-600 hover:shadow-sm transition-all shadow-sm">
-        <i class="fa-solid fa-arrow-left text-xs"></i>
-    </button>
-    <div class="px-6 py-2 bg-white rounded-xl border border-slate-100 shadow-sm text-[11px] font-black text-slate-500 uppercase tracking-[2px]">
-        Hasil 1 - 10 / <span class="text-emerald-600">41 Pasien</span>
-    </div>
-    <button class="w-10 h-10 rounded-xl border border-slate-100 flex items-center justify-center text-slate-400 hover:bg-white hover:text-emerald-600 hover:shadow-sm transition-all shadow-sm">
-        <i class="fa-solid fa-arrow-right text-xs"></i>
-    </button>
-</div>
 @endsection

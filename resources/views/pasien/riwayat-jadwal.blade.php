@@ -2,20 +2,12 @@
 @section('title', 'Riwayat Jadwal')
 @section('content')
 
+
+<div>
+    <h1 class="text-[30px] font-black text-slate-800 leading-tight">Riwayat Jadwal</h1>
+    <p class="text-slate-400 font-medium mt-1">Melihat daftar janji Anda sebelumnya dan yang akan datang.</p>
+</div>
 <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-    <div class="flex justify-between items-center mb-6">
-        <div>
-            <h1 class="text-2xl font-extrabold text-gray-900">Riwayat Jadwal</h1>
-            <p class="text-gray-500 text-sm">Melihat daftar janji Anda sebelumnya dan yang akan datang.</p>
-        </div>
-        <div class="flex gap-3">
-            <input type="text" placeholder="Cari dokter..." class="text-sm border border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500">
-            <select class="text-sm border border-gray-200 rounded-lg px-4 py-2 focus:outline-none">
-                <option>Terbaru</option>
-                <option>Terlama</option>
-            </select>
-        </div>
-    </div>
 
     <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse">

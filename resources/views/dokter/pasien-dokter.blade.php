@@ -77,38 +77,15 @@
                         </div>
                     </td>
                 </tr>
-
-                @for($i=0; $i<5; $i++)
-                <tr class="hover:bg-slate-50/80 transition-all opacity-40">
-                    <td class="px-8 py-6 text-slate-400 font-medium italic">Id</td>
-                    <td class="px-8 py-6 text-slate-400 italic">Nama</td>
-                    <td class="px-8 py-6 text-slate-400 italic font-mono uppercase text-xs">Nim / Nik</td>
-                    <td class="px-8 py-6 text-slate-400 italic font-medium">Kontak</td>
-                    <td class="px-8 py-6 text-slate-400 italic font-medium uppercase text-[10px]">Jenis Kelamin</td>
-                    <td class="px-8 py-6">
-                        <div class="flex justify-center gap-2">
-                            <div class="w-20 h-8 bg-slate-100 rounded-xl"></div>
-                            <div class="w-20 h-8 bg-slate-100 rounded-xl"></div>
-                        </div>
-                    </td>
-                </tr>
-                @endfor
             </tbody>
         </table>
     </div>
-
-    <div class="mt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-        <p class="text-[11px] font-black text-slate-400 uppercase tracking-widest">
-            Menunjukkan hasil <span class="text-emerald-600 font-black">1 - 10</span> dari <span class="text-slate-800 font-black">79 Pasien</span>
-        </p>
-        <div class="flex items-center gap-2">
-            <button class="w-10 h-10 rounded-xl border border-slate-100 flex items-center justify-center text-slate-400 hover:bg-emerald-50 hover:text-emerald-600 transition-all">
-                <i class="fa-solid fa-chevron-left text-xs"></i>
-            </button>
+    <div class="p-8 bg-slate-50 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-4">
+        <span class="text-sm font-medium text-slate-500">Menampilkan <span class="text-slate-900 font-bold">1 - 1</span> dari <span class="text-slate-900 font-bold"> 1 </span> Pasien </span>
+        <div class="flex gap-3">
+            <button class="px-5 py-2 bg-white border border-slate-200 rounded-xl text-sm font-bold text-slate-400 cursor-not-allowed transition hover:bg-slate-50">Sebelumnya</button>
             <button class="w-10 h-10 rounded-xl bg-emerald-600 text-white font-black text-xs shadow-lg shadow-emerald-100">1</button>
-            <button class="w-10 h-10 rounded-xl border border-slate-100 flex items-center justify-center text-slate-400 hover:bg-emerald-50 hover:text-emerald-600 transition-all">
-                <i class="fa-solid fa-chevron-right text-xs"></i>
-            </button>
+            <button class="px-5 py-2 bg-white border border-slate-200 rounded-xl text-sm font-bold text-slate-400 cursor-not-allowed transition hover:bg-slate-50">Selanjutnya</button>
         </div>
     </div>
 </div>

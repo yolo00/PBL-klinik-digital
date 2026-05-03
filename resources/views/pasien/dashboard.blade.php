@@ -38,7 +38,7 @@
                 </div>
                 <div class="bg-klinik-bg p-4 rounded-2xl border border-gray-50 text-center">
                     <span class="text-[11px] text-gray-400 block mb-1 uppercase font-bold tracking-wider">Total</span>
-                    <span class="font-bold text-3xl text-klinik-green">4</span>
+                    <span class="font-bold text-3xl text-klinik-green">1</span>
                 </div>
                 <div class="bg-klinik-bg p-4 rounded-2xl border border-gray-50 text-center">
                     <span class="text-[11px] text-gray-400 block mb-1 uppercase font-bold tracking-wider">Status</span>

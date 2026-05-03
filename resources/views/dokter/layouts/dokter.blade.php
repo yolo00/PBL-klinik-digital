@@ -71,7 +71,7 @@
         <div class="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
 
             <!-- ===== HEADER (sticky, hijau medis) ===== -->
-            <header class="h-[72px] bg-emerald-400 flex justify-end items-center px-10 shrink-0 sticky top-0 z-20">
+            <header class="h-[72px] bg-green-500 flex justify-end items-center px-10 shrink-0 sticky top-0 z-20">
                 <div class="relative group">
                     <div class="flex items-center gap-3 cursor-pointer">
                         <div class="text-right">

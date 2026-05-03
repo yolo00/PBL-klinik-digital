@@ -15,7 +15,7 @@ class LoginController extends Controller
             'redirect' => '/pasien/dashboard',
         ],
         [
-            'email'    => 'feysiber26@gmail.com',
+            'email'    => 'feynsiber26@gmail.com',
             'password' => '456456',
             'role'     => 'dokter',
             'redirect' => '/dokter/dashboard',

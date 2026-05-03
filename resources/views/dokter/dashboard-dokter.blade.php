@@ -49,8 +49,8 @@
                 </thead>
                 <tbody class="text-sm font-bold">
                     <tr class="hover:bg-slate-50 rounded-2xl transition-all">
-                        <td class="px-6 py-5 text-slate-700">Budi Santoso</td>
-                        <td class="px-6 py-5 text-slate-400 font-semibold text-xs uppercase tracking-tighter">11.00 WIB</td>
+                        <td class="px-6 py-5 text-slate-700">Aprillia Bunga</td>
+                        <td class="px-6 py-5 text-slate-400 font-semibold text-xs uppercase tracking-tighter">09.00 WIB</td>
                         <td class="px-6 py-5">
                             <span class="px-4 py-1.5 bg-amber-50 text-amber-600 rounded-full text-[10px] font-black uppercase">Mendatang</span>
                         </td>
@@ -86,7 +86,7 @@
             <p class="text-[10px] font-black text-slate-400 uppercase mb-3 tracking-widest">Informasi Penting</p>
             <div class="flex items-start gap-3">
                 <div class="w-1.5 h-1.5 bg-emerald-500 rounded-full mt-1.5"></div>
-                <p class="text-xs font-bold text-slate-600 leading-relaxed">24 April - 25 April Anda mengajukan cuti tahunan.</p>
+                <p class="text-xs font-bold text-slate-600 leading-relaxed">24 April - 25 April Anda mengajukan cuti.</p>
             </div>
         </div>
     </div>

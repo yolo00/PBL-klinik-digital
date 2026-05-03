@@ -116,6 +116,10 @@ Route::prefix('pasien')->name('pasien.')->group(function () {
     Route::get('/riwayat-pembayaran', function () {
         return view('pasien.riwayat-pembayaran');
     })->name('riwayat-pembayaran');
+
+    Route::get('/profil', function () {
+        return view('pasien.profil');
+    })->name('profil');
 });
 // Pindahkan keluar dari area routes pasien, karena tidak mau kebaca routenya
 // 1. Route untuk HALAMAN DAFTAR (Menampilkan Tabel)
