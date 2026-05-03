@@ -145,21 +145,3 @@ Route::post('/logout', function () {
     request()->session()->regenerateToken();
     return redirect('/'); 
 })->name('logout');
-
-Route::get('/pasien/rekam-medis/export-pdf', function () {
-    // Sementara pakai data statis dulu agar muncul hasilnya
-    $data = [
-        'no_rm' => '#00164',
-        'dokter' => 'Dr. Fenni',
-        'tanggal' => '12 April 2026',
-        'keluhan' => 'Pasien merasa hangat dan meriang sejak 2 hari yang lalu, disertai batuk ringan.',
-        'diagnosa' => 'Demam Ringan (Influenza awal)',
-        'resep' => [
-            'Paracetamol 500mg (3x1 hari setelah makan)',
-            'Vitamin C, 1 tablet setiap hari'
-        ]
-    ];
-
-    $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pasien.pdf-rekam-medis', $data);
-    return $pdf->download('Rekam-Medis-UniHealth.pdf');
-})->name('pasien.rekam-medis.pdf');
