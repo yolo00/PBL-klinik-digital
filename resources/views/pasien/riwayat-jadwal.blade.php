@@ -29,131 +29,115 @@
                     <th class="px-4 py-4 font-bold text-center">Aksi</th>
                 </tr>
             </thead>
-            <tbody class="text-sm text-gray-700">
-                <tr class="border-b border-gray-50 hover:bg-gray-50 transition">
-                    <td class="px-4 py-5">
-                        <span class="block font-bold">12 April 2026</span>
+            <tbody class="text-sm text-gray-700 divide-y divide-gray-100">
+                <tr class="hover:bg-gray-50 transition">
+                    <td class="px-5 py-4">
+                        <span class="block font-semibold text-gray-800">12 April 2026</span>
                         <span class="text-xs text-gray-400">09:00 WIB</span>
                     </td>
-                    <td class="px-4 py-5">
-                        <span class="block font-medium">Dr. Fenni</span>
-                        <span class="text-[10px] text-gray-400 uppercase">Dokter Umum</span>
+                    <td class="px-5 py-4">
+                        <span class="block font-medium text-gray-700">Dr. Fenni</span>
                     </td>
-                    <td class="px-4 py-5">
-                        <span class="px-3 py-1 rounded-full text-[10px] font-bold bg-blue-50 text-blue-600 uppercase">Mendatang</span>
+                    <td class="px-5 py-4">
+                        <span class="inline-flex px-3 py-1 rounded-full text-[11px] font-semibold bg-blue-50 text-blue-600 uppercase">
+                            Mendatang
+                        </span>
                     </td>
-                    <td class="px-4 py-5">
-                        <a href="{{ route('pasien.pembayaran') }}" class="px-4 py-2 bg-emerald-500 text-white text-[10px] font-bold rounded-full uppercase hover:bg-emerald-600 transition inline-block">
+                    <td class="px-5 py-4">
+                        <a href="{{ route('pasien.pembayaran') }}"
+                            class="inline-flex px-4 py-2 rounded-full bg-emerald-500 text-white text-[11px] font-semibold uppercase hover:bg-emerald-600 transition">
                             Bayar
                         </a>
                     </td>
-                    <td class="px-4 py-5">
-                        <button disabled class="px-4 py-2 bg-gray-100 text-gray-400 text-[10px] font-bold rounded-full uppercase cursor-not-allowed">Belum Tersedia</button>
+                    <td class="px-5 py-4">
+                        <button disabled
+                            class="inline-flex px-4 py-2 rounded-full bg-gray-100 text-gray-400 text-[11px] font-semibold uppercase cursor-not-allowed">
+                            Belum Tersedia
+                        </button>
                     </td>
-                    <td class="px-4 py-5 text-center">
-                        <button class="px-4 py-2 bg-red-50 text-red-500 text-[10px] font-bold rounded-full uppercase hover:bg-red-500 hover:text-white transition">Batalkan</button>
-                    </td>
-                </tr>
-
-                <tr class="border-b border-gray-50 hover:bg-gray-50 transition">
-                    <td class="px-4 py-5 font-bold">10 April 2026 <span class="block text-xs text-gray-400 font-medium">14:00 WIB</span></td>
-                    <td class="px-4 py-5 font-medium text-gray-600">Dr. Andi</td>
-                    <td class="px-4 py-5">
-                        <span class="px-3 py-1 bg-gray-100 text-gray-500 text-[10px] font-bold rounded-full uppercase">Selesai</span>
-                    </td>
-                    <td class="px-4 py-5">
-                        <a href="{{ route('pasien.riwayat-pembayaran') }}" class="px-4 py-2 bg-blue-50 text-blue-600 text-[10px] font-bold rounded-full uppercase hover:bg-blue-600 hover:text-white transition inline-block">Lihat Struk</a>
-                    </td>
-                    <td class="px-4 py-5">
-                        <a href="{{ route('pasien.rekam-medis.detail', 2) }}" class="px-4 py-2 bg-indigo-50 text-indigo-600 text-[10px] font-bold rounded-full uppercase hover:bg-indigo-600 hover:text-white transition inline-block">Lihat Rekam Medis</a>
-                    </td>
-                    <td class="px-4 py-5 text-center"><span class="text-gray-300">—</span></td>
-                </tr>
-
-                <tr class="border-b border-gray-50 hover:bg-gray-50 transition">
-                    <td class="px-4 py-5 text-gray-400">08 April 2026 <span class="block text-xs uppercase font-medium">10:00 WIB</span></td>
-                    <td class="px-4 py-5 text-gray-400 font-medium">Dr. Siti</td>
-                    <td class="px-4 py-5">
-                        <span class="px-3 py-1 bg-red-50 text-red-400 text-[10px] font-bold rounded-full uppercase">Dibatalkan</span>
-                    </td>
-                    <td class="px-4 py-5 text-xs text-gray-400 italic">Refunded</td>
-                    <td class="px-4 py-5 text-center text-gray-300">—</td>
-                    <td class="px-4 py-5 text-center">
-                        <button class="px-4 py-2 bg-emerald-50 text-emerald-600 text-[10px] font-bold rounded-full uppercase hover:bg-emerald-500 hover:text-white transition">Pesan Lagi</button>
+                    <td class="px-5 py-4 text-center">
+                        <button
+                            class="inline-flex px-4 py-2 rounded-full bg-red-50 text-red-500 text-[11px] font-semibold uppercase hover:bg-red-500 hover:text-white transition">
+                            Batalkan
+                        </button>
                     </td>
                 </tr>
+                <tr class="hover:bg-gray-50 transition">
+                    <td class="px-5 py-4">
+                        <span class="block font-semibold text-gray-800">10 April 2026</span>
+                        <span class="text-xs text-gray-400">9:00 WIB</span>
+                    </td>
+                    <td class="px-5 py-4">
+                        <span class="font-medium text-gray-700">Dr. Fenni</span>
+                    </td>
+                    <td class="px-5 py-4">
+                        <span class="inline-flex px-3 py-1 rounded-full text-[11px] font-semibold bg-gray-100 text-gray-600 uppercase">
+                            Selesai
+                        </span>
+                    </td>
 
-                <tr class="border-b border-gray-50 hover:bg-gray-50 transition">
-                    <td class="px-4 py-5 font-bold">15 April 2026 <span class="block text-xs text-gray-400 font-medium">13:00 WIB</span></td>
-                    <td class="px-4 py-5 font-medium text-gray-600">Dr. Budi</td>
-                    <td class="px-4 py-5">
-                        <span class="px-3 py-1 bg-orange-50 text-orange-600 text-[10px] font-bold rounded-full uppercase">Menunggu</span>
-                    </td>
-                    <td class="px-4 py-5">
-                        <span class="px-4 py-2 bg-gray-50 text-gray-400 text-[10px] font-bold rounded-full uppercase">Lunas</span>
-                    </td>
-                    <td class="px-4 py-5">
-                        <button disabled class="px-4 py-2 bg-gray-100 text-gray-400 text-[10px] font-bold rounded-full uppercase cursor-not-allowed">Belum Tersedia</button>
-                    </td>
-                    <td class="px-4 py-5 text-center">
-                        <button class="px-4 py-2 bg-red-50 text-red-500 text-[10px] font-bold rounded-full uppercase hover:bg-red-500 hover:text-white transition">Batalkan</button>
-                    </td>
-                </tr>
-
-                <tr class="border-b border-gray-50 hover:bg-gray-50 transition">
-                    <td class="px-4 py-5 font-bold">05 April 2026 <span class="block text-xs text-gray-400 font-medium">16:00 WIB</span></td>
-                    <td class="px-4 py-5 font-medium text-gray-600">Dr. Fenni</td>
-                    <td class="px-4 py-5">
-                        <span class="px-3 py-1 bg-gray-100 text-gray-500 text-[10px] font-bold rounded-full uppercase">Selesai</span>
-                    </td>
-                    <td class="px-4 py-5">
-                        <a href="{{ route('pasien.riwayat-pembayaran') }}" class="px-4 py-2 bg-blue-50 text-blue-600 text-[10px] font-bold rounded-full uppercase hover:bg-blue-600 hover:text-white transition inline-block">Lihat Struk</a>
-                    </td>
-                    <td class="px-4 py-5">
-                        <a href="{{ route('pasien.rekam-medis.detail', 5) }}" class="px-4 py-2 bg-indigo-50 text-indigo-600 text-[10px] font-bold rounded-full uppercase hover:bg-indigo-600 hover:text-white transition inline-block">Lihat Rekam Medis</a>
-                    </td>
-                    <td class="px-4 py-5 text-center"><span class="text-gray-300">—</span></td>
-                </tr>
-
-                <tr class="border-b border-gray-50 hover:bg-gray-50 transition">
-                    <td class="px-4 py-5 font-bold">20 April 2026 <span class="block text-xs text-gray-400 font-medium">08:00 WIB</span></td>
-                    <td class="px-4 py-5 font-medium text-gray-600">Dr. Siti</td>
-                    <td class="px-4 py-5">
-                        <span class="px-3 py-1 bg-blue-50 text-blue-600 text-[10px] font-bold rounded-full uppercase">Mendatang</span>
-                    </td>
-                    <td class="px-4 py-5">
-                        <a href="{{ route('pasien.pembayaran') }}" class="px-4 py-2 bg-emerald-500 text-white text-[10px] font-bold rounded-full uppercase hover:bg-emerald-600 transition inline-block">
-                            Bayar
+                    <td class="px-5 py-4">
+                        <a href="{{ route('pasien.riwayat-pembayaran') }}"
+                            class="inline-flex px-4 py-2 rounded-full bg-blue-50 text-blue-600 text-[11px] font-semibold uppercase hover:bg-blue-600 hover:text-white transition">
+                            Lihat Struk
                         </a>
                     </td>
-                    <td class="px-4 py-5 text-center text-gray-300">—</td>
-                    <td class="px-4 py-5 text-center">
-                        <button class="px-4 py-2 bg-red-50 text-red-500 text-[10px] font-bold rounded-full uppercase hover:bg-red-500 hover:text-white transition">Batalkan</button>
+
+                    <td class="px-5 py-4">
+                        <a href="{{ route('pasien.rekam-medis.detail', 2) }}"
+                            class="inline-flex px-4 py-2 rounded-full bg-indigo-50 text-indigo-600 text-[11px] font-semibold uppercase hover:bg-indigo-600 hover:text-white transition">
+                            Rekam Medis
+                        </a>
+                    </td>
+
+                    <td class="px-5 py-4 text-center text-gray-300">
+                        —
                     </td>
                 </tr>
 
                 <tr class="hover:bg-gray-50 transition">
-                    <td class="px-4 py-5 text-gray-400 font-bold">01 Maret 2026 <span class="block text-xs font-medium">11:00 WIB</span></td>
-                    <td class="px-4 py-5 text-gray-400 font-medium">Dr. Andi</td>
-                    <td class="px-4 py-5">
-                        <span class="px-3 py-1 bg-gray-100 text-gray-500 text-[10px] font-bold rounded-full uppercase">Selesai</span>
+                    <td class="px-5 py-4">
+                        <span class="block font-semibold text-gray-400">08 April 2026</span>
+                        <span class="text-xs text-gray-300">10:00 WIB</span>
                     </td>
-                    <td class="px-4 py-5">
-                        <a href="{{ route('pasien.riwayat-pembayaran') }}" class="px-4 py-2 bg-blue-50 text-blue-600 text-[10px] font-bold rounded-full uppercase hover:bg-blue-600 hover:text-white transition inline-block">Lihat Struk</a>
+
+                    <td class="px-5 py-4">
+                        <span class="font-medium text-gray-400">Dr. Siti</span>
                     </td>
-                    <td class="px-4 py-5">
-                        <a href="{{ route('pasien.rekam-medis.detail', 2) }}" class="px-4 py-2 bg-indigo-50 text-indigo-600 text-[10px] font-bold rounded-full uppercase hover:bg-indigo-600 hover:text-white transition inline-block">Lihat Rekam Medis</a>
+
+                    <td class="px-5 py-4">
+                        <span class="inline-flex px-3 py-1 rounded-full text-[11px] font-semibold bg-red-50 text-red-400 uppercase">
+                            Dibatalkan
+                        </span>
                     </td>
-                    <td class="px-4 py-5 text-center"><span class="text-gray-300">—</span></td>
+
+                    <td class="px-5 py-4">
+                        <span class="text-xs italic text-gray-400">
+                            Refunded
+                        </span>
+                    </td>
+
+                    <td class="px-5 py-4 text-center text-gray-300">
+                        —
+                    </td>
+
+                    <td class="px-5 py-4 text-center">
+                        <button
+                            class="inline-flex px-4 py-2 rounded-full bg-emerald-50 text-emerald-600 text-[11px] font-semibold uppercase hover:bg-emerald-500 hover:text-white transition">
+                            Pesan Lagi
+                        </button>
+                    </td>
                 </tr>
             </tbody>
         </table>
     </div>
 
-    <div class="mt-8 flex justify-center items-center gap-4 text-xs font-bold text-gray-500">
-        <button class="w-8 h-8 rounded-lg border border-gray-200 flex items-center justify-center hover:bg-emerald-500 hover:text-white transition">&lt;</button>
-        <span>Halaman 1 dari 2</span>
-        <button class="w-8 h-8 rounded-lg border border-gray-200 flex items-center justify-center hover:bg-emerald-500 hover:text-white transition">&gt;</button>
+    <div class="p-8 bg-slate-50 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-4">
+        <span class="text-sm font-medium text-slate-500">Menampilkan <span class="text-slate-900 font-bold">1 - 3</span> dari <span class="text-slate-900 font-bold"> 3 </span> Jadwal </span>
+        <div class="flex gap-3">
+            <button class="px-5 py-2 bg-white border border-slate-200 rounded-xl text-sm font-bold text-slate-400 cursor-not-allowed transition hover:bg-slate-50">Sebelumnya</button>
+            <button class="px-5 py-2 bg-white border border-slate-200 rounded-xl text-sm font-bold text-slate-400 cursor-not-allowed transition hover:bg-slate-50">Selanjutnya</button>
+        </div>
     </div>
 </div>
 @endsection

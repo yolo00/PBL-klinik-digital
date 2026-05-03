@@ -122,12 +122,7 @@ Route::prefix('pasien')->name('pasien.')->group(function () {
 Route::get('/pasien/riwayat-rekam-medis', function () {
     // Data dummy untuk isi tabel
     $rekamMedis = collect([
-        (object) ['id' => 1, 'tanggal' => '12 April 2026', 'dokter' => 'Dr. Fenni', 'diagnosa' => 'Influenza & Demam'],
-        (object) ['id' => 2, 'tanggal' => '28 Maret 2026', 'dokter' => 'Dr. Andi', 'diagnosa' => 'Gastritis Akut'],
-        (object) ['id' => 3, 'tanggal' => '15 Februari 2026', 'dokter' => 'Dr. Siti', 'diagnosa' => 'Scaling Gigi'],
-        (object) ['id' => 4, 'tanggal' => '10 Januari 2026', 'dokter' => 'Dr. Budi', 'diagnosa' => 'Hipertensi'],
-        (object) ['id' => 5, 'tanggal' => '22 Desember 2025', 'dokter' => 'Dr. Fenni', 'diagnosa' => 'Cek Rutin Pasca Flu'],
-        (object) ['id' => 6, 'tanggal' => '05 November 2025', 'dokter' => 'Dr. Andi', 'diagnosa' => 'Radang Tenggorokan']
+        (object) ['id' => 1, 'tanggal' => '12 April 2026', 'dokter' => 'Dr. Fenni', 'diagnosa' => 'Influenza & Demam']
     ]);
 
     return view('pasien.riwayat-rekam-medis', compact('rekamMedis'));

@@ -26,15 +26,12 @@
         <h1 class="text-center text-[32px] font-bold text-slate-800 mb-4 tracking-tight">Masuk ke UniHealth</h1>
         <p class="text-center text-[15px] font-medium text-slate-500 mb-8 mx-4">Akses jadwal klinik dan janji temu pasien Anda di kampus.</p>
 
-        {{-- Pesan error login --}}
         @if ($errors->has('login'))
             <div class="mb-5 rounded-[16px] bg-rose-50 border border-rose-200 px-5 py-3 flex items-center gap-3">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-rose-500 shrink-0"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
                 <p class="text-[14px] font-medium text-rose-600">{{ $errors->first('login') }}</p>
             </div>
         @endif
-
-        {{-- Pesan sukses (misal: setelah register) --}}
         @if (session('success'))
             <div class="mb-5 rounded-[16px] bg-emerald-50 border border-emerald-200 px-5 py-3 flex items-center gap-3">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-emerald-500 shrink-0"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>

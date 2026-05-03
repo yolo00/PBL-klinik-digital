@@ -62,10 +62,10 @@
         </div>
         
         <div class="p-8 bg-slate-50 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-4">
-            <span class="text-sm font-medium text-slate-500 italic">Menampilkan <span class="text-slate-900 font-bold">1 - {{ count($rekamMedis) }}</span> dari <span class="text-slate-900 font-bold">{{ count($rekamMedis) }}</span> Rekam Medis</span>
+            <span class="text-sm font-medium text-slate-500">Menampilkan <span class="text-slate-900 font-bold">1 - {{ count($rekamMedis) }}</span> dari <span class="text-slate-900 font-bold">{{ count($rekamMedis) }}</span> Rekam Medis</span>
             <div class="flex gap-3">
                 <button class="px-5 py-2 bg-white border border-slate-200 rounded-xl text-sm font-bold text-slate-400 cursor-not-allowed transition hover:bg-slate-50">Sebelumnya</button>
-                <button class="px-5 py-2 bg-white border border-slate-200 rounded-xl text-sm font-bold text-emerald-600 transition hover:border-emerald-500 hover:bg-emerald-50 active:scale-95">Selanjutnya</button>
+                <button class="px-5 py-2 bg-white border border-slate-200 rounded-xl text-sm font-bold text-slate-400 cursor-not-allowed transition hover:bg-slate-50">Selanjutnya</button>
             </div>
         </div>
     </div>

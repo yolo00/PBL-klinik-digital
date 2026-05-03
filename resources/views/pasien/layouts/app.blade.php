@@ -71,14 +71,6 @@
                 <i class="fa-solid fa-file-waveform w-5 text-center"></i>
                 Rekam Medis
             </a>
-            <a href="{{ route('pasien.pembayaran') }}" class="flex items-center gap-4 px-4 py-4 rounded-xl {{ request()->routeIs('pasien.pembayaran') ? 'sidebar-active' : 'sidebar-link' }}">
-                <i class="fa-solid fa-money-bill-wave w-5 text-center"></i>
-                Pembayaran
-            </a>
-            <a href="{{ route('pasien.riwayat-pembayaran') }}" class="flex items-center gap-4 px-4 py-4 rounded-xl {{ request()->routeIs('pasien.riwayat-pembayaran') ? 'sidebar-active' : 'sidebar-link' }}">
-                <i class="fa-solid fa-receipt w-5 text-center"></i>
-                Riwayat Pembayaran
-            </a>
 
         </nav>
     </aside>

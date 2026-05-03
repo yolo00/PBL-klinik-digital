@@ -10,11 +10,24 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Outfit', sans-serif; }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(28px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            opacity: 0;
+            animation: fadeInUp 0.65s ease-out forwards;
+        }
+        .fade-in-1 { animation-delay: 0.05s; }
+        .fade-in-2 { animation-delay: 0.2s; }
+        .fade-in-3 { animation-delay: 0.35s; }
+        .fade-in-4 { animation-delay: 0.5s; }
     </style>
 </head>
 <body class="min-h-screen bg-slate-50 text-slate-800">
     <!-- Navbar -->
-    <header class="w-full bg-white sticky top-0 z-50 shadow-sm border-b border-emerald-100">
+    <header class="w-full bg-white sticky top-0 z-50 shadow-sm border-b border-emerald-100 fade-in fade-in-1">
         
         <div class="flex items-center justify-between px-8 py-4 w-full max-w-[1500px] mx-auto">
             <!-- Logo area -->
@@ -42,7 +55,7 @@
 
     <main class="w-full">
         <!-- Hero Section -->
-        <div class="px-6 py-12 relative overflow-hidden bg-gradient-to-b from-white to-emerald-50/50">
+        <div class="px-6 py-12 relative overflow-hidden bg-gradient-to-b from-white to-emerald-50/50 fade-in fade-in-2">
             
             <div class="bg-white/90 backdrop-blur-md rounded-[32px] md:rounded-[40px] p-8 md:p-16 mt-4 grid grid-cols-1 md:grid-cols-12 gap-12 items-center mx-auto max-w-[1400px] shadow-[0_8px_30px_rgb(0,0,0,0.03)] border border-emerald-50 relative z-10">
                 <div class="md:col-span-7 space-y-6 md:pr-10">
@@ -81,7 +94,7 @@
         </div>
 
         <!-- Layanan Kami -->
-        <div class="px-6 py-20 max-w-[1400px] mx-auto relative relative z-20">
+        <div class="px-6 py-20 max-w-[1400px] mx-auto relative relative z-20 fade-in fade-in-3">
             <div class="text-center mb-14">
                 <h2 class="inline-block bg-emerald-100/80 text-emerald-800 py-2.5 px-8 rounded-full font-bold text-[16px] border border-emerald-200">Layanan Inti</h2>
                 <p class="mt-5 text-[36px] font-bold text-slate-800 tracking-tight">Perawatan Komprehensif Untuk Anda</p>
@@ -112,7 +125,7 @@
         </div>
 
         <!-- More Information -->
-        <div class="px-6 py-8 max-w-[1400px] mx-auto bg-white mb-20 rounded-[40px] shadow-[0_8px_30px_rgb(0,0,0,0.02)] border border-slate-100 relative">
+        <div class="px-6 py-8 max-w-[1400px] mx-auto bg-white mb-20 rounded-[40px] shadow-[0_8px_30px_rgb(0,0,0,0.02)] border border-slate-100 relative fade-in fade-in-4">
             <div class="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-16">
                 <!-- Left Column -->
                 <div class="md:col-span-5 flex flex-col h-full bg-emerald-50 rounded-[32px] p-8 md:p-12 border border-emerald-100 relative overflow-hidden text-center md:text-left">
@@ -177,7 +190,7 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-emerald-950 text-emerald-50/70 py-16 px-8 mt-auto rounded-t-[40px]">
+    <footer class="bg-emerald-950 text-emerald-50/70 py-16 px-8 mt-auto rounded-t-[40px] fade-in fade-in-4">
         <div class="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-16">
             <div class="md:col-span-5 lg:pr-10">
                 <div class="flex items-center gap-4 mb-6">

@@ -58,7 +58,7 @@
                 <p class="text-sm text-gray-500 mb-1 font-medium">Biaya Pendaftaran</p>
                 <p class="text-3xl font-black text-gray-900">Rp 50.000 <span class="text-sm font-medium text-gray-400">(QRIS Only)</span></p>
             </div>
-            <button type="submit" class="w-full md:w-auto bg-klinik-blue text-white px-12 py-5 rounded-2xl font-bold text-lg hover:bg-blue-600 transition-all shadow-xl shadow-blue-100 flex items-center justify-center gap-3">
+            <button type="submit" class="w-full md:w-auto bg-slate-500 text-white px-12 py-5 rounded-2xl font-bold text-lg hover:bg-blue-600 transition-all shadow-xl shadow-blue-100 flex items-center justify-center gap-3">
                 📅 Daftar Jadwal Sekarang
             </button>
         </div>
