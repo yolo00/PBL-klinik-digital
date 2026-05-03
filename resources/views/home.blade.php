@@ -38,10 +38,11 @@
             
             <!-- Nav Links -->
             <nav class="hidden md:flex items-center gap-8">
-                
+                <a href="{{ route('home') }}" class="text-[15px] font-semibold text-emerald-700 border-b-2 border-emerald-600 pb-0.5">Beranda</a>
+                <a href="{{ route('about') }}" class="text-[15px] font-semibold text-slate-600 hover:text-emerald-700 transition-colors">Tentang Kami</a>
                 <div class="flex items-center gap-3 ml-4">
-                    <a href="/register" class="text-[15px] font-bold border border-emerald-200 text-emerald-700 bg-emerald-50 px-6 py-2.5 rounded-full hover:bg-emerald-600 hover:text-white hover:border-emerald-600 shadow-sm shadow-emerald-500/20 hover:shadow-lg hover:-translate-y-0.5 transition-all">Daftar</a>
-                    <a href="/login" class="text-[15px] font-bold bg-emerald-600 text-white px-6 py-2.5 rounded-full hover:bg-emerald-700 shadow-md shadow-emerald-500/25 hover:shadow-lg hover:-translate-y-0.5 transition-all">Masuk</a>
+                    <a href="{{ route('register') }}" class="text-[15px] font-bold border border-emerald-200 text-emerald-700 bg-emerald-50 px-6 py-2.5 rounded-full hover:bg-emerald-600 hover:text-white hover:border-emerald-600 shadow-sm shadow-emerald-500/20 hover:shadow-lg hover:-translate-y-0.5 transition-all">Daftar</a>
+                    <a href="{{ route('login') }}" class="text-[15px] font-bold bg-emerald-600 text-white px-6 py-2.5 rounded-full hover:bg-emerald-700 shadow-md shadow-emerald-500/25 hover:shadow-lg hover:-translate-y-0.5 transition-all">Masuk</a>
                 </div>
             </nav>
         </div>
