@@ -43,19 +43,19 @@ Melalui UniHealth, seluruh data pasien, rekam medis, jadwal pemeriksaan, dan pro
 
 ```
 views/
-├── home.blade.php              # Landing page publik
-├── about.blade.php             # Halaman tentang kami
-├── login.blade.php             # Halaman masuk
-├── register.blade.php          # Registrasi akun pasien
-├── contact.blade.php           # Halaman kontak
+├── home.blade.php
+├── about.blade.php
+├── login.blade.php
+├── register.blade.php
+├── contact.blade.php
 │
 ├── admin/
 │   ├── dashboard.blade.php
-│   ├── dokter-*.blade.php      # CRUD data dokter
-│   ├── pasien-*.blade.php      # CRUD data pasien
-│   ├── jadwal-sistem.blade.php # Jadwal & cuti dokter
-│   ├── pembayaran-*.blade.php  # Manajemen pembayaran
-│   └── rekam-medis-*.blade.php # Manajemen rekam medis
+│   ├── dokter-*.blade.php
+│   ├── pasien-*.blade.php
+│   ├── jadwal-sistem.blade.php
+│   ├── pembayaran-*.blade.php
+│   └── rekam-medis-*.blade.php
 │
 ├── dokter/
 │   ├── dashboard-dokter.blade.php
