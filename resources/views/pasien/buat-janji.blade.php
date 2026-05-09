@@ -1,9 +1,9 @@
 @extends('pasien.layouts.app')
-@section('title', 'Booking Janji Temu')
+@section('title', 'Buat Janji Temu')
 @section('content')
 
     <section class="mb-10">
-        <h1 class="text-4xl font-black text-gray-900 mb-2 tracking-tight">Booking Janji Temu</h1>
+        <h1 class="text-4xl font-black text-gray-900 mb-2 tracking-tight">Buat Janji Temu</h1>
         <p class="text-gray-500 text-lg">Silakan pilih dokter, tanggal, dan waktu kunjungan Anda.</p>
     </section>
 
