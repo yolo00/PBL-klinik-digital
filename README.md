@@ -26,7 +26,6 @@ Melalui UniHealth, seluruh data pasien, rekam medis, jadwal pemeriksaan, dan pro
 - Manajemen jadwal pribadi dan pengajuan cuti
 - Daftar pasien yang terdaftar
 - Pengelolaan rekam medis pasien
-- Pengaturan jadwal operasional
 
 ### 🛠️ Admin
 - Dashboard statistik sistem (total pasien, dokter aktif, rekam medis baru)
@@ -35,7 +34,6 @@ Melalui UniHealth, seluruh data pasien, rekam medis, jadwal pemeriksaan, dan pro
 - Pengelolaan jadwal konsultasi
 - Manajemen pembayaran
 - Manajemen rekam medis
-- Persetujuan/penolakan pengajuan cuti dokter
 
 ---
 
@@ -87,14 +85,6 @@ views/
 - **Framework CSS:** Tailwind CSS
 - **Animasi:** `fadeInUp` untuk page load, `animate-pulse` untuk indikator status aktif
 
-### Palet Warna Status
-| Status | Warna |
-|---|---|
-| Dikonfirmasi / Aktif | Emerald (`emerald-100/700`) |
-| Menunggu / Pending | Amber (`amber-100/700`) |
-| Dibatalkan / Ditolak | Rose (`rose-100/700`) |
-| Selesai / Lunas | Sky (`sky-100/700`) |
-
 ---
 
 ## 🛠️ Teknologi
@@ -105,12 +95,11 @@ views/
 | Templating | Blade |
 | CSS Framework | Tailwind CSS |
 | Build Tool | Vite |
-| Font | Google Fonts — Outfit |
 | Pembayaran | QRIS & Cash |
 
 ---
 
-## 📍 Informasi Klinik
+## 📍 Informasi Klinik (Belum tentu)
 
 | | |
 |---|---|
