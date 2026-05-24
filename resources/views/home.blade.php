@@ -49,8 +49,8 @@
         <!-- Info Bar -->
         <div class="bg-emerald-600 w-full grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-emerald-500/50">
             <div class="py-2.5 px-6 text-[13px] md:text-[14px] text-center font-medium text-emerald-50">Jam Operasional 8:00 - 17:00 (Buka)</div>
-            <div class="py-2.5 px-6 text-[13px] md:text-[14px] text-center font-medium text-emerald-50">Antrean Hari Ini : <span class="font-bold text-white">5</span></div>
-            <div class="py-2.5 px-6 text-[13px] md:text-[14px] text-center font-medium text-emerald-50"><span class="font-bold text-white">3</span> Dokter Tersedia Hari Ini</div>
+            <div class="py-2.5 px-6 text-[13px] md:text-[14px] text-center font-medium text-emerald-50">Antrean Hari Ini : <span class="font-bold text-white">0</span></div>
+            <div class="py-2.5 px-6 text-[13px] md:text-[14px] text-center font-medium text-emerald-50"><span class="font-bold text-white">2</span> Dokter Tersedia Hari Ini</div>
         </div>
     </header>
 
@@ -95,7 +95,7 @@
         </div>
 
         <!-- Layanan Kami -->
-        <div class="px-6 py-20 max-w-[1400px] mx-auto relative relative z-20 fade-in fade-in-3">
+        <div class="px-6 py-20 max-w-[1400px] mx-auto relative z-20 fade-in fade-in-3">
             <div class="text-center mb-14">
                 <h2 class="inline-block bg-emerald-100/80 text-emerald-800 py-2.5 px-8 rounded-full font-bold text-[16px] border border-emerald-200">Layanan Inti</h2>
                 <p class="mt-5 text-[36px] font-bold text-slate-800 tracking-tight">Perawatan Komprehensif Untuk Anda</p>

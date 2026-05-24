@@ -7,9 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class AkunUser extends Authenticatable
 {
     protected $table = 'akun_user';
-    protected $primaryKey = 'id_user';
-
-    const UPDATED_AT = null;
+    protected $primaryKey = 'id';          // SQL: PRIMARY KEY (`id`)
 
     protected $fillable = [
         'email', 'password', 'nama', 'no_hp',
@@ -18,16 +16,19 @@ class AkunUser extends Authenticatable
 
     protected $hidden = ['password'];
 
+    // ─── Relasi ───────────────────────────────────────────────
 
     public function pasien()
     {
-        return $this->hasOne(Pasien::class, 'id_user', 'id_user');
+        return $this->hasOne(Pasien::class, 'id_user', 'id');
     }
 
     public function dokter()
     {
-        return $this->hasOne(Dokter::class, 'id_user', 'id_user');
+        return $this->hasOne(Dokter::class, 'id_user', 'id');
     }
+
+    // ─── Helper ───────────────────────────────────────────────
 
     public function getDrNameAttribute(): string
     {
@@ -37,6 +38,10 @@ class AkunUser extends Authenticatable
 
     public function getJenisKelaminLabelAttribute(): string
     {
-        return $this->jenis_kelamin === 'L' ? 'Laki-laki' : 'Perempuan';
+        return match ($this->jenis_kelamin) {
+            'L' => 'Laki-laki',
+            'P' => 'Perempuan',
+            default => '-',
+        };
     }
 }

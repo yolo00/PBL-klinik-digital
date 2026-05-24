@@ -7,19 +7,19 @@ use Illuminate\Database\Eloquent\Model;
 class Resep extends Model
 {
     protected $table = 'resep';
-    protected $primaryKey = 'id_resep';
+    protected $primaryKey = 'id';          // SQL: PRIMARY KEY (`id`)
 
-    // Hanya punya created_at
-    const UPDATED_AT = null;
+    // Tabel resep tidak memiliki timestamps
+    public $timestamps = false;
 
     protected $fillable = [
-        'id_rekam', 'nama_obat', 'dosis', 'aturan_pakai', 'jumlah',
+        'id_rekam', 'obat', 'dosis', 'aturan_pakai',
     ];
 
     // ─── Relasi ───────────────────────────────────────────────
 
     public function rekamMedis()
     {
-        return $this->belongsTo(RekamMedis::class, 'id_rekam', 'id_rekam');
+        return $this->belongsTo(RekamMedis::class, 'id_rekam', 'id');
     }
 }

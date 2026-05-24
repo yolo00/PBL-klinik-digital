@@ -15,7 +15,7 @@
             <p class="text-sm font-bold text-slate-700 mb-6 uppercase tracking-wider">Pindai kode QR ini untuk melakukan pembayaran</p>
             
             <div class="bg-slate-50 p-6 rounded-2xl border-2 border-dashed border-slate-200 mb-8">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=UniHealth-Payment-0020102040ID" alt="QR Code Pembayaran" class="w-56 h-56">
+                <img src="{{ asset('images/download.png') }}" alt="QR Code Pembayaran" class="w-56 h-56">
             </div>
 
             <div class="w-full bg-blue-50 rounded-2xl p-6 border border-blue-100">

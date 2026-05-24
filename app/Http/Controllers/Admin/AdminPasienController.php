@@ -14,7 +14,7 @@ class AdminPasienController extends Controller
     public function index(Request $request)
     {
         $query = Pasien::with('user')
-            ->join('akun_user', 'pasien.id_user', '=', 'akun_user.id_user')
+            ->join('akun_user', 'pasien.id_user', '=', 'akun_user.id')
             ->select('pasien.*');
 
         // Filter jenis kelamin
@@ -26,8 +26,7 @@ class AdminPasienController extends Controller
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
-                $q->where('akun_user.nama', 'like', "%{$search}%")
-                  ->orWhere('pasien.nimnik', 'like', "%{$search}%");
+                $q->where('akun_user.nama', 'like', "%{$search}%");
             });
         }
 
@@ -35,7 +34,7 @@ class AdminPasienController extends Controller
         $sort = $request->get('sort', 'nama_asc');
         match ($sort) {
             'nama_desc' => $query->orderBy('akun_user.nama', 'desc'),
-            'terbaru'   => $query->orderByDesc('pasien.id_pasien'),
+            'terbaru'   => $query->orderByDesc('pasien.id'),   // id bukan id_pasien
             default     => $query->orderBy('akun_user.nama', 'asc'),
         };
 
@@ -55,17 +54,17 @@ class AdminPasienController extends Controller
             'nama'          => 'required|string|max:100',
             'email'         => 'required|email|unique:akun_user,email',
             'password'      => 'required|string|min:6',
-            'nimnik'        => 'required|string|max:20',
             'no_hp'         => 'required|string|max:15',
             'jenis_kelamin' => 'required|in:L,P',
             'tgl_lahir'     => 'required|date',
+            'gol_darah'     => 'nullable|in:A,B,AB,O',
+            'riwayat_penyakit' => 'nullable|string',
         ], [
             'nama.required'          => 'Nama wajib diisi.',
             'email.required'         => 'Email wajib diisi.',
             'email.unique'           => 'Email sudah terdaftar.',
             'password.required'      => 'Password wajib diisi.',
             'password.min'           => 'Password minimal 6 karakter.',
-            'nimnik.required'        => 'NIM/NIK wajib diisi.',
             'no_hp.required'         => 'Nomor HP wajib diisi.',
             'jenis_kelamin.required' => 'Jenis kelamin wajib dipilih.',
             'tgl_lahir.required'     => 'Tanggal lahir wajib diisi.',
@@ -84,8 +83,9 @@ class AdminPasienController extends Controller
             ]);
 
             DB::table('pasien')->insert([
-                'id_user' => $userId,
-                'nimnik'  => $request->nimnik,
+                'id_user'          => $userId,
+                'gol_darah'        => $request->gol_darah,
+                'riwayat_penyakit' => $request->riwayat_penyakit,
             ]);
         });
 
@@ -95,8 +95,12 @@ class AdminPasienController extends Controller
 
     public function show($id)
     {
-        $pasien = Pasien::with('user', 'jadwals.dokter.user', 'jadwals.rekamMedis')
-            ->findOrFail($id);
+        $pasien = Pasien::with([
+            'user',
+            'alergi',
+            'jadwals.dokter.user',
+            'jadwals.rekamMedis',
+        ])->findOrFail($id);
 
         return view('admin.pasien-detail', compact('pasien'));
     }

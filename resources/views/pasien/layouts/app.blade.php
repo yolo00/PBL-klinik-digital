@@ -14,7 +14,7 @@
 
         .sidebar-active {
             background: rgba(255, 255, 255, 0.15);
-            border-left: 4px solid #4ed28e;
+            border-left: 4px solid #10b981;
             color: #ffffff;
             font-weight: 700;
         }

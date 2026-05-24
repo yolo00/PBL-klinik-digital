@@ -7,13 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class CutiDokter extends Model
 {
     protected $table = 'cuti_dokter';
-    protected $primaryKey = 'id_cuti';
-
-    // Hanya punya created_at
-    const UPDATED_AT = null;
+    protected $primaryKey = 'id';          // SQL: PRIMARY KEY (`id`)
 
     protected $fillable = [
-        'id_dokter', 'status', 'alasan', 'dari_tanggal', 'sampai_tanggal',
+        'id_dokter', 'dari_tanggal', 'sampai_tanggal', 'alasan', 'status',
     ];
 
     protected $casts = [
@@ -25,7 +22,7 @@ class CutiDokter extends Model
 
     public function dokter()
     {
-        return $this->belongsTo(Dokter::class, 'id_dokter', 'id_dokter');
+        return $this->belongsTo(Dokter::class, 'id_dokter', 'id');
     }
 
     // ─── Helper ───────────────────────────────────────────────

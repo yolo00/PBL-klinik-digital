@@ -4,7 +4,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Registrasi - UniHealth</title>
-    <!-- Direct link to pre-compiled Vite CSS -->
     <link rel="stylesheet" href="{{ asset('build/assets/app-T3EHGAm9.css') }}">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -40,32 +39,29 @@
                 </div>
             @endif
             
+            {{-- Nama & Email --}}
             <div class="grid grid-cols-2 gap-5">
                 <div class="col-span-2 md:col-span-1">
                     <label class="mb-1.5 block text-[15px] font-semibold text-slate-700">Nama Lengkap</label>
-                    <input type="text" name="nama" value="{{ old('nama') }}" required placeholder="Masukkan nama" class="w-full rounded-[20px] border border-slate-200 bg-slate-50 px-5 py-3.5 text-[15px] text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:bg-white transition-all shadow-sm focus:shadow-md focus:shadow-emerald-500/30" />
+                    <input type="text" name="nama" id="nama" value="{{ old('nama') }}" required placeholder="Masukkan nama"
+                        class="w-full rounded-[20px] border border-slate-200 bg-slate-50 px-5 py-3.5 text-[15px] text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:bg-white transition-all shadow-sm focus:shadow-md focus:shadow-emerald-500/30" />
                 </div>
 
                 <div class="col-span-2 md:col-span-1">
                     <label class="mb-1.5 block text-[15px] font-semibold text-slate-700">Email</label>
-                    <input type="email" name="email" value="{{ old('email') }}" required placeholder="Masukkan email" class="w-full rounded-[20px] border border-slate-200 bg-slate-50 px-5 py-3.5 text-[15px] text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:bg-white transition-all shadow-sm focus:shadow-md focus:shadow-emerald-500/30" />
+                    <input type="email" name="email" id="email" value="{{ old('email') }}" required placeholder="Masukkan email"
+                        class="w-full rounded-[20px] border border-slate-200 bg-slate-50 px-5 py-3.5 text-[15px] text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:bg-white transition-all shadow-sm focus:shadow-md focus:shadow-emerald-500/30" />
                 </div>
             </div>
 
-            <div class="grid grid-cols-2 gap-5">
-                <div class="col-span-2 md:col-span-1">
-                    <label class="mb-1.5 block text-[15px] font-semibold text-slate-700">NIM/NIK</label>
-                    <input type="text" name="nimnik" value="{{ old('nimnik') }}" required placeholder="Masukkan NIM/NIK" class="w-full rounded-[20px] border border-slate-200 bg-slate-50 px-5 py-3.5 text-[15px] text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:bg-white transition-all shadow-sm focus:shadow-md focus:shadow-emerald-500/30" />
-                </div>
-
-                <div class="col-span-2 md:col-span-1">
-                    <label class="mb-1.5 block text-[15px] font-semibold text-slate-700">Tanggal Lahir</label>
-                    <div class="relative">
-                        <input type="date" name="tgl_lahir" value="{{ old('tgl_lahir') }}" required class="w-full rounded-[20px] border border-slate-200 bg-slate-50 px-5 py-3.5 text-[15px] text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:bg-white transition-all shadow-sm focus:shadow-md focus:shadow-emerald-500/30 cursor-pointer" style="color-scheme: light;" />
-                    </div>
-                </div>
+            {{-- Tanggal Lahir (full width) --}}
+            <div>
+                <label class="mb-1.5 block text-[15px] font-semibold text-slate-700">Tanggal Lahir</label>
+                <input type="date" name="tgl_lahir" id="tgl_lahir" value="{{ old('tgl_lahir') }}" required
+                    class="w-full rounded-[20px] border border-slate-200 bg-slate-50 px-5 py-3.5 text-[15px] text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:bg-white transition-all shadow-sm focus:shadow-md focus:shadow-emerald-500/30 cursor-pointer" style="color-scheme: light;" />
             </div>
 
+            {{-- Jenis Kelamin & No HP --}}
             <div class="grid grid-cols-2 gap-5">
                 <div class="col-span-2 md:col-span-1">
                     <label class="mb-1.5 block text-[15px] font-semibold text-slate-700">Jenis Kelamin</label>
@@ -78,7 +74,7 @@
                             <span class="text-[14px] font-medium text-slate-700">Laki-Laki</span>
                         </label>
                         <label class="flex items-center gap-2 cursor-pointer relative">
-                            <input type="radio" name="jenis_kelamin" value="P" class="peer sr-only" required {{ old('jenis_kelamin') == 'P' ? 'checked' : '' }}>
+                            <input type="radio" name="jenis_kelamin" value="P" class="peer sr-only" {{ old('jenis_kelamin') == 'P' ? 'checked' : '' }}>
                             <div class="w-5 h-5 rounded-full border-2 border-slate-300 peer-checked:border-emerald-500 peer-checked:bg-emerald-500 bg-white transition-colors flex items-center justify-center">
                                 <div class="w-2 h-2 rounded-full bg-white opacity-0 peer-checked:opacity-100 transition-opacity"></div>
                             </div>
@@ -89,15 +85,43 @@
 
                 <div class="col-span-2 md:col-span-1">
                     <label class="mb-1.5 block text-[15px] font-semibold text-slate-700">Nomor Kontak</label>
-                    <input type="text" name="no_hp" value="{{ old('no_hp') }}" required placeholder="Masukkan nomor HP" class="w-full rounded-[20px] border border-slate-200 bg-slate-50 px-5 py-3.5 text-[15px] text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:bg-white transition-all shadow-sm focus:shadow-md focus:shadow-emerald-500/30" />
+                    <input type="text" name="no_hp" id="no_hp" value="{{ old('no_hp') }}" required placeholder="Masukkan nomor HP"
+                        class="w-full rounded-[20px] border border-slate-200 bg-slate-50 px-5 py-3.5 text-[15px] text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:bg-white transition-all shadow-sm focus:shadow-md focus:shadow-emerald-500/30" />
                 </div>
             </div>
 
+            {{-- Golongan Darah (field baru dari SQL revisi) --}}
+            <div>
+                <label class="mb-1.5 block text-[15px] font-semibold text-slate-700">Golongan Darah <span class="text-slate-400 font-normal text-[13px]">(opsional)</span></label>
+                <div class="flex gap-3 flex-wrap">
+                    @foreach(['A','B','AB','O'] as $gol)
+                    <label class="flex-1 min-w-[60px] cursor-pointer">
+                        <input type="radio" name="gol_darah" value="{{ $gol }}" class="peer sr-only" {{ old('gol_darah') == $gol ? 'checked' : '' }}>
+                        <div class="text-center py-3 rounded-[16px] border-2 border-slate-200 bg-slate-50 text-[15px] font-bold text-slate-600
+                                    peer-checked:border-emerald-500 peer-checked:bg-emerald-50 peer-checked:text-emerald-700
+                                    hover:border-emerald-300 transition-all">
+                            {{ $gol }}
+                        </div>
+                    </label>
+                    @endforeach
+                    <label class="flex-1 min-w-[60px] cursor-pointer">
+                        <input type="radio" name="gol_darah" value="" class="peer sr-only" {{ old('gol_darah') === null || old('gol_darah') === '' ? 'checked' : '' }}>
+                        <div class="text-center py-3 rounded-[16px] border-2 border-slate-200 bg-slate-50 text-[14px] font-medium text-slate-400
+                                    peer-checked:border-slate-400 peer-checked:bg-slate-100 peer-checked:text-slate-600
+                                    hover:border-slate-300 transition-all">
+                            Tidak tahu
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            {{-- Password --}}
             <div class="grid grid-cols-2 gap-5">
                 <div class="col-span-2 md:col-span-1">
                     <label class="mb-1.5 block text-[15px] font-semibold text-slate-700">Kata Sandi</label>
                     <div class="relative">
-                        <input type="password" name="password" required placeholder="Buat kata sandi anda" class="w-full rounded-[20px] border border-slate-200 bg-slate-50 px-5 py-3.5 text-[15px] text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:bg-white transition-all shadow-sm focus:shadow-md focus:shadow-emerald-500/30" />
+                        <input type="password" name="password" id="password" required placeholder="Buat kata sandi anda"
+                            class="w-full rounded-[20px] border border-slate-200 bg-slate-50 px-5 py-3.5 text-[15px] text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:bg-white transition-all shadow-sm focus:shadow-md focus:shadow-emerald-500/30" />
                         <button type="button" class="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-emerald-600 transition-colors" onclick="const p=this.previousElementSibling; p.type=p.type==='password'?'text':'password';">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
                         </button>
@@ -107,7 +131,8 @@
                 <div class="col-span-2 md:col-span-1">
                     <label class="mb-1.5 block text-[15px] font-semibold text-slate-700">Konfirmasi Sandi</label>
                     <div class="relative">
-                        <input type="password" name="password_confirmation" required placeholder="Ulangi kata sandi" class="w-full rounded-[20px] border border-slate-200 bg-slate-50 px-5 py-3.5 text-[15px] text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:bg-white transition-all shadow-sm focus:shadow-md focus:shadow-emerald-500/30" />
+                        <input type="password" name="password_confirmation" id="password_confirmation" required placeholder="Ulangi kata sandi"
+                            class="w-full rounded-[20px] border border-slate-200 bg-slate-50 px-5 py-3.5 text-[15px] text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:bg-white transition-all shadow-sm focus:shadow-md focus:shadow-emerald-500/30" />
                         <button type="button" class="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-emerald-600 transition-colors" onclick="const p=this.previousElementSibling; p.type=p.type==='password'?'text':'password';">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
                         </button>
@@ -116,7 +141,10 @@
             </div>
 
             <div class="pt-6">
-                <button type="submit" class="w-full md:w-[70%] mx-auto block rounded-[20px] bg-emerald-600 px-5 py-4 text-[16px] font-bold text-white hover:bg-emerald-700 focus:ring-4 focus:ring-emerald-500/30 transition-all shadow-lg shadow-emerald-500/25 transform hover:-translate-y-0.5">Daftar Sekarang</button>
+                <button type="submit" id="btn-daftar"
+                    class="w-full md:w-[70%] mx-auto block rounded-[20px] bg-emerald-600 px-5 py-4 text-[16px] font-bold text-white hover:bg-emerald-700 focus:ring-4 focus:ring-emerald-500/30 transition-all shadow-lg shadow-emerald-500/25 transform hover:-translate-y-0.5">
+                    Daftar Sekarang
+                </button>
             </div>
             
             <div class="text-center mt-6">
