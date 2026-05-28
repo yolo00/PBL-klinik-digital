@@ -7,9 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Pasien extends Model
 {
     protected $table = 'pasien';
-    protected $primaryKey = 'id';          // SQL: PRIMARY KEY (`id`)
-
-    // Tabel pasien tidak memiliki timestamps
+    protected $primaryKey = 'id';
     public $timestamps = false;
 
     protected $fillable = [

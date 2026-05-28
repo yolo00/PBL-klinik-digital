@@ -8,6 +8,7 @@ class RekamMedis extends Model
 {
     protected $table = 'rekam_medis';
     protected $primaryKey = 'id';          // SQL: PRIMARY KEY (`id`)
+    public $timestamps = true;
 
     protected $fillable = [
         'id_jadwal', 'keluhan', 'diagnosa', 'catatan', 'created_by', 'updated_by',

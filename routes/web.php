@@ -35,7 +35,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
     Route::resource('pasien', AdminPasienController::class)
-        ->only(['index', 'create', 'store', 'show', 'edit']);
+        ->only(['index', 'create', 'store', 'show', 'edit', 'update', 'destroy']);
 
     Route::resource('dokter', AdminDokterController::class)
         ->only(['index', 'create', 'store', 'show', 'edit']);

@@ -55,6 +55,7 @@
                         <x-admin.table-action
                             viewUrl="{{ route('admin.pasien.show', $pasien->id) }}"
                             editUrl="{{ route('admin.pasien.edit', $pasien->id) }}"
+                            deleteUrl="{{ route('admin.pasien.destroy', $pasien->id) }}"
                         />
                     </td>
                 </tr>

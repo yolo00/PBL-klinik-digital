@@ -7,7 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class AkunUser extends Authenticatable
 {
     protected $table = 'akun_user';
-    protected $primaryKey = 'id';          // SQL: PRIMARY KEY (`id`)
+    protected $primaryKey = 'id';
 
     protected $fillable = [
         'email', 'password', 'nama', 'no_hp',
