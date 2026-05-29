@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Jadwal extends Model
 {
     protected $table = 'jadwal';
-    protected $primaryKey = 'id';          // SQL: PRIMARY KEY (`id`)
+    protected $primaryKey = 'id';
 
     protected $fillable = [
         'id_dokter', 'id_pasien', 'tanggal', 'jam', 'status',
@@ -15,7 +15,7 @@ class Jadwal extends Model
 
     protected $casts = [
         'tanggal' => 'date',
-        'jam'     => 'integer',   // TINYINT(2) — contoh: 9 = 09:00
+        'jam'     => 'integer',   // TINYINT — contoh: 9 = 09:00
     ];
 
     // ─── Relasi ───────────────────────────────────────────────
@@ -40,7 +40,7 @@ class Jadwal extends Model
         return $this->hasOne(Pembayaran::class, 'id_jadwal', 'id');
     }
 
-    // ─── Helper ───────────────────────────────────────────────
+    // ─── Accessor ─────────────────────────────────────────────
 
     /** Kembalikan jam dalam format "09:00" */
     public function getJamFormatAttribute(): string
@@ -67,6 +67,17 @@ class Jadwal extends Model
             'selesai'      => 'text-emerald-600',
             'dibatalkan'   => 'text-rose-600',
             default        => 'text-slate-600',
+        };
+    }
+
+    public function getStatusBadgeAttribute(): string
+    {
+        return match ($this->status) {
+            'menunggu'     => 'bg-amber-50 text-amber-700 ring-1 ring-amber-200',
+            'dikonfirmasi' => 'bg-blue-50 text-blue-700 ring-1 ring-blue-200',
+            'selesai'      => 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200',
+            'dibatalkan'   => 'bg-rose-50 text-rose-700 ring-1 ring-rose-200',
+            default        => 'bg-slate-50 text-slate-700 ring-1 ring-slate-200',
         };
     }
 }

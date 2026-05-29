@@ -6,10 +6,10 @@
         <div class="flex items-center justify-between mb-6 border-b border-slate-100 pb-4">
             <div>
                 <h2 class="text-[20px] font-bold text-slate-800">Detail Dokter</h2>
-                <p class="text-[14px] text-slate-500 mt-1">ID Dokter #{{ $dokter->id_dokter }}</p>
+                <p class="text-[14px] text-slate-500 mt-1">ID Dokter #{{ $dokter->id }}</p>
             </div>
             <div class="flex gap-3">
-                <a href="{{ route('admin.dokter.edit', $dokter->id_dokter) }}"
+                <a href="{{ route('admin.dokter.edit', $dokter->id) }}"
                     class="px-5 py-2.5 bg-slate-500 text-white font-medium rounded-[12px] text-[14px] hover:bg-slate-600 transition-colors">Edit</a>
                 <a href="{{ route('admin.dokter.index') }}"
                     class="px-5 py-2.5 bg-slate-100 text-slate-600 font-medium rounded-[12px] text-[14px] hover:bg-slate-200 transition-colors">Kembali</a>
@@ -19,12 +19,34 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <x-admin.detail-card label="Nama Dokter"    :value="$dokter->user->nama ?? '—'" />
             <x-admin.detail-card label="Email"          :value="$dokter->user->email ?? '—'" />
-            <x-admin.detail-card label="Spesialis"      :value="$dokter->spesialis" />
+            <x-admin.detail-card label="Spesialis"      :value="$dokter->spesialisasi->nama ?? '—'" />
             <x-admin.detail-card label="Nomor HP"       :value="$dokter->user->no_hp ?? '—'" />
             <x-admin.detail-card label="Jenis Kelamin"  :value="$dokter->user->jenis_kelamin_label ?? '—'" />
             <x-admin.detail-card label="Tanggal Lahir"  :value="$dokter->user->tgl_lahir ? \Carbon\Carbon::parse($dokter->user->tgl_lahir)->format('d M Y') : '—'" />
             <x-admin.detail-card label="Total Jadwal"   :value="$dokter->jadwals->count() . ' jadwal'" />
             <x-admin.detail-card label="Total Cuti"     :value="$dokter->cutiDokters->count() . ' pengajuan'" />
+        </div>
+
+        {{-- Dokumen SIP --}}
+        <div class="mt-6 p-5 bg-slate-50 border border-slate-200 rounded-[16px]">
+            <p class="text-[13px] font-bold text-slate-600 mb-2 uppercase tracking-wide">Dokumen SIP</p>
+            @if($dokter->dokumen_sip)
+                <div class="flex items-center gap-3">
+                    <svg class="w-5 h-5 text-slate-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    <span class="text-[14px] text-slate-700">{{ basename($dokter->dokumen_sip) }}</span>
+                    <a href="{{ asset($dokter->dokumen_sip) }}" target="_blank"
+                        class="ml-auto px-4 py-2 bg-slate-500 text-white font-medium rounded-[10px] text-[13px] hover:bg-slate-600 transition-colors shadow-sm flex items-center gap-1.5">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                        </svg>
+                        Buka Dokumen
+                    </a>
+                </div>
+            @else
+                <p class="text-[14px] text-slate-400 italic">Belum ada dokumen SIP yang diunggah.</p>
+            @endif
         </div>
     </div>
 

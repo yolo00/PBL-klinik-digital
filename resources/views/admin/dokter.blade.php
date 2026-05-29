@@ -40,14 +40,15 @@
             <tbody class="text-[14px] text-slate-800 font-medium divide-y divide-gray-100">
                 @forelse($dokters as $dokter)
                 <tr class="hover:bg-gray-50 transition-colors">
-                    <td class="px-6 py-5 align-middle text-slate-500">{{ $dokter->id_dokter }}</td>
+                    <td class="px-6 py-5 align-middle text-slate-500">{{ $dokter->id }}</td>
                     <td class="px-6 py-5 align-middle">{{ $dokter->user->nama ?? '-' }}</td>
-                    <td class="px-6 py-5 align-middle">{{ $dokter->spesialis }}</td>
+                    <td class="px-6 py-5 align-middle">{{ $dokter->spesialisasi->nama ?? '-' }}</td>
                     <td class="px-6 py-5 align-middle">{{ $dokter->user->no_hp ?? '-' }}</td>
                     <td class="px-6 py-5 text-center">
                         <x-admin.table-action
-                            viewUrl="{{ route('admin.dokter.show', $dokter->id_dokter) }}"
-                            editUrl="{{ route('admin.dokter.edit', $dokter->id_dokter) }}"
+                            viewUrl="{{ route('admin.dokter.show', $dokter->id) }}"
+                            editUrl="{{ route('admin.dokter.edit', $dokter->id) }}"
+                            deleteUrl="{{ route('admin.dokter.destroy', $dokter->id) }}"
                         />
                     </td>
                 </tr>
