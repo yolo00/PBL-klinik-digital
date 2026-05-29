@@ -40,9 +40,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::resource('jadwal', AdminJadwalController::class);
 
-    Route::resource('rekam-medis', AdminRekamMedisController::class)
-        ->only(['index', 'create', 'store', 'show', 'edit'])
-        ->parameters(['rekam-medis' => 'rekamMedis']);
+    Route::resource('rekam-medis', AdminRekamMedisController::class);
 
     Route::resource('pembayaran', AdminPembayaranController::class)
         ->only(['index', 'create', 'store', 'show', 'edit']);
