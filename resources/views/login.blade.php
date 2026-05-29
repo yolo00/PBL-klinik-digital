@@ -24,7 +24,7 @@
 
         <p class="text-center text-[13px] font-bold tracking-[0.2em] text-emerald-600 mb-2 uppercase">Selamat Datang Kembali</p>
         <h1 class="text-center text-[32px] font-bold text-slate-800 mb-4 tracking-tight">Masuk ke UniHealth</h1>
-        <p class="text-center text-[15px] font-medium text-slate-500 mb-8 mx-4">Akses jadwal klinik dan janji temu pasien Anda di kampus.</p>
+        <p class="text-center text-[15px] font-medium text-slate-500 mb-8 mx-4">Akses jadwal klinik dan janji temu pasien Anda.</p>
 
         @if ($errors->has('login'))
             <div class="mb-5 rounded-[16px] bg-rose-50 border border-rose-200 px-5 py-3 flex items-center gap-3">

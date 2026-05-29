@@ -1,36 +1,23 @@
 <?php
- 
+
 namespace App\Http\Controllers;
- 
+
 use Illuminate\Http\Request;
- 
+use Illuminate\Support\Facades\Auth;
+
 class LoginController extends Controller
 {
-    // Kredensial sementara untuk keperluan pengembangan front-end
-    private array $users = [
-        [
-            'email'    => 'bubungchii27@gmail.com',
-            'password' => '123123',
-            'role'     => 'pasien',
-            'redirect' => '/pasien/dashboard',
-        ],
-        [
-            'email'    => 'feynsiber26@gmail.com',
-            'password' => '456456',
-            'role'     => 'dokter',
-            'redirect' => '/dokter/dashboard',
-        ],
-        [
-            'email'    => 'acbdfehhs1@gmail.com',
-            'password' => '789789',
-            'role'     => 'admin',
-            'redirect' => '/admin/dashboard',
-        ],
-    ];
- 
+    // 1. Menampilkan Halaman Login
+    public function showLogin()
+    {
+        return view('login');
+    }
+
+    // 2. Memproses Data Login
     public function submit(Request $request)
     {
-        $request->validate([
+        // Validasi input
+        $credentials = $request->validate([
             'email'    => 'required|email',
             'password' => 'required',
         ], [
@@ -38,21 +25,29 @@ class LoginController extends Controller
             'email.email'       => 'Format email tidak valid.',
             'password.required' => 'Kata sandi wajib diisi.',
         ]);
- 
-        foreach ($this->users as $user) {
-            if (
-                $request->email === $user['email'] &&
-                $request->password === $user['password']
-            ) {
-                // Simpan role di session untuk keperluan front-end
-                session(['role' => $user['role'], 'email' => $user['email']]);
- 
-                return redirect($user['redirect']);
-            }
+
+        // Autentikasi mencocokkan email & password dengan isi Database
+        if (Auth::attempt($credentials)) {
+            // Jika sukses, buat sesi baru agar aman
+            $request->session()->regenerate();
+
+            // Arahkan ke dashboard masing-masing sesuai properti yang ada di Model AkunUser
+            return redirect()->route(Auth::user()->halaman_beranda);
         }
- 
+
+        // Jika gagal login (email/password salah), kembalikan ke halaman login
         return back()
             ->withInput($request->only('email'))
             ->withErrors(['login' => 'Email atau kata sandi salah.']);
+    }
+
+    // 3. Memproses Logout
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('home');
     }
 }
