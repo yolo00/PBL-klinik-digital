@@ -7,7 +7,13 @@
         <a href="{{ $editUrl }}" class="px-5 py-2 rounded-full bg-gray-200 hover:bg-blue-100 hover:text-blue-700 text-slate-700 text-[13px] transition-colors shadow-sm">Edit</a>
     @endif
     
-    @if($showDelete ?? true)
+    @if(($showDelete ?? true) && isset($deleteUrl))
+        <form action="{{ $deleteUrl }}" method="POST" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="px-5 py-2 rounded-full bg-gray-200 hover:bg-rose-100 hover:text-rose-700 text-slate-700 text-[13px] transition-colors shadow-sm">Hapus</button>
+        </form>
+    @elseif($showDelete ?? true)
         <button type="button" class="px-5 py-2 rounded-full bg-gray-200 hover:bg-rose-100 hover:text-rose-700 text-slate-700 text-[13px] transition-colors shadow-sm">Hapus</button>
     @endif
 </div>

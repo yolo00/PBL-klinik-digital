@@ -13,7 +13,7 @@
 
     <!-- Filters -->
     <form method="GET" action="{{ route('admin.pasien.index') }}" class="flex flex-wrap gap-4 mb-4">
-        <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama / NIM/NIK…"
+        <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama pasien…"
             class="flex-1 min-w-[200px] max-w-[500px] px-5 py-3 bg-white border border-slate-200 rounded-[12px] text-[14px] focus:outline-none focus:ring-2 focus:ring-slate-500/20 focus:border-slate-500 transition-all shadow-[0_2px_10px_rgb(0,0,0,0.02)]">
 
         <select name="jenis_kelamin" class="px-5 py-3 bg-gray-400 text-white font-medium border-0 rounded-[12px] text-[14px] focus:outline-none shadow-sm min-w-[170px] appearance-none cursor-pointer">
@@ -39,7 +39,6 @@
                 <tr class="text-[14px] text-slate-600 font-medium border-b border-gray-100">
                     <th class="px-6 py-5">Id</th>
                     <th class="px-6 py-5">Nama</th>
-                    <th class="px-6 py-5">NIM / NIK</th>
                     <th class="px-6 py-5">Nomor HP</th>
                     <th class="px-6 py-5">Jenis Kelamin</th>
                     <th class="px-6 py-5 text-center">Kelola</th>
@@ -48,21 +47,21 @@
             <tbody class="text-[14px] text-slate-800 font-medium divide-y divide-gray-100">
                 @forelse($pasiens as $pasien)
                 <tr class="hover:bg-gray-50 transition-colors">
-                    <td class="px-6 py-5 align-middle text-slate-500">{{ $pasien->id_pasien }}</td>
+                    <td class="px-6 py-5 align-middle text-slate-500">{{ $pasien->id }}</td>
                     <td class="px-6 py-5 align-middle">{{ $pasien->user->nama ?? '-' }}</td>
-                    <td class="px-6 py-5 align-middle">{{ $pasien->nimnik }}</td>
                     <td class="px-6 py-5 align-middle">{{ $pasien->user->no_hp ?? '-' }}</td>
                     <td class="px-6 py-5 align-middle">{{ $pasien->user->jenis_kelamin_label ?? '-' }}</td>
                     <td class="px-6 py-5 text-center">
                         <x-admin.table-action
-                            viewUrl="{{ route('admin.pasien.show', $pasien->id_pasien) }}"
-                            editUrl="{{ route('admin.pasien.edit', $pasien->id_pasien) }}"
+                            viewUrl="{{ route('admin.pasien.show', $pasien->id) }}"
+                            editUrl="{{ route('admin.pasien.edit', $pasien->id) }}"
+                            deleteUrl="{{ route('admin.pasien.destroy', $pasien->id) }}"
                         />
                     </td>
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="6" class="px-6 py-10 text-center text-slate-400 text-[14px]">Belum ada data pasien.</td>
+                    <td colspan="5" class="px-6 py-10 text-center text-slate-400 text-[14px]">Belum ada data pasien.</td>
                 </tr>
                 @endforelse
             </tbody>

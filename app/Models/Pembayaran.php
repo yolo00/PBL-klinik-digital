@@ -7,10 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Pembayaran extends Model
 {
     protected $table = 'pembayaran';
-    protected $primaryKey = 'id_pembayaran';
-
-    // Hanya punya created_at
-    const UPDATED_AT = null;
+    protected $primaryKey = 'id';          // SQL: PRIMARY KEY (`id`)
 
     protected $fillable = [
         'id_jadwal', 'jumlah', 'metode', 'status', 'nomor_struk',
@@ -24,7 +21,7 @@ class Pembayaran extends Model
 
     public function jadwal()
     {
-        return $this->belongsTo(Jadwal::class, 'id_jadwal', 'id_jadwal');
+        return $this->belongsTo(Jadwal::class, 'id_jadwal', 'id');
     }
 
     // ─── Helper ───────────────────────────────────────────────

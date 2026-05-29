@@ -53,18 +53,18 @@
                         <td class="px-6 py-5 text-center">
                             <div class="flex items-center justify-center gap-2">
                                 <a href="{{ route('admin.cuti-dokter.detail', $cuti->id_cuti) }}"
-                                    class="px-5 py-2 rounded-full bg-gray-200 hover:bg-slate-100 hover:text-slate-700 text-slate-700 text-[13px] transition-colors shadow-sm">Lihat</a>
+                                    class="px-5 py-2 rounded-12 bg-gray-200 hover:bg-slate-100 hover:text-slate-700 text-slate-700 text-[13px] transition-colors shadow-sm">Lihat</a>
 
                                 @if($cuti->status === 'pending')
                                 <form action="{{ route('admin.cuti-dokter.terima', $cuti->id_cuti) }}" method="POST" class="inline">
                                     @csrf
                                     <button type="submit"
-                                        class="px-5 py-2 rounded-full bg-emerald-100 hover:bg-emerald-200 text-emerald-700 text-[13px] font-bold transition-colors shadow-sm">Terima</button>
+                                        class="px-5 py-2 rounded-12 bg-emerald-100 hover:bg-emerald-200 text-emerald-700 text-[13px] font-bold transition-colors shadow-sm">Terima</button>
                                 </form>
                                 <form action="{{ route('admin.cuti-dokter.tolak', $cuti->id_cuti) }}" method="POST" class="inline">
                                     @csrf
                                     <button type="submit"
-                                        class="px-5 py-2 rounded-full bg-rose-100 hover:bg-rose-200 text-rose-700 text-[13px] font-bold transition-colors shadow-sm">Tolak</button>
+                                        class="px-5 py-2 rounded-12 bg-rose-100 hover:bg-rose-200 text-rose-700 text-[13px] font-bold transition-colors shadow-sm">Tolak</button>
                                 </form>
                                 @endif
                             </div>

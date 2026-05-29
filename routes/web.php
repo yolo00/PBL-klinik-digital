@@ -34,14 +34,11 @@ use App\Http\Controllers\Admin\AdminJadwalSistemController;
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
-    Route::resource('pasien', AdminPasienController::class)
-        ->only(['index', 'create', 'store', 'show', 'edit']);
+    Route::resource('pasien', AdminPasienController::class);
 
-    Route::resource('dokter', AdminDokterController::class)
-        ->only(['index', 'create', 'store', 'show', 'edit']);
+    Route::resource('dokter', AdminDokterController::class);
 
-    Route::resource('jadwal', AdminJadwalController::class)
-        ->only(['index', 'create', 'store', 'show', 'edit']);
+    Route::resource('jadwal', AdminJadwalController::class);
 
     Route::resource('rekam-medis', AdminRekamMedisController::class)
         ->only(['index', 'create', 'store', 'show', 'edit'])

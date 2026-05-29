@@ -1,66 +1,126 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🏥 UniHealth — Sistem Klinik Digital Kampus
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+> Sistem berbasis web untuk administrasi dan pengelolaan layanan kesehatan klinik kampus secara digital.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 📖 Tentang Proyek
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+**UniHealth** adalah aplikasi web klinik digital yang dirancang untuk membantu proses administrasi dan pengelolaan layanan kesehatan di lingkungan kampus. Sistem ini hadir sebagai solusi atas berbagai kendala pengelolaan data medis secara konvensional, seperti penumpukan dokumen fisik, risiko kehilangan data, serta lambatnya proses pendaftaran dan penjadwalan pasien.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Melalui UniHealth, seluruh data pasien, rekam medis, jadwal pemeriksaan, dan proses administrasi dapat disimpan dan dikelola secara terpusat. Sistem ini dapat diakses secara fleksibel oleh tiga jenis pengguna sesuai hak akses masing-masing: **Admin**, **Dokter**, dan **Pasien**.
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## ✨ Fitur Utama
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### 👤 Pasien
+- Registrasi akun dan profil pasien
+- Pembuatan janji temu (pilih dokter, tanggal, dan sesi)
+- Riwayat jadwal konsultasi
+- Riwayat rekam medis dan resep obat
+- Riwayat dan status pembayaran
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 🩺 Dokter
+- Dashboard jadwal harian
+- Manajemen jadwal pribadi dan pengajuan cuti
+- Daftar pasien yang terdaftar
+- Pengelolaan rekam medis pasien
 
-## Laravel Sponsors
+### 🛠️ Admin
+- Dashboard statistik sistem (total pasien, dokter aktif, rekam medis baru)
+- Manajemen data dokter (tambah, edit, hapus, lihat detail)
+- Manajemen data pasien
+- Pengelolaan jadwal konsultasi
+- Manajemen pembayaran
+- Manajemen rekam medis
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+---
 
-### Premium Partners
+## 🗂️ Struktur Halaman (Views)
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+```
+views/
+├── home.blade.php
+├── about.blade.php
+├── login.blade.php
+├── register.blade.php
+├── contact.blade.php
+│
+├── admin/
+│   ├── dashboard.blade.php
+│   ├── dokter-*.blade.php
+│   ├── pasien-*.blade.php
+│   ├── jadwal-sistem.blade.php
+│   ├── pembayaran-*.blade.php
+│   └── rekam-medis-*.blade.php
+│
+├── dokter/
+│   ├── dashboard-dokter.blade.php
+│   ├── jadwal-saya.blade.php
+│   ├── pasien-dokter.blade.php
+│   ├── rekam-medis-dokter.blade.php
+│   ├── edit-rekam-medis.blade.php
+│   ├── pengaturan-jadwal.blade.php
+│   └── profil-dokter.blade.php
+│
+└── pasien/
+    ├── dashboard.blade.php
+    ├── buat-janji.blade.php
+    ├── riwayat-jadwal.blade.php
+    ├── riwayat-rekam-medis.blade.php
+    ├── riwayat-pembayaran.blade.php
+    ├── pembayaran.blade.php
+    ├── lihat.blade.php
+    └── profil.blade.php
+```
 
-## Contributing
+---
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## 🎨 Desain Sistem
 
-## Code of Conduct
+- **Font:** Outfit (Google Fonts)
+- **Warna Utama:** Emerald (`#059669`) — mencerminkan nuansa kesehatan
+- **Border Radius:** Konsisten menggunakan `rounded-[32px]` / `rounded-[40px]` untuk card utama
+- **Framework CSS:** Tailwind CSS
+- **Animasi:** `fadeInUp` untuk page load, `animate-pulse` untuk indikator status aktif
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+## 🛠️ Teknologi
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+| Layer | Teknologi |
+|---|---|
+| Backend | Laravel (PHP) |
+| Templating | Blade |
+| CSS Framework | Tailwind CSS |
+| Build Tool | Vite |
+| Pembayaran | QRIS & Cash |
 
-## License
+---
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 📍 Informasi Klinik (Belum tentu)
+
+| | |
+|---|---|
+| **Lokasi** | Politeknik Negeri Batam, Jl. Ahmad Yani, Batam Center, Batam Kota, Kepri 29461 |
+| **Jam Operasional** | Senin – Jumat: 08.00 – 17.00 WIB |
+| **Email** | health67@gmail.com |
+| **Telepon** | 0671-2345-6789 |
+
+---
+
+## 👨‍💻 Tim Pengembang
+
+| Nama | Peran |
+|---|---|
+| **Michael Sando Turnip** | Pengelola Database · Developer Halaman Admin |
+| **Aprillia Bunga** | Frontend Developer · Developer Halaman Pasien |
+| **Fenni Patrik Simanjuntak** | Developer Halaman Dokter · Desainer Logo Web |
+
+---
+
+## 📄 Lisensi
+
+© 2026 UniHealth System. All rights reserved.  
+Dikembangkan sebagai proyek klinik digital kampus — Politeknik Negeri Batam.
