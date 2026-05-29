@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class RekamMedis extends Model
 {
     protected $table = 'rekam_medis';
-    protected $primaryKey = 'id';          // SQL: PRIMARY KEY (`id`)
+    protected $primaryKey = 'id';
     public $timestamps = true;
 
     protected $fillable = [
@@ -34,5 +34,25 @@ class RekamMedis extends Model
     public function updatedBy()
     {
         return $this->belongsTo(AkunUser::class, 'updated_by', 'id');
+    }
+
+    // ─── Accessor ─────────────────────────────────────────────
+
+    /** Shortcut ke nama pasien via jadwal */
+    public function getNamaPasienAttribute(): string
+    {
+        return $this->jadwal?->pasien?->user?->nama ?? '(Tanpa Pasien)';
+    }
+
+    /** Shortcut ke nama dokter via jadwal */
+    public function getNamaDokterAttribute(): string
+    {
+        return $this->jadwal?->dokter?->user?->nama ?? '—';
+    }
+
+    /** Diagnosa dipotong untuk tampilan tabel */
+    public function getDiagnosaSingkatAttribute(): string
+    {
+        return \Illuminate\Support\Str::limit($this->diagnosa ?? '—', 60);
     }
 }

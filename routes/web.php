@@ -46,11 +46,16 @@ Route::middleware('auth')->group(function () {
     Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
-        Route::resource('pasien', AdminPasienController::class)->only(['index', 'create', 'store', 'show', 'edit']);
-        Route::resource('dokter', AdminDokterController::class)->only(['index', 'create', 'store', 'show', 'edit']);
-        Route::resource('jadwal', AdminJadwalController::class)->only(['index', 'create', 'store', 'show', 'edit']);
-        Route::resource('rekam-medis', AdminRekamMedisController::class)->only(['index', 'create', 'store', 'show', 'edit'])->parameters(['rekam-medis' => 'rekamMedis']);
-        Route::resource('pembayaran', AdminPembayaranController::class)->only(['index', 'create', 'store', 'show', 'edit']);
+    Route::resource('pasien', AdminPasienController::class);
+
+    Route::resource('dokter', AdminDokterController::class);
+
+    Route::resource('jadwal', AdminJadwalController::class);
+
+    Route::resource('rekam-medis', AdminRekamMedisController::class);
+
+    Route::resource('pembayaran', AdminPembayaranController::class)
+        ->only(['index', 'create', 'store', 'show', 'edit']);
 
         // Jadwal Sistem & Cuti Dokter
         Route::get('/jadwal-sistem', [AdminJadwalSistemController::class, 'index'])->name('jadwal-sistem');
