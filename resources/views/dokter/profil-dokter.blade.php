@@ -60,7 +60,7 @@
     </div>
 
     <div class="mt-12 flex flex-col md:flex-row gap-4 justify-end border-t border-slate-50 pt-8">
-        <button class="px-8 py-4 bg-slate-100 text-slate-500 rounded-2xl text-[11px] font-black uppercase hover:bg-red-50 hover:text-red-500 transition-all flex items-center justify-center gap-2">
+        <button onclick="event.preventDefault(); document.getElementById('logout-form-dokter').submit();" class="px-8 py-4 bg-slate-100 text-slate-500 rounded-2xl text-[11px] font-black uppercase hover:bg-red-50 hover:text-red-500 transition-all flex items-center justify-center gap-2">
             <i class="fa-solid fa-power-off"></i> Logout
         </button>
         <button class="px-10 py-4 bg-slate-800 text-white rounded-2xl text-[11px] font-black uppercase hover:bg-emerald-600 transition-all shadow-lg shadow-slate-200 flex items-center justify-center gap-2">

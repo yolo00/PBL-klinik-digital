@@ -28,12 +28,10 @@ Route::view('/contact', 'contact')->name('contact'); // incase kalian belum up t
 // ==========================================
 // RUTE GUEST (Hanya untuk yang BELUM login)
 // ==========================================
-Route::middleware('guest')->group(function () {
-    Route::get('/login', fn() => view('login'))->name('login');
-    Route::post('/login', [\App\Http\Controllers\LoginController::class, 'submit'])->name('login.submit');
-    Route::view('/register', 'register')->name('register');
-    Route::post('/register', [\App\Http\Controllers\RegisterController::class, 'submit'])->name('register.submit');
-});
+Route::get('/login', fn() => view('login'))->name('login');
+Route::post('/login', [\App\Http\Controllers\LoginController::class, 'submit'])->name('login.submit');
+Route::view('/register', 'register')->name('register');
+Route::post('/register', [\App\Http\Controllers\RegisterController::class, 'submit'])->name('register.submit');
 
 // ==========================================
 // RUTE AUTH (WAJIB LOGIN)
@@ -43,7 +41,7 @@ Route::middleware('auth')->group(function () {
     // --------------------------------------
     // 1. ADMIN ROUTES
     // --------------------------------------
-    Route::prefix('admin')->name('admin.')->group(function () {
+    Route::prefix('admin')->name('admin.')->middleware('role:A')->group(function () {
         Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
     Route::resource('pasien', AdminPasienController::class);
@@ -67,7 +65,7 @@ Route::middleware('auth')->group(function () {
     // --------------------------------------
     // 2. DOKTER ROUTES
     // --------------------------------------
-    Route::prefix('dokter')->group(function () {
+    Route::prefix('dokter')->middleware('role:D')->group(function () {
         Route::get('/dashboard', function () { return view('dokter.dashboard-dokter'); })->name('dokter.dashboard');
         Route::get('/jadwal', function () { return view('dokter.jadwal-saya'); })->name('dokter.jadwal');
         Route::get('/pasien', function () { return view('dokter.pasien-dokter'); })->name('dokter.pasien');
@@ -80,7 +78,7 @@ Route::middleware('auth')->group(function () {
     // --------------------------------------
     // 3. PASIEN ROUTES
     // --------------------------------------
-    Route::prefix('pasien')->name('pasien.')->group(function () {
+    Route::prefix('pasien')->name('pasien.')->middleware('role:P')->group(function () {
         Route::get('/dashboard', function () { return view('pasien.dashboard'); })->name('dashboard');
         Route::get('/buat-janji', function () { return view('pasien.buat-janji'); })->name('buat-janji');
         Route::get('/riwayat-jadwal', function () { return view('pasien.riwayat-jadwal'); })->name('riwayat');

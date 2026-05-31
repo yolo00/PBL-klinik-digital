@@ -6,10 +6,19 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
+use Illuminate\Support\Facades\Auth;
+
 class RegisterController extends Controller
 {
     public function submit(Request $request)
     {
+        // Jika sudah login, hapus sesi lama terlebih dahulu
+        if (Auth::check()) {
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+        }
+
         $request->validate([
             'nama'          => 'required|string|max:100',
             'email'         => 'required|email|unique:akun_user,email',

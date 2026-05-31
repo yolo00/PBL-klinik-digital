@@ -10,7 +10,7 @@ class AkunUser extends Authenticatable
     use Notifiable;
 
     protected $table = 'akun_user';
-    protected $primaryKey = 'id_user';
+    protected $primaryKey = 'id';
 
     const UPDATED_AT = null;
 
@@ -23,12 +23,12 @@ class AkunUser extends Authenticatable
 
     public function pasien()
     {
-        return $this->hasOne(Pasien::class, 'id_user', 'id_user');
+        return $this->hasOne(Pasien::class, 'id_user', 'id');
     }
 
     public function dokter()
     {
-        return $this->hasOne(Dokter::class, 'id_user', 'id_user');
+        return $this->hasOne(Dokter::class, 'id_user', 'id');
     }
 
     public function getDrNameAttribute(): string

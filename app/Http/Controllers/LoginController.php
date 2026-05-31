@@ -16,6 +16,13 @@ class LoginController extends Controller
     // 2. Memproses Data Login
     public function submit(Request $request)
     {
+        // Jika sudah login, hapus sesi lama terlebih dahulu
+        if (Auth::check()) {
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+        }
+
         // Validasi input
         $credentials = $request->validate([
             'email'    => 'required|email',
