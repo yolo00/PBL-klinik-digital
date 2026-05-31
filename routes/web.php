@@ -12,6 +12,9 @@ use App\Http\Controllers\Admin\AdminRekamMedisController;
 use App\Http\Controllers\Admin\AdminPembayaranController;
 use App\Http\Controllers\Admin\AdminJadwalSistemController;
 
+// Pasien Controller
+use App\Http\Controllers\Pasien\PasienController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -22,8 +25,8 @@ use App\Http\Controllers\Admin\AdminJadwalSistemController;
 // RUTE PUBLIK (Tanpa perlu login)
 // ==========================================
 Route::view('/', 'home')->name('home');
-Route::view('/about', 'about')->name('about'); // incase kalian belum up to date
-Route::view('/contact', 'contact')->name('contact'); // incase kalian belum up to date
+Route::view('/about', 'about')->name('about');
+Route::view('/contact', 'contact')->name('contact');
 
 // ==========================================
 // RUTE GUEST (Hanya untuk yang BELUM login)
@@ -43,17 +46,13 @@ Route::middleware('auth')->group(function () {
     // --------------------------------------
     Route::prefix('admin')->name('admin.')->middleware('role:A')->group(function () {
         Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
-
-    Route::resource('pasien', AdminPasienController::class);
-
-    Route::resource('dokter', AdminDokterController::class);
-
-    Route::resource('jadwal', AdminJadwalController::class);
-
-    Route::resource('rekam-medis', AdminRekamMedisController::class);
-
-    Route::resource('pembayaran', AdminPembayaranController::class)
-        ->only(['index', 'create', 'store', 'show', 'edit']);
+        
+        Route::resource('pasien', AdminPasienController::class);
+        Route::resource('dokter', AdminDokterController::class);
+        Route::resource('jadwal', AdminJadwalController::class);
+        Route::resource('rekam-medis', AdminRekamMedisController::class);
+        Route::resource('pembayaran', AdminPembayaranController::class)
+            ->only(['index', 'create', 'store', 'show', 'edit']);
 
         // Jadwal Sistem & Cuti Dokter
         Route::get('/jadwal-sistem', [AdminJadwalSistemController::class, 'index'])->name('jadwal-sistem');
@@ -76,26 +75,28 @@ Route::middleware('auth')->group(function () {
     });
 
     // --------------------------------------
-    // 3. PASIEN ROUTES
+    // 3. PASIEN ROUTES (SUDAH DIPERBARUI DENGAN OOP CONTROLLER & SECURITY ROLE)
     // --------------------------------------
     Route::prefix('pasien')->name('pasien.')->middleware('role:P')->group(function () {
-        Route::get('/dashboard', function () { return view('pasien.dashboard'); })->name('dashboard');
-        Route::get('/buat-janji', function () { return view('pasien.buat-janji'); })->name('buat-janji');
-        Route::get('/riwayat-jadwal', function () { return view('pasien.riwayat-jadwal'); })->name('riwayat');
+        
+        // Rute CRUD OOP menggunakan PasienController
+        Route::get('/dashboard', [PasienController::class, 'index'])->name('dashboard');
+        
+        Route::get('/buat-janji', [PasienController::class, 'buatJanji'])->name('buat-janji');
+        Route::post('/buat-janji', [PasienController::class, 'storeJadwal'])->name('store_jadwal');
+        
+        Route::get('/profil/edit', function () { return view('pasien.edit-profil'); })->name('profil.edit');
+        Route::post('/profil/update', [PasienController::class, 'updateProfil'])->name('profil.update');
+        
+        Route::delete('/jadwal/{id}/batal', [PasienController::class, 'destroyJadwal'])->name('batal_jadwal');
+
+        // Rute Statis Pasien
+        Route::get('/riwayat-jadwal', [PasienController::class, 'riwayatJadwal'])->name('riwayat');
         Route::get('/pembayaran', function () { return view('pasien.pembayaran'); })->name('pembayaran'); 
         Route::get('/riwayat-pembayaran', function () { return view('pasien.riwayat-pembayaran'); })->name('riwayat-pembayaran');
         Route::get('/profil', function () { return view('pasien.profil'); })->name('profil');
-        Route::get('/profil/edit', function () { return view('pasien.edit-profil'); })->name('profil.edit');
         
-        Route::post('/profil/update', function () {
-            // Di sini nanti tempat kode simpan ke database
-            return back()->with('success', 'Profil Anda berhasil diperbarui!');
-        })->name('profil.update');
-
-        // SUDAH DIMASUKKAN KEMBALI KE GRUP PASIEN
-        // URL dan Name diubah agar tidak bentrok (karena sudah otomatis ditambah prefix dari grup)
         Route::get('/riwayat-rekam-medis', function () {
-            // Data dummy untuk isi tabel
             $rekamMedis = collect([
                 (object) ['id' => 1, 'tanggal' => '12 April 2026', 'dokter' => 'Dr. Fenni', 'diagnosa' => 'Influenza & Demam']
             ]);
