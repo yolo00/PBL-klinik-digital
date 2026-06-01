@@ -12,6 +12,9 @@ use App\Http\Controllers\Admin\AdminRekamMedisController;
 use App\Http\Controllers\Admin\AdminPembayaranController;
 use App\Http\Controllers\Admin\AdminJadwalSistemController;
 
+// Dokter Routes Controllers
+use App\Http\Controllers\Dokter\RekamMedisController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -70,9 +73,20 @@ Route::middleware('auth')->group(function () {
         Route::get('/jadwal', function () { return view('dokter.jadwal-saya'); })->name('dokter.jadwal');
         Route::get('/pasien', function () { return view('dokter.pasien-dokter'); })->name('dokter.pasien');
         Route::get('/pengaturan-jadwal', function () { return view('dokter.pengaturan-jadwal'); })->name('dokter.pengaturan');
-        Route::get('/rekam-medis', function () { return view('dokter.rekam-medis-dokter'); })->name('dokter.rekam-medis');
-        Route::get('/rekam-medis/edit/{id}', function ($id) { return view('dokter.edit-rekam-medis', ['id' => $id]); })->name('dokter.edit-rekam');
-        Route::get('/profil', function() { return view('dokter.profil-dokter'); })->name('dokter.profil');
+        
+        // --- INI BAGIAN REKAM MEDIS YANG SUDAH DISESUAIKAN VIA CONTROLLER ---
+    Route::get('/rekam-medis', [RekamMedisController::class, 'index'])->name('dokter.rekam-medis');
+    Route::get('/rekam-medis/create', [RekamMedisController::class, 'create'])->name('dokter.rekam-medis.create');
+    Route::post('/rekam-medis', [RekamMedisController::class, 'store'])->name('dokter.rekam-medis.store');
+    
+    // HANYA BAGIAN INI YANG DIUBAH NAMA ALIASNYA AGAR COCOK DENGAN TOMBOL DI BLADE JADWAL
+    Route::get('/rekam-medis/edit/{id}', [RekamMedisController::class, 'edit'])->name('dokter.rekam-medis.edit');
+    
+    Route::put('/rekam-medis/update/{id}', [RekamMedisController::class, 'update'])->name('dokter.rekam-medis.update');
+    Route::delete('/rekam-medis/delete/{id}', [RekamMedisController::class, 'destroy'])->name('dokter.rekam-medis.destroy');
+    // ---------------------------------------------------------------------
+    
+        Route::get('/profil', function () { return view('dokter.profil-dokter'); })->name('dokter.profil');
     });
 
     // --------------------------------------
