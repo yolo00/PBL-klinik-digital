@@ -46,8 +46,28 @@ class Pembayaran extends Model
         };
     }
 
+    public function getStatusBadgeAttribute(): string
+    {
+        return match ($this->status) {
+            'pending' => 'bg-amber-50 text-amber-700 ring-1 ring-amber-200',
+            'lunas'   => 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200',
+            'batal'   => 'bg-rose-50 text-rose-700 ring-1 ring-rose-200',
+            default   => 'bg-slate-50 text-slate-700 ring-1 ring-slate-200',
+        };
+    }
+
     public function getJumlahFormatAttribute(): string
     {
         return 'Rp ' . number_format($this->jumlah, 0, ',', '.');
+    }
+
+    public function getMetodeLabelAttribute(): string
+    {
+        return match ($this->metode) {
+            'cash'     => 'Cash',
+            'qris'     => 'QRIS',
+            'transfer' => 'Transfer Bank',
+            default    => strtoupper($this->metode),
+        };
     }
 }

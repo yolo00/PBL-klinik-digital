@@ -2,7 +2,8 @@
 @section('title', 'Dashboard Admin')
 @section('content')
 <div class="space-y-6 max-w-[1400px] mx-auto">
-    <!-- Statistic Cards -->
+
+    {{-- ── Statistic Cards ─────────────────────────────────── --}}
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
         <div class="bg-gray-200/50 rounded-[28px] p-6 border border-slate-100 flex flex-col items-center justify-center gap-3">
             <p class="text-[14px] text-slate-500 font-medium">Total Pasien</p>
@@ -22,60 +23,202 @@
         </div>
     </div>
 
-    <!-- Dokter Cuti Hari Ini -->
-    @if($dokterCutiHariIni->isNotEmpty())
-    <div class="bg-amber-50 border border-amber-200 rounded-[20px] px-6 py-4 flex items-center gap-4">
-        <svg class="w-5 h-5 text-amber-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
-        <div>
-            <p class="text-[14px] font-bold text-amber-800">Dokter Cuti Hari Ini</p>
-            <p class="text-[13px] text-amber-700">
-                {{ $dokterCutiHariIni->map(fn($c) => $c->dokter->dr_name)->join(', ') }}
-            </p>
+    {{-- ── Grafik Jadwal ────────────────────────────────────── --}}
+    <div class="bg-gray-200/50 rounded-[32px] p-8 border border-slate-100">
+        {{-- Header + Tombol Pilih Range --}}
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+            <div>
+                <h2 class="text-[20px] font-bold text-slate-800">Grafik Jadwal</h2>
+                <p class="text-[13px] text-slate-500 mt-0.5">
+                    {{ now()->subDays($range)->translatedFormat('d M Y') }}
+                    &ndash;
+                    {{ now()->addDays($range)->translatedFormat('d M Y') }}
+                </p>
+            </div>
+            <div class="flex items-center gap-2">
+                @foreach([1, 3, 7] as $r)
+                <a href="{{ request()->fullUrlWithQuery(['range' => $r]) }}"
+                   class="px-4 py-1.5 rounded-full text-[13px] font-semibold transition-colors
+                          {{ $range == $r
+                              ? 'bg-blue-600 text-white shadow-sm'
+                              : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50' }}">
+                    ±{{ $r }} hari
+                </a>
+                @endforeach
+            </div>
         </div>
-    </div>
-    @endif
 
-    <!-- Jadwal Terbaru -->
-    <div class="bg-gray-200/50 rounded-[32px] overflow-hidden p-8 mt-6">
-        <h2 class="text-[20px] font-bold text-slate-800 mb-6">Jadwal Terbaru</h2>
-        <div class="overflow-x-auto bg-white rounded-[24px] shadow-sm border border-slate-100 px-2 py-2">
-            <table class="w-full text-left">
-                <thead>
-                    <tr class="text-[14px] text-slate-600 font-medium border-b border-gray-100">
-                        <th class="px-6 py-5">Pasien</th>
-                        <th class="px-6 py-5">Dokter</th>
-                        <th class="px-6 py-5">Tanggal</th>
-                        <th class="px-6 py-5">Jam</th>
-                        <th class="px-6 py-5">Status</th>
-                    </tr>
-                </thead>
-                <tbody class="text-[14px] text-slate-800 font-medium divide-y divide-gray-100">
-                    @forelse($jadwalTerbaru as $jadwal)
-                    <tr class="hover:bg-gray-50 transition-colors">
-                        <td class="px-6 py-5 align-middle">
-                            {{ $jadwal->pasien?->user?->nama ?? '-' }}
-                        </td>
-                        <td class="px-6 py-5 align-middle">
-                            {{ $jadwal->dokter->dr_name }}
-                        </td>
-                        <td class="px-6 py-5 align-middle text-slate-500">
-                            {{ $jadwal->tanggal->format('d M Y') }}
-                        </td>
-                        <td class="px-6 py-5 align-middle text-slate-500">
-                            {{ \Illuminate\Support\Str::substr($jadwal->jam, 0, 5) }}
-                        </td>
-                        <td class="px-6 py-5 align-middle font-bold {{ $jadwal->status_color }}">
-                            {{ $jadwal->status_label }}
-                        </td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="5" class="px-6 py-10 text-center text-slate-400 text-[14px]">Belum ada jadwal tercatat.</td>
-                    </tr>
-                    @endforelse
-                </tbody>
-            </table>
+        {{-- Legend --}}
+        <div class="flex items-center gap-5 mb-4 text-[13px] text-slate-500">
+            <span class="flex items-center gap-1.5">
+                <span class="inline-block w-3 h-3 rounded-sm bg-slate-400"></span> Sudah lewat
+            </span>
+            <span class="flex items-center gap-1.5">
+                <span class="inline-block w-3 h-3 rounded-sm bg-blue-500"></span> Mendatang / Hari ini
+            </span>
+        </div>
+
+        {{-- Chart --}}
+        <div class="bg-white rounded-[20px] border border-slate-100 p-4">
+            <canvas id="jadwalChart" height="90"></canvas>
         </div>
     </div>
+
+    {{-- ── Tabel Jadwal Hari Ini & Dokter Cuti (1 row) ──────── --}}
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+        {{-- Jadwal Hari Ini --}}
+        <div class="bg-gray-200/50 rounded-[32px] overflow-hidden p-6 border border-slate-100">
+            <h2 class="text-[18px] font-bold text-slate-800 mb-4">
+                Jadwal Hari Ini
+                <span class="ml-2 text-[13px] font-semibold text-blue-600 bg-blue-50 px-2.5 py-0.5 rounded-full">
+                    {{ $jadwalHariIni->count() }} jadwal
+                </span>
+            </h2>
+            <div class="overflow-x-auto bg-white rounded-[20px] shadow-sm border border-slate-100">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="text-[13px] text-slate-500 font-medium border-b border-gray-100">
+                            <th class="px-5 py-4">Pasien</th>
+                            <th class="px-5 py-4">Dokter</th>
+                            <th class="px-5 py-4">Jam</th>
+                            <th class="px-5 py-4">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-[13px] text-slate-800 font-medium divide-y divide-gray-100">
+                        @forelse($jadwalHariIni as $jadwal)
+                        <tr class="hover:bg-blue-50/40 transition-colors cursor-pointer"
+                            onclick="window.location='{{ route('admin.jadwal.show', $jadwal->id) }}'">
+                            <td class="px-5 py-4 align-middle">
+                                {{ $jadwal->pasien?->user?->nama ?? '-' }}
+                            </td>
+                            <td class="px-5 py-4 align-middle text-slate-500">
+                                @php
+                                    $namaLengkap = $jadwal->dokter?->user?->nama ?? '';
+                                    $namaDisplay = $namaLengkap
+                                        ? 'dr. ' . $namaLengkap
+                                        : '-';
+                                @endphp
+                                {{ $namaDisplay }}
+                            </td>
+                            <td class="px-5 py-4 align-middle text-slate-500">
+                                {{ sprintf('%02d:00', $jadwal->jam) }}
+                            </td>
+                            <td class="px-5 py-4 align-middle">
+                                <span class="inline-block px-2.5 py-0.5 rounded-full text-[12px] font-semibold {{ $jadwal->status_badge }}">
+                                    {{ $jadwal->status_label }}
+                                </span>
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="4" class="px-5 py-10 text-center text-slate-400 text-[13px]">
+                                Tidak ada jadwal hari ini.
+                            </td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        {{-- Dokter Cuti Hari Ini --}}
+        <div class="bg-gray-200/50 rounded-[32px] overflow-hidden p-6 border border-slate-100">
+            <h2 class="text-[18px] font-bold text-slate-800 mb-4">
+                Dokter Cuti Hari Ini
+                @if($dokterCutiHariIni->isNotEmpty())
+                <span class="ml-2 text-[13px] font-semibold text-amber-600 bg-amber-50 px-2.5 py-0.5 rounded-full">
+                    {{ $dokterCutiHariIni->count() }} dokter
+                </span>
+                @endif
+            </h2>
+            <div class="overflow-x-auto bg-white rounded-[20px] shadow-sm border border-slate-100">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="text-[13px] text-slate-500 font-medium border-b border-gray-100">
+                            <th class="px-5 py-4">Nama Dokter</th>
+                            <th class="px-5 py-4">Tanggal Cuti</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-[13px] text-slate-800 font-medium divide-y divide-gray-100">
+                        @forelse($dokterCutiHariIni as $cuti)
+                        <tr class="hover:bg-amber-50/40 transition-colors">
+                            <td class="px-5 py-4 align-middle">
+                                {{ $cuti->dokter?->user?->nama ?? '-' }}
+                            </td>
+                            <td class="px-5 py-4 align-middle text-slate-500">
+                                {{ $cuti->dari_tanggal->translatedFormat('d M Y') }}
+                                &ndash;
+                                {{ $cuti->sampai_tanggal->translatedFormat('d M Y') }}
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="2" class="px-5 py-10 text-center text-slate-400 text-[13px]">
+                                Tidak ada dokter yang cuti hari ini.
+                            </td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>{{-- end row --}}
+
 </div>
+
+{{-- ── Chart.js ─────────────────────────────────────────────── --}}
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script>
+    const ctx = document.getElementById('jadwalChart').getContext('2d');
+
+    const labels = @json($chartLabels);
+    const data   = @json($chartData);
+    const colors = @json($chartColors);
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Jumlah Jadwal',
+                data: data,
+                backgroundColor: colors,
+                borderRadius: 8,
+                borderSkipped: false,
+                barPercentage: 0.6,
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: ctx => ` ${ctx.parsed.y} jadwal`
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    grid: { display: false },
+                    ticks: { color: '#94a3b8', font: { size: 12 } }
+                },
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        color: '#94a3b8',
+                        font: { size: 12 },
+                        stepSize: 1,
+                        precision: 0
+                    },
+                    grid: { color: '#f1f5f9' }
+                }
+            }
+        }
+    });
+</script>
+@endpush
 @endsection

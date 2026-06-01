@@ -53,7 +53,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('rekam-medis', AdminRekamMedisController::class);
 
     Route::resource('pembayaran', AdminPembayaranController::class)
-        ->only(['index', 'create', 'store', 'show', 'edit']);
+        ->only(['index', 'create', 'store', 'show', 'edit', 'update']);
 
         // Jadwal Sistem & Cuti Dokter
         Route::get('/jadwal-sistem', [AdminJadwalSistemController::class, 'index'])->name('jadwal-sistem');
