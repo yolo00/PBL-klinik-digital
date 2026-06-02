@@ -7,49 +7,43 @@
         <p class="text-gray-500 text-lg">Silakan pilih dokter, tanggal, dan waktu kunjungan Anda.</p>
     </section>
 
-    <form action="#" class="bg-white p-10 rounded-[2.5rem] shadow-sm border border-gray-100 space-y-10">
-        
+    @if ($errors->any())
+    <div class="mb-6 p-4 bg-red-50 text-red-600 rounded-2xl">
+        <ul class="list-disc ml-5">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
+
+    <form action="{{ route('pasien.store_jadwal') }}" method="POST" class="bg-white p-10 rounded-[2.5rem] shadow-sm border border-gray-100 space-y-10">
+        @csrf 
         <div class="space-y-4">
-            <label class="block text-lg font-bold text-gray-800 flex items-center gap-3">
-                <span class="text-2xl">👤</span> Pilih Dokter
-            </label>
-            <div class="relative">
-                <select class="w-full p-5 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-klinik-blue focus:border-klinik-blue outline-none transition-all appearance-none text-gray-700">
-                    <option>Dr. Fenni | Dokter Umum</option>
-                    <option>Dr. Gizan | Dokter Umum</option>
-                    <option>Drg. Ryan | Spesialis Gigi</option>
-                    <option>Dr. Siti | Spesialis Anak</option>
-                </select>
-                <div class="absolute inset-y-0 right-0 flex items-center px-5 pointer-events-none text-gray-400">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </div>
-            </div>
+            <label class="block text-lg font-bold text-gray-800">👤 Pilih Dokter</label>
+      <select name="id_dokter" class="w-full p-5 bg-gray-50 border border-gray-200 rounded-2xl outline-none" required>
+    @foreach($dokters as $dokter)
+        <option value="{{ $dokter->id }}">
+            {{-- Sesuaikan 'nama' dengan nama kolom asli di tabel akun_user --}}
+            {{ $dokter->user->nama ?? ($dokter->user->name ?? 'Dokter Tanpa Nama') }}
+        </option>
+    @endforeach
+</select>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
             <div class="space-y-4">
-                <label class="block text-lg font-bold text-gray-800 flex items-center gap-3">
-                    <span class="text-2xl">📅</span> Pilih Tanggal
-                </label>
-                <input type="date" value="2026-04-08" class="w-full p-5 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-klinik-blue outline-none text-gray-700 font-medium">
+                <label class="block text-lg font-bold text-gray-800">📅 Pilih Tanggal</label>
+                <input type="date" name="tanggal" required class="w-full p-5 bg-gray-50 border border-gray-200 rounded-2xl outline-none">
             </div>
 
             <div class="space-y-4">
-                <label class="block text-lg font-bold text-gray-800 flex items-center gap-3">
-                    <span class="text-2xl">⏰</span> Pilih Waktu
-                </label>
-                <div class="relative">
-                    <select class="w-full p-5 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-klinik-blue outline-none transition-all appearance-none text-gray-700 font-medium">
-                        <option>08:00 WIB</option>
-                        <option disabled class="text-gray-400">09:00 WIB (Penuh)</option>
-                        <option>10:00 WIB</option>
-                        <option selected>11:00 WIB</option>
-                        <option>13:00 WIB</option>
-                    </select>
-                    <div class="absolute inset-y-0 right-0 flex items-center px-5 pointer-events-none text-gray-400">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                    </div>
-                </div>
+                <label class="block text-lg font-bold text-gray-800">⏰ Pilih Waktu</label>
+                <select name="jam" class="w-full p-5 bg-gray-50 border border-gray-200 rounded-2xl outline-none" required>
+                    @for($i = 8; $i <= 16; $i++)
+                        <option value="{{ $i }}">{{ $i }}:00 WIB</option>
+                    @endfor
+                </select>
             </div>
         </div>
 
@@ -62,6 +56,5 @@
                 📅 Daftar Jadwal Sekarang
             </button>
         </div>
-
     </form>
 @endsection
