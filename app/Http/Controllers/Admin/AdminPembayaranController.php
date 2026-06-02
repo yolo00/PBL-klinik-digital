@@ -13,17 +13,13 @@ class AdminPembayaranController extends Controller
     {
         $query = Pembayaran::with('jadwal.pasien.user', 'jadwal.dokter.user');
 
-        // Filter status
         if ($request->filled('status')) {
             $query->where('status', $request->status);
         }
 
-        // Filter metode
         if ($request->filled('metode')) {
             $query->where('metode', $request->metode);
         }
-
-        // Pencarian nomor struk / nama pasien
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
@@ -32,7 +28,6 @@ class AdminPembayaranController extends Controller
             });
         }
 
-        // Sortir
         $sort = $request->get('sort', 'terbaru');
         match ($sort) {
             'terlama' => $query->orderBy('created_at', 'asc'),

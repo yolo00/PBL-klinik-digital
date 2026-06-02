@@ -17,12 +17,10 @@ class AdminPasienController extends Controller
             ->join('akun_user', 'pasien.id_user', '=', 'akun_user.id')
             ->select('pasien.*');
 
-        // Filter jenis kelamin
         if ($request->filled('jenis_kelamin')) {
             $query->where('akun_user.jenis_kelamin', $request->jenis_kelamin);
         }
 
-        // Pencarian nama
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
@@ -30,7 +28,6 @@ class AdminPasienController extends Controller
             });
         }
 
-        // Sortir
         $sort = $request->get('sort', 'nama_asc');
         match ($sort) {
             'nama_desc' => $query->orderBy('akun_user.nama', 'desc'),

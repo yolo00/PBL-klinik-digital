@@ -46,11 +46,8 @@ class AdminJadwalController extends Controller
         return view('admin.jadwal', compact('jadwals'));
     }
 
-    // ─── Create ───────────────────────────────────────────────
-
     public function create()
     {
-        // Ambil dokter berikut nama user — join ke akun_user.id (bukan id_user)
         $dokters = Dokter::with(['user', 'spesialisasi'])
             ->join('akun_user', 'dokter.id_user', '=', 'akun_user.id')
             ->orderBy('akun_user.nama')
@@ -65,8 +62,6 @@ class AdminJadwalController extends Controller
 
         return view('admin.jadwal-create', compact('dokters', 'pasiens'));
     }
-
-    // ─── Store ────────────────────────────────────────────────
 
     public function store(Request $request)
     {
@@ -87,7 +82,6 @@ class AdminJadwalController extends Controller
             'status.in'          => 'Status tidak valid.',
         ]);
 
-        // Cek konflik slot (dokter + tanggal + jam harus unik)
         $konflik = Jadwal::where('id_dokter', $validated['id_dokter'])
             ->where('tanggal', $validated['tanggal'])
             ->where('jam', $validated['jam'])
@@ -111,8 +105,6 @@ class AdminJadwalController extends Controller
             ->with('success', 'Jadwal berhasil ditambahkan.');
     }
 
-    // ─── Show ─────────────────────────────────────────────────
-
     public function show($id)
     {
         $jadwal = Jadwal::with([
@@ -126,7 +118,6 @@ class AdminJadwalController extends Controller
         return view('admin.jadwal-detail', compact('jadwal'));
     }
 
-    // ─── Edit ─────────────────────────────────────────────────
 
     public function edit($id)
     {
@@ -147,7 +138,6 @@ class AdminJadwalController extends Controller
         return view('admin.jadwal-edit', compact('jadwal', 'dokters', 'pasiens'));
     }
 
-    // ─── Update ───────────────────────────────────────────────
 
     public function update(Request $request, $id)
     {
@@ -170,7 +160,7 @@ class AdminJadwalController extends Controller
             'status.in'          => 'Status tidak valid.',
         ]);
 
-        // Cek konflik slot — kecuali jadwal itu sendiri
+        // Cek konflik slot, kecuali jadwal itu sendiri
         $konflik = Jadwal::where('id_dokter', $validated['id_dokter'])
             ->where('tanggal', $validated['tanggal'])
             ->where('jam', $validated['jam'])
@@ -194,8 +184,6 @@ class AdminJadwalController extends Controller
         return redirect()->route('admin.jadwal.show', $id)
             ->with('success', 'Jadwal berhasil diperbarui.');
     }
-
-    // ─── Destroy ──────────────────────────────────────────────
 
     public function destroy($id)
     {
