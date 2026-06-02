@@ -55,28 +55,7 @@ Route::middleware('auth')->group(function () {
     // --------------------------------------
     Route::prefix('admin')->name('admin.')->middleware('role:A')->group(function () {
         Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
-<<<<<<< HEAD
-        
-        Route::resource('pasien', AdminPasienController::class);
-        Route::resource('dokter', AdminDokterController::class);
-        Route::resource('jadwal', AdminJadwalController::class);
-        Route::resource('rekam-medis', AdminRekamMedisController::class);
-        Route::resource('pembayaran', AdminPembayaranController::class)
-            ->only(['index', 'create', 'store', 'show', 'edit']);
-=======
-
-    Route::resource('pasien', AdminPasienController::class);
-
-    Route::resource('dokter', AdminDokterController::class);
-
-    Route::resource('jadwal', AdminJadwalController::class);
-
-    Route::resource('rekam-medis', AdminRekamMedisController::class);
-
-    Route::resource('pembayaran', AdminPembayaranController::class)
-        ->only(['index', 'create', 'store', 'show', 'edit', 'update']);
->>>>>>> ffe604914211036502e39d767df1e4254525fe19
-
+//
         // Jadwal Sistem & Cuti Dokter
         Route::get('/jadwal-sistem', [AdminJadwalSistemController::class, 'index'])->name('jadwal-sistem');
         Route::post('/cuti-dokter/{id}/terima', [AdminJadwalSistemController::class, 'approve'])->name('cuti-dokter.terima');
