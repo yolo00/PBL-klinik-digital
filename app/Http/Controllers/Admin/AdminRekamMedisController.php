@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 
 class AdminRekamMedisController extends Controller
 {
-    // ─── Index ────────────────────────────────────────────────
 
     public function index(Request $request)
     {
@@ -18,7 +17,6 @@ class AdminRekamMedisController extends Controller
             'jadwal.pasien.user',
         ]);
 
-        // Pencarian nama pasien / dokter
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
@@ -27,7 +25,6 @@ class AdminRekamMedisController extends Controller
             });
         }
 
-        // Sortir
         $sort = $request->get('sort', 'terbaru');
         if ($sort === 'terlama') {
             $query->orderBy('created_at', 'asc');
@@ -40,11 +37,9 @@ class AdminRekamMedisController extends Controller
         return view('admin.rekam-medis', compact('rekamMedis'));
     }
 
-    // ─── Create ───────────────────────────────────────────────
 
     public function create()
     {
-        // Hanya jadwal berstatus 'selesai' yang belum punya rekam medis
         $jadwals = Jadwal::with('dokter.user', 'pasien.user')
             ->where('status', 'selesai')
             ->whereDoesntHave('rekamMedis')
@@ -54,7 +49,6 @@ class AdminRekamMedisController extends Controller
         return view('admin.rekam-medis-create', compact('jadwals'));
     }
 
-    // ─── Store ────────────────────────────────────────────────
 
     public function store(Request $request)
     {
@@ -81,8 +75,6 @@ class AdminRekamMedisController extends Controller
             ->with('success', 'Rekam medis berhasil ditambahkan.');
     }
 
-    // ─── Show ─────────────────────────────────────────────────
-
     public function show($id)
     {
         $rekamMedis = RekamMedis::with([
@@ -97,7 +89,6 @@ class AdminRekamMedisController extends Controller
         return view('admin.rekam-medis-detail', compact('rekamMedis'));
     }
 
-    // ─── Edit ─────────────────────────────────────────────────
 
     public function edit($id)
     {
@@ -119,7 +110,6 @@ class AdminRekamMedisController extends Controller
         return view('admin.rekam-medis-edit', compact('rekamMedis', 'jadwals'));
     }
 
-    // ─── Update ───────────────────────────────────────────────
 
     public function update(Request $request, $id)
     {
@@ -153,13 +143,10 @@ class AdminRekamMedisController extends Controller
             ->with('success', 'Rekam medis berhasil diperbarui.');
     }
 
-    // ─── Destroy ──────────────────────────────────────────────
-
     public function destroy($id)
     {
         $rekamMedis = RekamMedis::findOrFail($id);
 
-        // Hapus resep terkait dulu (cascade manual jika tidak pakai DB cascade)
         $rekamMedis->reseps()->delete();
         $rekamMedis->delete();
 

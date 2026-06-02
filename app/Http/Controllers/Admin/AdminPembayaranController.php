@@ -13,12 +13,13 @@ class AdminPembayaranController extends Controller
     {
         $query = Pembayaran::with('jadwal.pasien.user', 'jadwal.dokter.user');
 
-        // Filter status
         if ($request->filled('status')) {
             $query->where('status', $request->status);
         }
 
-        // Pencarian nomor struk / nama pasien
+        if ($request->filled('metode')) {
+            $query->where('metode', $request->metode);
+        }
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
@@ -27,7 +28,6 @@ class AdminPembayaranController extends Controller
             });
         }
 
-        // Sortir
         $sort = $request->get('sort', 'terbaru');
         match ($sort) {
             'terlama' => $query->orderBy('created_at', 'asc'),
@@ -54,15 +54,17 @@ class AdminPembayaranController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'id_jadwal'   => 'required|exists:jadwal,id_jadwal|unique:pembayaran,id_jadwal',
+            'id_jadwal'   => 'required|exists:jadwal,id|unique:pembayaran,id_jadwal',
             'jumlah'      => 'required|numeric|min:0',
-            'metode'      => 'required|in:cash,qris',
+            'metode'      => 'required|in:cash,qris,transfer',
             'status'      => 'required|in:pending,lunas,batal',
             'nomor_struk' => 'nullable|string|max:50',
         ], [
             'id_jadwal.required' => 'Jadwal wajib dipilih.',
+            'id_jadwal.exists'   => 'Jadwal tidak ditemukan.',
             'id_jadwal.unique'   => 'Pembayaran untuk jadwal ini sudah ada.',
             'jumlah.required'    => 'Jumlah wajib diisi.',
+            'jumlah.numeric'     => 'Jumlah harus berupa angka.',
             'metode.required'    => 'Metode pembayaran wajib dipilih.',
             'status.required'    => 'Status wajib dipilih.',
         ]);
@@ -72,7 +74,7 @@ class AdminPembayaranController extends Controller
             'jumlah'      => $request->jumlah,
             'metode'      => $request->metode,
             'status'      => $request->status,
-            'nomor_struk' => $request->nomor_struk,
+            'nomor_struk' => $request->nomor_struk ?: null,
         ]);
 
         return redirect()->route('admin.pembayaran.index')
@@ -95,15 +97,33 @@ class AdminPembayaranController extends Controller
         $pembayaran = Pembayaran::with('jadwal.pasien.user', 'jadwal.dokter.user')
             ->findOrFail($id);
 
-        $jadwals = Jadwal::with('dokter.user', 'pasien.user')
-            ->where(function ($q) use ($pembayaran) {
-                $q->whereDoesntHave('pembayaran')
-                  ->orWhere('id_jadwal', $pembayaran->id_jadwal);
-            })
-            ->whereNotNull('id_pasien')
-            ->orderByDesc('tanggal')
-            ->get();
+        return view('admin.pembayaran-edit', compact('pembayaran'));
+    }
 
-        return view('admin.pembayaran-edit', compact('pembayaran', 'jadwals'));
+    public function update(Request $request, $id)
+    {
+        $pembayaran = Pembayaran::findOrFail($id);
+
+        $request->validate([
+            'jumlah'      => 'required|numeric|min:0',
+            'metode'      => 'required|in:cash,qris,transfer',
+            'status'      => 'required|in:pending,lunas,batal',
+            'nomor_struk' => 'nullable|string|max:50',
+        ], [
+            'jumlah.required' => 'Jumlah wajib diisi.',
+            'jumlah.numeric'  => 'Jumlah harus berupa angka.',
+            'metode.required' => 'Metode pembayaran wajib dipilih.',
+            'status.required' => 'Status wajib dipilih.',
+        ]);
+
+        $pembayaran->update([
+            'jumlah'      => $request->jumlah,
+            'metode'      => $request->metode,
+            'status'      => $request->status,
+            'nomor_struk' => $request->nomor_struk ?: null,
+        ]);
+
+        return redirect()->route('admin.pembayaran.show', $pembayaran->id)
+            ->with('success', 'Data pembayaran berhasil diperbarui.');
     }
 }
