@@ -22,9 +22,9 @@ class AkunUser extends Authenticatable
     protected $hidden = ['password', 'remember_token'];
 
     public function pasien()
-    {
-        return $this->hasOne(Pasien::class, 'id_user', 'id');
-    }
+{
+    return $this->hasOne(Pasien::class, 'id_user', 'id');
+}
 
     public function dokter()
     {

@@ -8,6 +8,13 @@
         <p class="text-lg text-slate-500 mt-2">Melihat daftar janji Anda sebelumnya dan yang akan datang.</p>
     </div>
 
+    {{-- Alert Sukses / Gagal setelah aksi --}}
+    @if(session('success'))
+    <div class="mb-6 p-4 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-2xl font-medium shadow-sm">
+        {{ session('success') }}
+    </div>
+    @endif
+
     {{-- Container disesuaikan menjadi rounded-3xl --}}
     <div class="bg-white rounded-3xl shadow-md border border-slate-100 overflow-hidden">
         
@@ -29,7 +36,6 @@
 
         <div class="overflow-x-auto">
             <table class="w-full text-left">
-                {{-- Header <th> disesuaikan: bg-slate-50/50, tracking-widest, text-slate-400 --}}
                 <thead class="bg-slate-50/50 border-b border-slate-100">
                     <tr>
                         <th class="px-8 py-5 text-sm font-bold uppercase text-slate-400 tracking-widest">Tanggal & Waktu</th>
@@ -41,99 +47,112 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100">
-                    {{-- Row 1: Mendatang --}}
+                    @forelse($riwayatJadwal as $jadwal)
                     <tr class="hover:bg-slate-50/80 transition-all duration-200">
+                        {{-- Tanggal & Waktu --}}
                         <td class="px-8 py-6">
-                            <div class="text-lg font-bold text-slate-800">12 April 2026</div>
-                            <div class="text-sm text-slate-400 font-medium mt-0.5">09:00 WIB</div>
+                            <div class="text-lg font-bold text-slate-800">
+                                {{ date('d F Y', strtotime($jadwal->tanggal)) }}
+                            </div>
+                            <div class="text-sm text-slate-400 font-medium mt-0.5">
+                                {{ $jadwal->jam }} WIB
+                            </div>
                         </td>
-                        <td class="px-8 py-6">
-                            <div class="text-lg font-bold text-slate-700">Dr. Fenni</div>
-                        </td>
-                        <td class="px-8 py-6">
-                            <span class="inline-flex px-3 py-1 rounded-full text-[11px] font-bold bg-blue-50 text-blue-600 uppercase border border-blue-100 shadow-sm">
-                                Mendatang
-                            </span>
-                        </td>
-                        <td class="px-8 py-6">
-                            <a href="{{ route('pasien.pembayaran') }}"
-                                class="inline-flex px-6 py-2.5 rounded-xl bg-emerald-500 text-white text-sm font-bold shadow-sm shadow-emerald-200 hover:bg-emerald-600 transition transform active:scale-95">
-                                Bayar
-                            </a>
-                        </td>
-                        <td class="px-8 py-6">
-                            <button disabled
-                                class="inline-flex px-4 py-2.5 rounded-xl bg-gray-100 text-gray-400 text-xs font-bold uppercase cursor-not-allowed">
-                                Belum Tersedia
-                            </button>
-                        </td>
-                        <td class="px-8 py-6 text-center">
-                            <button class="inline-flex px-4 py-2.5 rounded-xl bg-red-50 text-red-500 text-xs font-bold uppercase hover:bg-red-500 hover:text-white transition shadow-sm">
-                                Batalkan
-                            </button>
-                        </td>
-                    </tr>
 
-                    {{-- Row 2: Selesai --}}
-                    <tr class="hover:bg-slate-50/80 transition-all duration-200">
+                        {{-- Dokter --}}
                         <td class="px-8 py-6">
-                            <div class="text-lg font-bold text-slate-800">10 April 2026</div>
-                            <div class="text-sm text-slate-400 font-medium mt-0.5">9:00 WIB</div>
+                            <div class="text-lg font-bold text-slate-700">
+                                {{ $jadwal->dokter->nama ?? 'Dr. Fenni' }}
+                            </div>
                         </td>
-                        <td class="px-8 py-6">
-                            <div class="text-lg font-bold text-slate-700">Dr. Fenni</div>
-                        </td>
-                        <td class="px-8 py-6">
-                            <span class="inline-flex px-3 py-1 rounded-full text-[11px] font-bold bg-slate-100 text-gray-600 uppercase border border-slate-200 shadow-sm">
-                                Selesai
-                            </span>
-                        </td>
-                        <td class="px-8 py-6">
-                            <a href="{{ route('pasien.riwayat-pembayaran') }}"
-                                class="inline-flex px-4 py-2.5 rounded-xl bg-blue-50 text-blue-600 text-xs font-bold uppercase border border-blue-100 hover:bg-blue-600 hover:text-white transition shadow-sm">
-                                Lihat Struk
-                            </a>
-                        </td>
-                        <td class="px-8 py-6">
-                            <a href="{{ route('pasien.rekam-medis.detail', 2) }}"
-                                class="inline-flex px-4 py-2.5 rounded-xl bg-indigo-50 text-indigo-600 text-xs font-bold uppercase border border-indigo-100 hover:bg-indigo-600 hover:text-white transition shadow-sm">
-                                Rekam Medis
-                            </a>
-                        </td>
-                        <td class="px-8 py-6 text-center text-slate-300">—</td>
-                    </tr>
 
-                    {{-- Row 3: Dibatalkan --}}
-                    <tr class="hover:bg-slate-50/80 transition-all duration-200">
+                        {{-- Status Jadwal --}}
                         <td class="px-8 py-6">
-                            <div class="text-lg font-bold text-slate-400">08 April 2026</div>
-                            <div class="text-sm text-slate-300 font-medium mt-0.5">10:00 WIB</div>
+                            @if($jadwal->status == 'menunggu' || $jadwal->status == 'mendatang')
+                                <span class="inline-flex px-3 py-1 rounded-full text-[11px] font-bold bg-blue-50 text-blue-600 uppercase border border-blue-100 shadow-sm">
+                                    Mendatang
+                                </span>
+                            @elseif($jadwal->status == 'selesai')
+                                <span class="inline-flex px-3 py-1 rounded-full text-[11px] font-bold bg-slate-100 text-gray-600 uppercase border border-slate-200 shadow-sm">
+                                    Selesai
+                                </span>
+                            @elseif($jadwal->status == 'dibatalkan')
+                                <span class="inline-flex px-3 py-1 rounded-full text-[11px] font-bold bg-red-50 text-red-400 uppercase border border-red-100 shadow-sm">
+                                    Dibatalkan
+                                </span>
+                            @endif
                         </td>
+
+                        {{-- Tombol/Status Pembayaran --}}
                         <td class="px-8 py-6">
-                            <div class="text-lg font-bold text-slate-400">Dr. Siti</div>
+                            @if($jadwal->status == 'menunggu' || $jadwal->status == 'mendatang')
+                                <a href="{{ route('pasien.pembayaran') }}"
+                                    class="inline-flex px-6 py-2.5 rounded-xl bg-emerald-500 text-white text-sm font-bold shadow-sm shadow-emerald-200 hover:bg-emerald-600 transition transform active:scale-95">
+                                    Bayar
+                                </a>
+                            @elseif($jadwal->status == 'selesai')
+                                <a href="{{ route('pasien.riwayat-pembayaran') }}"
+                                    class="inline-flex px-4 py-2.5 rounded-xl bg-blue-50 text-blue-600 text-xs font-bold uppercase border border-blue-100 hover:bg-blue-600 hover:text-white transition shadow-sm">
+                                    Lihat Struk
+                                </a>
+                            @elseif($jadwal->status == 'dibatalkan')
+                                <span class="text-xs italic text-gray-400 font-medium">Refunded</span>
+                            @endif
                         </td>
+
+                        {{-- Akses Rekam Medis --}}
                         <td class="px-8 py-6">
-                            <span class="inline-flex px-3 py-1 rounded-full text-[11px] font-bold bg-red-50 text-red-400 uppercase border border-red-100 shadow-sm">
-                                Dibatalkan
-                            </span>
+                            @if($jadwal->status == 'selesai')
+                                <a href="{{ route('pasien.rekam-medis.detail', $jadwal->id) }}"
+                                    class="inline-flex px-4 py-2.5 rounded-xl bg-indigo-50 text-indigo-600 text-xs font-bold uppercase border border-indigo-100 hover:bg-indigo-600 hover:text-white transition shadow-sm">
+                                    Rekam Medis
+                                </a>
+                            @elseif($jadwal->status == 'dibatalkan')
+                                <div class="text-slate-300 text-center">—</div>
+                            @else
+                                <button disabled
+                                    class="inline-flex px-4 py-2.5 rounded-xl bg-gray-100 text-gray-400 text-xs font-bold uppercase cursor-not-allowed">
+                                    Belum Tersedia
+                                </button>
+                            @endif
                         </td>
-                        <td class="px-8 py-6">
-                            <span class="text-xs italic text-gray-400 font-medium">Refunded</span>
-                        </td>
-                        <td class="px-8 py-6 text-center text-slate-300">—</td>
+
+                        {{-- Kolom Aksi Dinamis --}}
                         <td class="px-8 py-6 text-center">
-                            <a href="{{ route('pasien.buat-janji') }}" 
-                               class="inline-flex px-4 py-2.5 rounded-xl bg-emerald-50 text-emerald-600 text-xs font-bold uppercase border border-emerald-100 hover:bg-emerald-500 hover:text-white transition decoration-none shadow-sm">
-                                Pesan Lagi
-                            </a>
+                            @if($jadwal->status == 'menunggu' || $jadwal->status == 'mendatang')
+                                <form action="{{ route('pasien.batal_jadwal', $jadwal->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin membatalkan jadwal janji temu ini?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="inline-flex px-4 py-2.5 rounded-xl bg-red-50 text-red-500 text-xs font-bold uppercase hover:bg-red-500 hover:text-white transition shadow-sm">
+                                        Batalkan
+                                    </button>
+                                </form>
+                            @elseif($jadwal->status == 'dibatalkan')
+                                <a href="{{ route('pasien.buat-janji') }}" 
+                                   class="inline-flex px-4 py-2.5 rounded-xl bg-emerald-50 text-emerald-600 text-xs font-bold uppercase border border-emerald-100 hover:bg-emerald-500 hover:text-white transition decoration-none shadow-sm">
+                                    Pesan Lagi
+                                </a>
+                            @else
+                                <span class="text-slate-300">—</span>
+                            @endif
                         </td>
                     </tr>
+                    @empty
+                    {{-- Kondisi jika database pasien masih kosong --}}
+                    <tr>
+                        <td colspan="6" class="px-8 py-12 text-center text-slate-400 font-medium">
+                            Belum ada riwayat jadwal janji temu yang terdaftar.
+                        </td>
+                    </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
 
         <div class="p-8 bg-slate-50 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-4">
-            <span class="text-sm font-medium text-slate-500">Menampilkan <span class="text-slate-900 font-bold">1 - 3</span> dari <span class="text-slate-900 font-bold"> 3 </span> Jadwal </span>
+            <span class="text-sm font-medium text-slate-500">
+                Total: <span class="text-slate-900 font-bold">{{ $riwayatJadwal->count() }}</span> Jadwal Terdaftar
+            </span>
             <div class="flex gap-3">
                 <button class="px-5 py-2 bg-white border border-slate-200 rounded-xl text-sm font-bold text-slate-400 cursor-not-allowed transition hover:bg-slate-50 shadow-sm">Sebelumnya</button>
                 <button class="px-5 py-2 bg-white border border-slate-200 rounded-xl text-sm font-bold text-slate-400 cursor-not-allowed transition hover:bg-slate-50 shadow-sm">Selanjutnya</button>
