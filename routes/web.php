@@ -55,14 +55,20 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('rekam-medis', AdminRekamMedisController::class);
 
-    Route::resource('pembayaran', AdminPembayaranController::class)
-        ->only(['index', 'create', 'store', 'show', 'edit', 'update']);
+    Route::resource('pembayaran', AdminPembayaranController::class);
 
-        // Jadwal Sistem & Cuti Dokter
-        Route::get('/jadwal-sistem', [AdminJadwalSistemController::class, 'index'])->name('jadwal-sistem');
-        Route::post('/cuti-dokter/{id}/terima', [AdminJadwalSistemController::class, 'approve'])->name('cuti-dokter.terima');
-        Route::post('/cuti-dokter/{id}/tolak', [AdminJadwalSistemController::class, 'reject'])->name('cuti-dokter.tolak');
-        Route::get('/cuti-dokter/{id}', [AdminJadwalSistemController::class, 'show'])->name('cuti-dokter.detail');
+    Route::get('/jadwal-sistem', [AdminJadwalSistemController::class, 'index'])->name('jadwal-sistem');
+
+    // Edit jam harian (Senin–Minggu)
+    Route::get('/jadwal-sistem/harian/{jadwalSistem}/edit', [AdminJadwalSistemController::class, 'editHarian'])->name('jadwal-sistem.harian.edit');
+    Route::put('/jadwal-sistem/harian/{jadwalSistem}',      [AdminJadwalSistemController::class, 'updateHarian'])->name('jadwal-sistem.harian.update');
+
+    // CRUD tanggal khusus (libur / jam berbeda)
+    Route::get('/jadwal-sistem/create',              [AdminJadwalSistemController::class, 'create'])->name('jadwal-sistem.create');
+    Route::post('/jadwal-sistem',                    [AdminJadwalSistemController::class, 'store'])->name('jadwal-sistem.store');
+    Route::get('/jadwal-sistem/{jadwalSistem}/edit', [AdminJadwalSistemController::class, 'edit'])->name('jadwal-sistem.edit');
+    Route::put('/jadwal-sistem/{jadwalSistem}',      [AdminJadwalSistemController::class, 'update'])->name('jadwal-sistem.update');
+    Route::delete('/jadwal-sistem/{jadwalSistem}',   [AdminJadwalSistemController::class, 'destroy'])->name('jadwal-sistem.destroy');
     });
 
     // --------------------------------------

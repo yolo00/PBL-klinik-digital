@@ -23,9 +23,8 @@
         </div>
     </div>
 
-    {{-- ── Grafik Jadwal ────────────────────────────────────── --}}
+    {{--  Grafik Jadwal--}}
     <div class="bg-gray-200/50 rounded-[32px] p-8 border border-slate-100">
-        {{-- Header + Tombol Pilih Range --}}
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
             <div>
                 <h2 class="text-[20px] font-bold text-slate-800">Grafik Jadwal</h2>

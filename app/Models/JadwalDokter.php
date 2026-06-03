@@ -1,5 +1,5 @@
 <?php
-
+/*
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -34,7 +34,7 @@ class JadwalDokter extends Model
 
     // ─── Helper ───────────────────────────────────────────────
 
-    /** Contoh: 8 → "08:00", 16 → "16:00" */
+
     public function getJamMulaiFormatAttribute(): string
     {
         return sprintf('%02d:00', $this->jam_mulai);
@@ -45,3 +45,4 @@ class JadwalDokter extends Model
         return sprintf('%02d:00', $this->jam_selesai);
     }
 }
+*/
