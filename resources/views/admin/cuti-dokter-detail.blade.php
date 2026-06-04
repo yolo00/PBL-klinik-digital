@@ -1,3 +1,4 @@
+{{--File Residu/Belum di update--}}
 @extends('admin.layouts.app')
 @section('title', 'Detail Cuti Dokter')
 @section('content')

@@ -3,15 +3,6 @@
 @section('content')
 <div class="space-y-6">
 
-    {{-- Flash messages --}}
-    @if(session('success'))
-    <div class="p-4 bg-emerald-50 border border-emerald-200 rounded-[16px] text-[13px] text-emerald-700 flex items-center gap-2">
-        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-        </svg>
-        {{ session('success') }}
-    </div>
-    @endif
 
     {{-- Card utama --}}
     <div class="bg-white rounded-[24px] shadow-sm border border-slate-100 p-8">

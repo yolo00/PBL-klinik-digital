@@ -9,22 +9,53 @@ class RekamMedis extends Model
 {
     use HasFactory;
 
-    // Nama tabel aslimu di database
     protected $table = 'rekam_medis';
+    protected $primaryKey = 'id';
+    public $timestamps = true;
 
-    // Kolom yang boleh diisi massal saat disimpan
     protected $fillable = [
-        'id_pasien', // Menggunakan id_pasien sesuai struktur database kelompokmu
-        'keluhan',
-        'diagnosa',
-        'tindakan',
-        'resep_obat'
+        'id_jadwal', 'keluhan', 'diagnosa', 'catatan', 'created_by', 'updated_by',
     ];
 
-    // 🌟 KUNCI UTAMA: Daftarkan relasi ke tabel Pasien
-    public function pasien()
-{
-    // Pastikan 'id_pasien' sesuai dengan nama kolom foreign key di tabel rekam_medis kamu
-    return $this->belongsTo(Pasien::class, 'id_pasien');
-}
+    // ─── Relasi ───────────────────────────────────────────────
+
+    public function jadwal()
+    {
+        return $this->belongsTo(Jadwal::class, 'id_jadwal', 'id');
+    }
+
+    public function reseps()
+    {
+        return $this->hasMany(Resep::class, 'id_rekam', 'id');
+    }
+
+    public function createdBy()
+    {
+        return $this->belongsTo(AkunUser::class, 'created_by', 'id');
+    }
+
+    public function updatedBy()
+    {
+        return $this->belongsTo(AkunUser::class, 'updated_by', 'id');
+    }
+
+    // ─── Accessor ─────────────────────────────────────────────
+
+    /** Shortcut ke nama pasien via jadwal */
+    public function getNamaPasienAttribute(): string
+    {
+        return $this->jadwal?->pasien?->user?->nama ?? '(Tanpa Pasien)';
+    }
+
+    /** Shortcut ke nama dokter via jadwal */
+    public function getNamaDokterAttribute(): string
+    {
+        return $this->jadwal?->dokter?->user?->nama ?? '—';
+    }
+
+    /** Diagnosa dipotong untuk tampilan tabel */
+    public function getDiagnosaSingkatAttribute(): string
+    {
+        return \Illuminate\Support\Str::limit($this->diagnosa ?? '—', 60);
+    }
 }

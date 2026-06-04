@@ -18,7 +18,7 @@ use App\Http\Controllers\Admin\AdminJadwalController;
 use App\Http\Controllers\Admin\AdminRekamMedisController;
 use App\Http\Controllers\Admin\AdminPembayaranController;
 use App\Http\Controllers\Admin\AdminJadwalSistemController;
-
+use App\Http\Controllers\Admin\AdminJadwalDokterController;
 // Dokter Routes Controllers (Dialias agar tidak bentrok dengan milik Pasien)
 use App\Http\Controllers\Dokter\PasienController as DokterPasienController;
 use App\Http\Controllers\Dokter\RekamMedisController as DokterRekamMedisController;
@@ -61,6 +61,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('pasien', AdminPasienController::class);
 
     Route::resource('dokter', AdminDokterController::class);
+    Route::get('/dokter/jadwal/{jadwalDokter}/edit', [AdminJadwalDokterController::class, 'edit'])->name('dokter.jadwal.edit');
+    Route::put('/dokter/jadwal/{jadwalDokter}', [AdminJadwalDokterController::class, 'update'])->name('dokter.jadwal.update');
 
     Route::resource('jadwal', AdminJadwalController::class);
 
@@ -99,7 +101,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/dokter/jadwal/{id}/simpan-rekam', [App\Http\Controllers\Dokter\PasienController::class, 'storeRekamMedis'])->name('dokter.rekam-medis');
 
         // Alur Riwayat Rekam Medis (Memakai DokterRekamMedisController)
-        Route::get('/dokter/rekam-medis', [RekamMedisController::class, 'index'])->name('dokter.rekam-medis');
+        Route::get('/dokter/rekam-medis', [DokterRekamMedisController::class, 'index'])->name('dokter.rekam-medis');
     });
     
     // --------------------------------------

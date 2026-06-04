@@ -3,23 +3,6 @@
 @section('content')
 <div class="bg-gray-200/50 rounded-[32px] overflow-hidden p-8">
 
-    {{-- Flash messages --}}
-    @if(session('success'))
-    <div class="mb-6 p-4 bg-emerald-50 border border-emerald-200 rounded-[16px] text-[13px] text-emerald-700 flex items-center gap-2">
-        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-        </svg>
-        {{ session('success') }}
-    </div>
-    @endif
-    @if(session('error'))
-    <div class="mb-6 p-4 bg-rose-50 border border-rose-200 rounded-[16px] text-[13px] text-rose-700 flex items-center gap-2">
-        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-        </svg>
-        {{ session('error') }}
-    </div>
-    @endif
 
     <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
         <h2 class="text-[20px] font-bold text-slate-800">Data Pembayaran</h2>
@@ -91,6 +74,7 @@
                         <x-admin.table-action
                             viewUrl="{{ route('admin.pembayaran.show', $bayar->id) }}"
                             editUrl="{{ route('admin.pembayaran.edit', $bayar->id) }}"
+                            deleteUrl="{{ route('admin.pembayaran.destroy', $bayar->id) }}"
                         />
                     </td>
                 </tr>

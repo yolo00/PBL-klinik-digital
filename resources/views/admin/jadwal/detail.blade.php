@@ -4,23 +4,6 @@
 
 <div class="space-y-6">
 
-    {{-- Flash message --}}
-    @if(session('success'))
-    <div class="p-4 bg-emerald-50 border border-emerald-200 rounded-[16px] text-[13px] text-emerald-700 flex items-center gap-2">
-        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-        </svg>
-        {{ session('success') }}
-    </div>
-    @endif
-    @if(session('error'))
-    <div class="p-4 bg-rose-50 border border-rose-200 rounded-[16px] text-[13px] text-rose-700 flex items-center gap-2">
-        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-        </svg>
-        {{ session('error') }}
-    </div>
-    @endif
 
     {{-- Info utama --}}
     <div class="bg-white rounded-[24px] shadow-sm border border-slate-100 p-8">

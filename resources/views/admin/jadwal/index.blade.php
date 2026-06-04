@@ -14,23 +14,6 @@
         </a>
     </div>
 
-    {{-- Flash message --}}
-    @if(session('success'))
-    <div class="mb-4 p-4 bg-emerald-50 border border-emerald-200 rounded-[12px] text-[13px] text-emerald-700 flex items-center gap-2">
-        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-        </svg>
-        {{ session('success') }}
-    </div>
-    @endif
-    @if(session('error'))
-    <div class="mb-4 p-4 bg-rose-50 border border-rose-200 rounded-[12px] text-[13px] text-rose-700 flex items-center gap-2">
-        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-        </svg>
-        {{ session('error') }}
-    </div>
-    @endif
 
     {{-- Filters --}}
     <form method="GET" action="{{ route('admin.jadwal.index') }}" class="flex flex-wrap gap-4 mb-6">
@@ -103,6 +86,7 @@
                         <x-admin.table-action
                             viewUrl="{{ route('admin.jadwal.show', $jadwal->id) }}"
                             editUrl="{{ route('admin.jadwal.edit', $jadwal->id) }}"
+                            deleteUrl="{{ route('admin.jadwal.destroy', $jadwal->id) }}"
                         />
                     </td>
                 </tr>

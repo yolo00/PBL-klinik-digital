@@ -34,7 +34,7 @@ class AdminRekamMedisController extends Controller
 
         $rekamMedis = $query->paginate(10)->withQueryString();
 
-        return view('admin.rekam-medis', compact('rekamMedis'));
+        return view('admin.rekam-medis.index', compact('rekamMedis'));
     }
 
 
@@ -46,7 +46,7 @@ class AdminRekamMedisController extends Controller
             ->orderByDesc('tanggal')
             ->get();
 
-        return view('admin.rekam-medis-create', compact('jadwals'));
+        return view('admin.rekam-medis.create', compact('jadwals'));
     }
 
 
@@ -86,7 +86,7 @@ class AdminRekamMedisController extends Controller
             'updatedBy',
         ])->findOrFail($id);
 
-        return view('admin.rekam-medis-detail', compact('rekamMedis'));
+        return view('admin.rekam-medis.detail', compact('rekamMedis'));
     }
 
 
@@ -107,7 +107,7 @@ class AdminRekamMedisController extends Controller
             ->orderByDesc('tanggal')
             ->get();
 
-        return view('admin.rekam-medis-edit', compact('rekamMedis', 'jadwals'));
+        return view('admin.rekam-medis.edit', compact('rekamMedis', 'jadwals'));
     }
 
 

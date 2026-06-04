@@ -37,12 +37,12 @@ class AdminPasienController extends Controller
 
         $pasiens = $query->paginate(10)->withQueryString();
 
-        return view('admin.pasien', compact('pasiens'));
+        return view('admin.pasien.index', compact('pasiens'));
     }
 
     public function create()
     {
-        return view('admin.pasien-create');
+        return view('admin.pasien.create');
     }
 
     public function store(Request $request)
@@ -99,14 +99,14 @@ class AdminPasienController extends Controller
             'jadwals.rekamMedis',
         ])->findOrFail($id);
 
-        return view('admin.pasien-detail', compact('pasien'));
+        return view('admin.pasien.detail', compact('pasien'));
     }
 
     public function edit($id)
     {
         $pasien = Pasien::with('user')->findOrFail($id);
 
-        return view('admin.pasien-edit', compact('pasien'));
+        return view('admin.pasien.edit', compact('pasien'));
     }
 
     public function update(Request $request, $id)

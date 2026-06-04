@@ -36,7 +36,7 @@ class AdminPembayaranController extends Controller
 
         $pembayarans = $query->paginate(10)->withQueryString();
 
-        return view('admin.pembayaran', compact('pembayarans'));
+        return view('admin.pembayaran.index', compact('pembayarans'));
     }
 
     public function create()
@@ -48,7 +48,7 @@ class AdminPembayaranController extends Controller
             ->orderByDesc('tanggal')
             ->get();
 
-        return view('admin.pembayaran-create', compact('jadwals'));
+        return view('admin.pembayaran.create', compact('jadwals'));
     }
 
     public function store(Request $request)
@@ -89,7 +89,7 @@ class AdminPembayaranController extends Controller
             'jadwal.rekamMedis'
         )->findOrFail($id);
 
-        return view('admin.pembayaran-detail', compact('pembayaran'));
+        return view('admin.pembayaran.detail', compact('pembayaran'));
     }
 
     public function edit($id)
@@ -97,7 +97,7 @@ class AdminPembayaranController extends Controller
         $pembayaran = Pembayaran::with('jadwal.pasien.user', 'jadwal.dokter.user')
             ->findOrFail($id);
 
-        return view('admin.pembayaran-edit', compact('pembayaran'));
+        return view('admin.pembayaran.edit', compact('pembayaran'));
     }
 
     public function update(Request $request, $id)
@@ -125,5 +125,14 @@ class AdminPembayaranController extends Controller
 
         return redirect()->route('admin.pembayaran.show', $pembayaran->id)
             ->with('success', 'Data pembayaran berhasil diperbarui.');
+    }
+
+    public function destroy($id)
+    {
+        $pembayaran = Pembayaran::findOrFail($id);
+        $pembayaran->delete();
+
+        return redirect()->route('admin.pembayaran.index')
+            ->with('success', 'Data pembayaran berhasil dihapus.');
     }
 }

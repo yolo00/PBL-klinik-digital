@@ -38,13 +38,13 @@ class AdminDokterController extends Controller
 
         $dokters = $query->paginate(10)->withQueryString();
 
-        return view('admin.dokter', compact('dokters'));
+        return view('admin.dokter.index', compact('dokters'));
     }
 
     public function create()
     {
         $spesialisasis = Spesialisasi::all();
-        return view('admin.dokter-create', compact('spesialisasis'));
+        return view('admin.dokter.create', compact('spesialisasis'));
     }
 
     public function store(Request $request)
@@ -85,7 +85,7 @@ class AdminDokterController extends Controller
                 'created_at'    => now(),
             ]);
 
-            DB::table('dokter')->insert([
+            $dokterId = DB::table('dokter')->insertGetId([
                 'id_user'          => $userId,
                 'id_spesialisasi'  => $request->id_spesialisasi,
             ]);
@@ -100,6 +100,41 @@ class AdminDokterController extends Controller
                     ->where('id_user', $userId)
                     ->update(['dokumen_sip' => 'sip/' . $filename]);
             }
+
+            // Generate Jadwal Dokter 6 hari (Senin - Sabtu)
+            $jadwalSistems = \App\Models\JadwalSistem::harian()
+                ->whereIn('hari', ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'])
+                ->get()
+                ->keyBy('hari');
+
+            $hariKerja = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+            foreach ($hariKerja as $hari) {
+                $js = $jadwalSistems->get($hari);
+                $isAktif = 1;
+                $jamMulai = 0;
+                $jamSelesai = 0;
+                $istirahatMulai = null;
+                $istirahatSelesai = null;
+
+                if ($js && !$js->is_libur && $js->jam_buka !== null && $js->jam_tutup !== null) {
+                    $jamMulai = $js->jam_buka;
+                    $jamSelesai = $js->jam_tutup;
+                    $istirahatMulai = $js->jam_istirahat_mulai;
+                    $istirahatSelesai = $js->jam_istirahat_selesai;
+                } else {
+                    $isAktif = 0;
+                }
+
+                DB::table('jadwal_dokter')->insert([
+                    'id_dokter' => $dokterId,
+                    'hari' => $hari,
+                    'jam_mulai' => $jamMulai,
+                    'jam_selesai' => $jamSelesai,
+                    'override_istirahat_mulai' => $istirahatMulai,
+                    'override_istirahat_selesai' => $istirahatSelesai,
+                    'is_aktif' => $isAktif,
+                ]);
+            }
         });
 
         return redirect()->route('admin.dokter.index')
@@ -108,10 +143,10 @@ class AdminDokterController extends Controller
 
     public function show($id)
     {
-        $dokter = Dokter::with(['user', 'spesialisasi', 'jadwals.pasien.user', 'cutiDokters'])
+        $dokter = Dokter::with(['user', 'spesialisasi', 'jadwals.pasien.user', 'cutiDokters', 'jadwalDokters'])
             ->findOrFail($id);
 
-        return view('admin.dokter-detail', compact('dokter'));
+        return view('admin.dokter.detail', compact('dokter'));
     }
 
     public function edit($id)
@@ -119,7 +154,7 @@ class AdminDokterController extends Controller
         $dokter = Dokter::with(['user', 'spesialisasi'])->findOrFail($id);
         $spesialisasis = Spesialisasi::all();
 
-        return view('admin.dokter-edit', compact('dokter', 'spesialisasis'));
+        return view('admin.dokter.edit', compact('dokter', 'spesialisasis'));
     }
 
     public function update(Request $request, $id)

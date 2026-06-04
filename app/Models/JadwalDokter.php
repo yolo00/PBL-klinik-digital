@@ -1,5 +1,4 @@
 <?php
-/*
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -45,4 +44,3 @@ class JadwalDokter extends Model
         return sprintf('%02d:00', $this->jam_selesai);
     }
 }
-*/

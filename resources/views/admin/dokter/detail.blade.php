@@ -78,5 +78,74 @@
         </div>
     </div>
     @endif
+
+    {{-- Jadwal Operasional Dokter --}}
+    <div class="bg-gray-200/50 rounded-[24px] p-6">
+        <h3 class="text-[16px] font-bold text-slate-800 mb-4">Jadwal Operasional Dokter</h3>
+
+        @if($dokter->jadwalDokters->isEmpty())
+            <div class="bg-white rounded-[18px] border border-slate-100 px-6 py-10 text-center">
+                <p class="text-[14px] text-slate-400 italic">Belum ada jadwal operasional yang terdaftar.</p>
+            </div>
+        @else
+        @php
+            $urutanHari = ['Senin' => 1, 'Selasa' => 2, 'Rabu' => 3, 'Kamis' => 4, 'Jumat' => 5, 'Sabtu' => 6, 'Minggu' => 7];
+            $sortedJadwal = $dokter->jadwalDokters->sortBy(fn($j) => $urutanHari[$j->hari] ?? 99);
+        @endphp
+        <div class="overflow-x-auto bg-white rounded-[18px] shadow-sm border border-slate-100 px-2 py-2">
+            <table class="w-full text-left">
+                <thead>
+                    <tr class="text-[13px] text-slate-600 font-medium border-b border-gray-100">
+                        <th class="px-5 py-4">Hari</th>
+                        <th class="px-5 py-4">Jam Mulai</th>
+                        <th class="px-5 py-4">Jam Selesai</th>
+                        <th class="px-5 py-4">Istirahat Mulai</th>
+                        <th class="px-5 py-4">Istirahat Selesai</th>
+                        <th class="px-5 py-4">Status</th>
+                        <th class="px-5 py-4">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody class="text-[13px] text-slate-800 divide-y divide-gray-100">
+                    @foreach($sortedJadwal as $jd)
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-5 py-4 font-semibold">{{ $jd->hari }}</td>
+                        <td class="px-5 py-4">{{ sprintf('%02d:00', $jd->jam_mulai) }}</td>
+                        <td class="px-5 py-4">{{ sprintf('%02d:00', $jd->jam_selesai) }}</td>
+                        <td class="px-5 py-4">
+                            {{ $jd->override_istirahat_mulai !== null ? sprintf('%02d:00', $jd->override_istirahat_mulai) : '—' }}
+                        </td>
+                        <td class="px-5 py-4">
+                            {{ $jd->override_istirahat_selesai !== null ? sprintf('%02d:00', $jd->override_istirahat_selesai) : '—' }}
+                        </td>
+                        <td class="px-5 py-4">
+                            @if($jd->is_aktif)
+                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[12px] font-semibold bg-emerald-50 text-emerald-700">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block"></span>
+                                    Aktif
+                                </span>
+                            @else
+                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[12px] font-semibold bg-slate-100 text-slate-500">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-slate-400 inline-block"></span>
+                                    Tidak Tersedia
+                                </span>
+                            @endif
+                        </td>
+                        <td class="px-5 py-4">
+                            <a href="{{ route('admin.dokter.jadwal.edit', $jd->id) }}"
+                               class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 font-medium rounded-[8px] text-[12px] transition-colors">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                          d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                </svg>
+                                Edit
+                            </a>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+        @endif
+    </div>
 </div>
 @endsection

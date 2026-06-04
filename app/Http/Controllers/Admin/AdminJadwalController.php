@@ -43,7 +43,7 @@ class AdminJadwalController extends Controller
 
         $jadwals = $query->paginate(10)->withQueryString();
 
-        return view('admin.jadwal', compact('jadwals'));
+        return view('admin.jadwal.index', compact('jadwals'));
     }
 
     public function create()
@@ -60,7 +60,7 @@ class AdminJadwalController extends Controller
             ->select('pasien.*')
             ->get();
 
-        return view('admin.jadwal-create', compact('dokters', 'pasiens'));
+        return view('admin.jadwal.create', compact('dokters', 'pasiens'));
     }
 
     public function store(Request $request)
@@ -115,7 +115,7 @@ class AdminJadwalController extends Controller
             'pembayaran',
         ])->findOrFail($id);
 
-        return view('admin.jadwal-detail', compact('jadwal'));
+        return view('admin.jadwal.detail', compact('jadwal'));
     }
 
 
@@ -135,7 +135,7 @@ class AdminJadwalController extends Controller
             ->select('pasien.*')
             ->get();
 
-        return view('admin.jadwal-edit', compact('jadwal', 'dokters', 'pasiens'));
+        return view('admin.jadwal.edit', compact('jadwal', 'dokters', 'pasiens'));
     }
 
 
