@@ -40,7 +40,7 @@
                         <td colspan="3" class="px-6 py-4">
                             <span class="inline-flex items-center gap-1.5 text-[13px] font-semibold text-rose-600 bg-rose-50 px-3 py-1 rounded-full">
                                 <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
-                                Tutup / Libur
+                                Tutup
                             </span>
                         </td>
                         @else

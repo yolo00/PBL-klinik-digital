@@ -7,6 +7,9 @@ use Barryvdh\DomPDF\Facade\Pdf; // untuk pdf rekam medis
 // IMPORT CONTROLLERS (SUDAH DIPERBAIKI)
 // ==========================================
 
+// Home
+use App\Http\Controllers\HomeController;
+
 // Admin Routes Controllers
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminPasienController;
@@ -33,9 +36,8 @@ use App\Http\Controllers\Pasien\PasienController as PasienUtamaController;
 // ==========================================
 // RUTE PUBLIK (Tanpa perlu login)
 // ==========================================
-Route::view('/', 'home')->name('home');
-Route::view('/about', 'about')->name('about');
-Route::view('/contact', 'contact')->name('contact');
+Route::get('/', [HomeController::class, 'home'])->name('home');
+Route::get('/about', [HomeController::class, 'about'])->name('about');
 
 // ==========================================
 // RUTE GUEST (Hanya untuk yang BELUM login)
