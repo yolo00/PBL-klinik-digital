@@ -89,9 +89,9 @@ Route::middleware('auth')->group(function () {
     // --------------------------------------
     Route::prefix('dokter')->middleware('role:D')->group(function () {
         // Halaman Tampilan Umum / View
-        Route::get('/dashboard', function () { return view('dokter.dashboard-dokter'); })->name('dokter.dashboard');
+        Route::get('/dashboard', [\App\Http\Controllers\Dokter\DashboardController::class, 'index'])->name('dokter.dashboard');
         Route::get('/pengaturan-jadwal', function () { return view('dokter.pengaturan-jadwal'); })->name('dokter.pengaturan');
-        Route::get('/profil', function () { return view('dokter.profil-dokter'); })->name('dokter.profil');
+        Route::get('/profil', [\App\Http\Controllers\Dokter\ProfilController::class, 'index'])->name('dokter.profil');
         Route::get('/pasien', function () { return view('dokter.pasien-dokter'); })->name('dokter.pasien');
         
         // Alur Jadwal & Aksi Pembuatan Rekam Medis
