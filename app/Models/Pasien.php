@@ -6,19 +6,20 @@ use Illuminate\Database\Eloquent\Model;
 
 class Pasien extends Model
 {
-    protected $table = 'pasien';
+    protected $table = 'pasien'; 
     protected $primaryKey = 'id';
     public $timestamps = false;
 
+    // Pastikan 'nama' ada di sini agar bisa diakses
     protected $fillable = [
-        'id_user', 'gol_darah', 'riwayat_penyakit',
+        'id_user', 'gol_darah', 'riwayat_penyakit', 'nama', 
     ];
 
     // ─── Relasi ───────────────────────────────────────────────
 
     public function user()
     {
-        return $this->belongsTo(AkunUser::class, 'id_user', 'id');
+        return $this->belongsTo(\App\Models\AkunUser::class, 'id_user', 'id');
     }
 
     public function jadwals()

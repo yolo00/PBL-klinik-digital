@@ -7,11 +7,12 @@
     <h1 class="text-2xl font-black text-slate-800 mb-2">Input Rekam Medis</h1>
     <p class="text-slate-500">
         Pasien: <span class="font-bold text-slate-800">
-            {{ $jadwal->pasien->nama ?? 'Nama Pasien Tidak Ditemukan' }}
+            {{ $jadwal->pasien->user->nama ?? 'Nama Pasien Tidak Ditemukan' }}
         </span>
     </p>
-    <form action="{{ route('dokter.rekam-medis', $jadwal->id) }}" method="POST">
-    <input type="hidden" name="id_pasien" value="{{ $jadwal->id_pasien }}">
+
+    <form action="{{ route('dokter.rekam-medis.store', $jadwal->id) }}" method="POST">
+        @csrf 
 
         <div class="mb-4">
             <label class="block text-sm font-bold text-slate-700 mb-2">Keluhan Pasien</label>
@@ -37,8 +38,5 @@
             <a href="{{ route('dokter.jadwal') }}" class="px-6 py-3 bg-slate-100 text-slate-600 rounded-xl text-sm font-bold hover:bg-slate-200">Batal</a>
             <button type="submit" class="px-6 py-3 bg-emerald-500 text-white rounded-xl text-sm font-bold hover:bg-emerald-600 shadow-sm">Simpan Rekam Medis</button>
         </div>
-    <input type="text" name="keluhan">
-    @csrf <button type="submit">Simpan Rekam Medis</button>
-    </form>
-</div>
+    </form> </div>
 @endsection
