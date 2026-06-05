@@ -8,10 +8,15 @@ class Pasien extends Model
 {
     protected $table = 'pasien';
     protected $primaryKey = 'id';
+    
+    // Sangat penting: matikan timestamps agar Laravel tidak error mencari kolom created_at
     public $timestamps = false;
 
+    // Pastikan hanya kolom ini yang ada, sesuai dengan database Anda
     protected $fillable = [
-        'id_user', 'gol_darah', 'riwayat_penyakit',
+        'id_user', 
+        'gol_darah', 
+        'riwayat_penyakit',
     ];
 
     // ─── Relasi ───────────────────────────────────────────────
