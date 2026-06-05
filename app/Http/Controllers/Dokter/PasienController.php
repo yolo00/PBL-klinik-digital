@@ -28,18 +28,20 @@ class PasienController extends Controller
             'keluhan' => 'required',
             'diagnosa' => 'required',
         ]);
-    
+
         // Simpan ke database
         \App\Models\RekamMedis::create([
-            'id_pasien' => $request->id_pasien,
-            'keluhan' => $request->keluhan,
-            'diagnosa' => $request->diagnosa,
-            // ... field lainnya
+            'id_jadwal' => $id, // Tambahkan ini agar id_jadwal terisi
+            'id_pasien' => $request->id_pasien, // Pastikan ini juga tersedia dari input atau $jadwal
+            'keluhan'   => $request->keluhan,
+            'diagnosa'  => $request->diagnosa,
+            'tindakan'  => $request->tindakan,    // Pastikan field ini ada di tabel
+            'resep_obat' => $request->resep_obat, // Pastikan field ini ada di tabel
         ]);
-    
-        // Update status jadwal agar berubah menjadi 'Selesai'
+
+        // Update status jadwal agar berubah menjadi 'selesai'
         \App\Models\Jadwal::where('id', $id)->update(['status' => 'selesai']);
-    
+
         return redirect()->route('dokter.jadwal')->with('success', 'Rekam medis berhasil disimpan!');
     }
 }

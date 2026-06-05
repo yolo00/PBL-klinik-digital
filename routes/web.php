@@ -85,23 +85,24 @@ Route::middleware('auth')->group(function () {
     });
 
     // --------------------------------------
-    // 2. DOKTER ROUTES (PORSI TUGAS KAMU - CLEAN & SAFE)
+    // 2. DOKTER ROUTES
     // --------------------------------------
     Route::prefix('dokter')->middleware('role:D')->group(function () {
         // Halaman Tampilan Umum / View
-        Route::get('/dashboard', function () { return view('dokter.dashboard-dokter'); })->name('dokter.dashboard');
+        Route::get('/dashboard', [\App\Http\Controllers\Dokter\DashboardController::class, 'index'])->name('dokter.dashboard');
         Route::get('/pengaturan-jadwal', function () { return view('dokter.pengaturan-jadwal'); })->name('dokter.pengaturan');
-        Route::get('/profil', function () { return view('dokter.profil-dokter'); })->name('dokter.profil');
+        Route::get('/profil', [\App\Http\Controllers\Dokter\ProfilController::class, 'index'])->name('dokter.profil');
         Route::get('/pasien', function () { return view('dokter.pasien-dokter'); })->name('dokter.pasien');
         
-        // Alur Jadwal & Aksi Pembuatan Rekam Medis (Memakai DokterPasienController)
+        // Alur Jadwal & Aksi Pembuatan Rekam Medis
         Route::get('/jadwal', [DokterPasienController::class, 'index'])->name('dokter.jadwal');
         Route::get('/jadwal/{id}/buat-rekam', [App\Http\Controllers\Dokter\PasienController::class, 'buatRekam'])->name('dokter.jadwal.buat-rekam');
-        // Route untuk memproses form (POST)
-        Route::post('/dokter/jadwal/{id}/simpan-rekam', [App\Http\Controllers\Dokter\PasienController::class, 'storeRekamMedis'])->name('dokter.rekam-medis');
+        
+        // PERBAIKAN: Hapus '/dokter' karena sudah tercover oleh prefix di atas
+        Route::post('/jadwal/{id}/simpan-rekam', [App\Http\Controllers\Dokter\PasienController::class, 'storeRekamMedis'])->name('dokter.rekam-medis.store');
 
-        // Alur Riwayat Rekam Medis (Memakai DokterRekamMedisController)
-        Route::get('/dokter/rekam-medis', [DokterRekamMedisController::class, 'index'])->name('dokter.rekam-medis');
+        // Alur Riwayat Rekam Medis
+        Route::get('/rekam-medis', [DokterRekamMedisController::class, 'index'])->name('dokter.rekam-medis');
     });
     
     // --------------------------------------

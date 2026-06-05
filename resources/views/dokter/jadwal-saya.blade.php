@@ -26,9 +26,9 @@
                     </td>
                     
                     <td class="px-8 py-6">
-                        <span class="text-sm font-bold text-slate-700">
-                            {{ $jadwal->pasien->nama ?? 'Nama Tidak Ditemukan' }}
-                        </span>
+                    <span class="text-sm font-bold text-slate-800">
+                        {{ $jadwal->pasien->user->nama ?? 'Nama Tidak Ditemukan' }}
+                    </span>
                     </td>
 
                     <td class="px-8 py-6">
