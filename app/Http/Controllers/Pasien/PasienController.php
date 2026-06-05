@@ -7,6 +7,7 @@ use App\Models\Jadwal;
 use App\Models\Pasien;
 use App\Models\Dokter;
 use App\Models\Alergi; 
+use App\Models\JadwalSistem;
 use App\Models\Pembayaran; // Penting: Pastikan model ini ada
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -28,6 +29,49 @@ class PasienController extends Controller
         $terakhirKunjungan = null;
         $nextAppointment = null;
         $pendingPayment = null;
+
+        // Jadwal operasional klinik
+        $jadwalOperasional = JadwalSistem::harian()->get();
+
+        // Urutan hari
+        $urutanHari = JadwalSistem::urutanHari();
+
+        // Sort sesuai urutan Senin-Minggu
+        $jadwalOperasional = $jadwalOperasional->sortBy(function ($item) use ($urutanHari) {
+            return $urutanHari[$item->hari] ?? 999;
+        });
+
+        // Kelompokkan berdasarkan jam yang sama
+        $grupJadwal = [];
+
+        foreach ($jadwalOperasional as $jadwal) {
+            $key = implode('|', [
+                $jadwal->is_libur,
+                $jadwal->jam_buka,
+                $jadwal->jam_tutup,
+                $jadwal->jam_istirahat_mulai,
+                $jadwal->jam_istirahat_selesai,
+            ]);
+
+            $grupJadwal[$key]['hari'][] = $jadwal->hari;
+            $grupJadwal[$key]['data'] = $jadwal;
+        }
+
+        // Format hari menjadi Senin-Rabu dll
+        $jadwalKlinik = [];
+
+        foreach ($grupJadwal as $grup) {
+            $hari = $grup['hari'];
+
+            $labelHari = count($hari) > 1
+                ? $hari[0] . ' - ' . end($hari)
+                : $hari[0];
+
+            $jadwalKlinik[] = [
+                'hari' => $labelHari,
+                'data' => $grup['data']
+            ];
+        }
 
         if ($profilPasien) {
             // Base query untuk jadwal pasien
@@ -57,7 +101,8 @@ class PasienController extends Controller
             'totalKunjungan', 
             'terakhirKunjungan', 
             'nextAppointment', 
-            'pendingPayment'
+            'pendingPayment',
+            'jadwalKlinik'
         ));
     }
 
@@ -167,7 +212,7 @@ class PasienController extends Controller
             // 2. Buat Pembayaran (Wajib ditambahkan agar tabel pembayaran terisi)
             Pembayaran::create([
                 'id_jadwal' => $jadwal->id,
-                'jumlah'    => 75000,
+                'jumlah'    => 50000,
                 // Gunakan 'cash' atau 'qris' sebagai nilai default yang valid menurut ENUM database Anda
                 // Jangan gunakan 'pending' karena 'pending' itu STATUS, bukan METODE
                 'metode'    => 'cash', 

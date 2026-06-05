@@ -105,15 +105,34 @@
             </h2>
 
             <div class="space-y-4 relative z-10">
-                <div class="flex justify-between items-center text-base border-b border-white/20 pb-3">
-                    <span class="text-blue-50 font-medium">Senin - Jumat</span>
-                    <span class="font-bold text-white">08:00 - 17:00</span>
-                </div>
-                
-                <div class="flex justify-between items-center text-base border-b border-white/20 pb-3">
-                    <span class="text-blue-50 font-medium">Sabtu</span>
-                    <span class="font-bold text-white">10:00 - 14:00</span>
-                </div>
+                @foreach ($jadwalKlinik as $jadwal)
+                    <div class="border-b border-white/20 pb-3">
+                        <div class="flex justify-between items-center text-base">
+                            <span class="text-blue-50 font-medium">
+                                {{ $jadwal['hari'] }}
+                            </span>
+
+                            @if ($jadwal['data']->is_libur)
+                                <span class="font-bold text-red-200">
+                                    Tutup
+                                </span>
+                            @else
+                                <span class="font-bold text-white">
+                                    {{ $jadwal['data']->jam_buka_format }}
+                                    -
+                                    {{ $jadwal['data']->jam_tutup_format }}
+                                </span>
+                            @endif
+                        </div>
+
+                        @if (!$jadwal['data']->is_libur)
+                            <div class="text-sm text-blue-100 mt-1">
+                                Istirahat:
+                                {{ $jadwal['data']->jam_istirahat_display }}
+                            </div>
+                        @endif
+                    </div>
+                @endforeach
 
                 <div class="mt-6">
                     <p class="text-[11px] font-bold text-blue-100 mb-1 uppercase tracking-widest">Emergency Call:</p>

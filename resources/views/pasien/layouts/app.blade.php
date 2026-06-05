@@ -52,7 +52,7 @@
             {{-- Home --}}
             <a href="{{ route('pasien.dashboard') }}" class="flex items-center gap-4 px-4 py-4 rounded-xl {{ request()->routeIs('pasien.dashboard') ? 'sidebar-active' : 'sidebar-link' }}">
                 <i class="fa-solid fa-house w-5 text-center"></i>
-                Home
+                Beranda
             </a>
 
             {{-- Layanan --}}
