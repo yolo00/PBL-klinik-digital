@@ -2,17 +2,25 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Alergi extends Model
 {
-    protected $table = 'alergi';
-    protected $primaryKey = 'id';
+    use HasFactory;
 
-    // Tabel alergi tidak memiliki timestamps
+    protected $table = 'alergi';
+    
+    // Primary Key tidak perlu didefinisikan jika namanya 'id'
+    // karena Laravel otomatis mendeteksinya.
+
+    // Tabel alergi tidak memiliki timestamps (created_at/updated_at)
     public $timestamps = false;
 
-    protected $fillable = ['id_pasien', 'nama_alergi'];
+    protected $fillable = [
+        'id_pasien', 
+        'nama_alergi'
+    ];
 
     // ─── Relasi ───────────────────────────────────────────────
 

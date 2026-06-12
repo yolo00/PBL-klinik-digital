@@ -6,6 +6,7 @@
     <title>@yield('title', 'Pasien Dashboard') - UniHealth</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
@@ -51,7 +52,7 @@
             {{-- Home --}}
             <a href="{{ route('pasien.dashboard') }}" class="flex items-center gap-4 px-4 py-4 rounded-xl {{ request()->routeIs('pasien.dashboard') ? 'sidebar-active' : 'sidebar-link' }}">
                 <i class="fa-solid fa-house w-5 text-center"></i>
-                Home
+                Beranda
             </a>
 
             {{-- Layanan --}}
@@ -84,7 +85,7 @@
             <div class="relative group">
                 <div class="flex items-center gap-3 cursor-pointer">
                     <div class="text-right">
-                        <p class="text-[14px] font-bold text-white group-hover:text-emerald-50 transition">Aprillia Bunga</p>
+                        <p class="text-[14px] font-bold text-white group-hover:text-emerald-50 transition">{{ auth()->user()->nama }}</p>
                         <p class="text-[12px] text-emerald-900/70 font-semibold uppercase tracking-wide">Pasien</p>
                     </div>
                     <div class="w-10 h-10 rounded-full bg-white/30 flex items-center justify-center text-white shadow-sm group-hover:ring-2 ring-white/40 transition">
@@ -98,7 +99,7 @@
                 <!-- Dropdown Menu -->
                 <div class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-slate-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                     <div class="py-2 flex flex-col">
-                        <a href="{{ route('pasien.profil.edit') }}" class="px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 transition">
+                        <a href="{{ route('pasien.profil') }}" class="px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 transition">
                             <i class="fa-solid fa-user mr-2 text-slate-400"></i>Profil Saya
                         </a>
                         <div class="border-t border-slate-100 my-1"></div>

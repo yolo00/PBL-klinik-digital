@@ -8,6 +8,8 @@ class Pasien extends Model
 {
     protected $table = 'pasien'; 
     protected $primaryKey = 'id';
+    
+    // Sangat penting: matikan timestamps agar Laravel tidak error mencari kolom created_at
     public $timestamps = false;
 
     // Pastikan 'nama' ada di sini agar bisa diakses
