@@ -49,7 +49,7 @@
             </a>
         </div>
 
-        {{-- Janji Berikutnya --}}
+{{-- Janji Berikutnya --}}
         <div class="col-span-5 bg-white p-7 rounded-2xl shadow-sm border border-gray-100">
             <h2 class="text-xl font-bold text-gray-800 mb-1">Janji Berikutnya</h2>
             <p class="text-sm text-gray-400 mb-6">Jangan lewatkan jadwal Anda</p>
@@ -57,11 +57,26 @@
             @if($nextAppointment)
             <div class="bg-slate-50 p-5 rounded-2xl border-l-4 border-blue-500 flex items-center justify-between">
                 <div>
-                    <p class="font-bold text-gray-800 text-lg">{{ $nextAppointment->dokter->nama }}</p>
-                    <p class="text-xs text-blue-500 font-bold uppercase">{{ $nextAppointment->dokter->spesialisasi }}</p>
+                    {{-- 1. PERBAIKAN: Mengambil nama asli dokter dari relasi user --}}
+                    <p class="font-bold text-gray-800 text-lg">
+                        {{ $nextAppointment->dokter->user->nama ?? ($nextAppointment->dokter->user->name ?? 'Dokter Spesialis') }}
+                    </p>
+                    
+                    {{-- 2. PERBAIKAN: Mengantisipasi teks JSON pada spesialisasi/nama agar tidak muncul mentah --}}
+                    <p class="text-xs text-blue-500 font-bold uppercase">
+                        @if(json_decode($nextAppointment->dokter->nama))
+                            {{-- Jika data JSON "DOKTER UMUM" tersimpan di kolom nama --}}
+                            {{ json_decode($nextAppointment->dokter->nama)->NAMA ?? 'Dokter Umum' }}
+                        @elseif(is_object($nextAppointment->dokter->spesialisasi))
+                            {{ $nextAppointment->dokter->spesialisasi->NAMA ?? 'Dokter Umum' }}
+                        @else
+                            {{ $nextAppointment->dokter->spesialisasi ?? 'Dokter Umum' }}
+                        @endif
+                    </p>
+
                     <div class="mt-3 flex items-center gap-2 text-blue-600 font-bold text-xs uppercase tracking-tighter">
                         <span><i class="fa-solid fa-calendar-days mr-1"></i> {{ $nextAppointment->tanggal->format('d M Y') }}</span>
-                        <span><i class="fa-solid fa-clock mr-1"></i> {{ $nextAppointment->jam }}</span>
+                        <span><i class="fa-solid fa-clock mr-1"></i>{{ date('H.i', strtotime(str_contains($nextAppointment->jam, ':') ? $nextAppointment->jam : $nextAppointment->jam . ':00')) }} WIB</span>
                     </div>
                 </div>
                 <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm text-xl border border-blue-50">🩺</div>
@@ -71,9 +86,10 @@
             @endif
         </div>
 
-        {{-- Menunggu Pembayaran --}}
-<div class="col-span-7 bg-white p-7 rounded-2xl shadow-sm border border-gray-100">
+{{-- Menunggu Pembayaran --}}
+<div class="col-span-7 bg-white p-7 rounded-2xl shadow-sm border border-gray-100 h-fit self-start">
     <h2 class="text-xl font-bold text-gray-800 mb-6">Menunggu Pembayaran</h2>
+    
     @if($pendingPayment)
     <div class="flex items-center justify-between p-5 bg-slate-50 rounded-2xl border border-blue-50">
         <div class="flex items-center gap-4">
@@ -81,9 +97,13 @@
                 <i class="fa-solid fa-file-invoice"></i>
             </div>
             <div>
-                {{-- Kita akses dokter melalui relasi: pembayaran -> jadwal -> dokter --}}
-                <p class="font-bold text-gray-800">Konsultasi - {{ $pendingPayment->jadwal->dokter->nama ?? 'Dokter' }}</p>
-                <p class="text-xs text-gray-400">Jadwal: {{ $pendingPayment->jadwal->tanggal->format('d M Y') }}</p>
+                <p class="font-bold text-gray-800">
+                    Konsultasi - {{ $pendingPayment->jadwal->dokter->user->nama ?? $pendingPayment->jadwal->dokter->nama ?? 'Dokter' }}
+                </p>
+                {{-- Ubah d M Y menjadi d F Y di sini --}}
+                <p class="text-xs text-gray-400 mt-1">
+                    Jadwal: {{ \Carbon\Carbon::parse($pendingPayment->jadwal->tanggal)->locale('id')->translatedFormat('d F Y') }}
+                </p>
             </div>
         </div>
         <div class="text-right">

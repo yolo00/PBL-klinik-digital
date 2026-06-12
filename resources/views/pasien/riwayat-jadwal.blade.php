@@ -27,7 +27,6 @@
                 <option>Semua Status</option>
                 <option>Mendatang</option>
                 <option>Selesai</option>
-                <option>Dibatalkan</option>
             </select>
         </div>
 
@@ -49,19 +48,19 @@
                         {{-- Tanggal & Waktu --}}
                         <td class="px-8 py-6">
                             <div class="text-lg font-bold text-slate-800">
-                                {{ \Carbon\Carbon::parse($jadwal->tanggal)->format('d F Y') }}
+                                {{ \Carbon\Carbon::parse($jadwal->tanggal)->locale('id')->translatedFormat('d F Y') }}
                             </div>
                             <div class="text-sm text-slate-400 font-medium mt-0.5">
                                 {{ $jadwal->jam }}:00 WIB
                             </div>
                         </td>
 
-                        {{-- Dokter (Diperbaiki: Mengakses relasi user) --}}
-<td class="px-8 py-6">
-    <div class="text-lg font-bold text-slate-700">
-        {{ $jadwal->dokter->user->nama ?? 'Dokter Tidak Terdaftar' }}
-    </div>
-</td>
+                        {{-- Dokter --}}
+                        <td class="px-8 py-6">
+                            <div class="text-lg font-bold text-slate-700">
+                                {{ $jadwal->dokter->user->nama ?? 'Dokter Tidak Terdaftar' }}
+                            </div>
+                        </td>
 
                         {{-- Status Jadwal --}}
                         <td class="px-8 py-6">
@@ -75,34 +74,33 @@
                         </td>
 
                         {{-- Pembayaran --}}
-<td class="px-8 py-6">
-    @if($jadwal->pembayaran)
-        <div class="flex flex-col">
-            <span class="text-sm font-bold text-slate-800">
-                Rp {{ number_format($jadwal->pembayaran->jumlah, 0, ',', '.') }}
-            </span>
-            <span class="text-[11px] text-slate-400 uppercase tracking-wider font-semibold">
-                {{ $jadwal->pembayaran->metode }}
-            </span>
-        </div>
+                        <td class="px-8 py-6">
+                            @if($jadwal->pembayaran)
+                                <div class="flex flex-col">
+                                    <span class="text-sm font-bold text-slate-800">
+                                        Rp {{ number_format($jadwal->pembayaran->jumlah, 0, ',', '.') }}
+                                    </span>
+                                    <span class="text-[11px] text-slate-400 uppercase tracking-wider font-semibold">
+                                        {{ $jadwal->pembayaran->metode }}
+                                    </span>
+                                </div>
 
-        {{-- Logika Tombol --}}
-        <div class="mt-2">
-            @if($jadwal->pembayaran->status == 'pending')
-                {{-- Jika ingin hanya tulisan "Menunggu" dan tidak bisa diklik --}}
-                <span class="inline-flex px-3 py-1 rounded-lg bg-yellow-100 text-yellow-600 text-[10px] font-bold uppercase">
-                    Menunggu
-                </span>
-            @elseif($jadwal->pembayaran->status == 'lunas')
-                <span class="text-emerald-600 font-bold text-xs">Lunas</span>
-            @elseif($jadwal->pembayaran->status == 'batal')
-                <span class="text-red-600 font-bold text-xs">Batal</span>
-            @endif
-        </div>
-    @else
-        <span class="text-slate-300 text-sm italic">Belum ada</span>
-    @endif
-</td>
+                                {{-- Logika Tombol --}}
+                                <div class="mt-2">
+                                    @if($jadwal->pembayaran->status == 'pending')
+                                        <span class="inline-flex px-3 py-1 rounded-lg bg-yellow-100 text-yellow-600 text-[10px] font-bold uppercase">
+                                            Menunggu
+                                        </span>
+                                    @elseif($jadwal->pembayaran->status == 'lunas')
+                                        <span class="text-emerald-600 font-bold text-xs">Lunas</span>
+                                    @elseif($jadwal->pembayaran->status == 'batal')
+                                        <span class="text-red-600 font-bold text-xs">Batal</span>
+                                    @endif
+                                </div>
+                            @else
+                                <span class="text-slate-300 text-sm italic">Belum ada</span>
+                            @endif
+                        </td>
 
                         {{-- Akses Rekam Medis --}}
                         <td class="px-8 py-6">
@@ -154,4 +152,5 @@
         </div>
     </div>
 </div>
+
 @endsection

@@ -81,18 +81,26 @@ class PasienController extends Controller
             $totalKunjungan = (clone $query)->where('status', 'selesai')->count();
             $terakhirKunjungan = (clone $query)->where('status', 'selesai')->latest('tanggal')->first();
 
-            // 2. Janji Berikutnya
+            // 2. Janji Berikutnya (Sudah diperbaiki dengan eager loading)
             $nextAppointment = (clone $query)
+                ->with('dokter.user') // <-- TAMBAHKAN BARIS INI
                 ->where('status', 'menunggu')
                 ->where('tanggal', '>=', Carbon::today())
                 ->orderBy('tanggal', 'asc')
+                ->orderBy('jam', 'asc')
                 ->first();
 
-            // 3. Cek Pembayaran Pending (Mengambil dari tabel pembayaran berdasarkan id_jadwal)
-            $jadwalIds = (clone $query)->pluck('id');
-            $pendingPayment = Pembayaran::whereIn('id_jadwal', $jadwalIds)
-                ->where('status', 'pending') // Sesuaikan dengan nilai di database Anda
-                ->first();
+            // 3. Cek Pembayaran Pending (Mengambil 1 data terdekat dengan tanggal janji temu)
+           $jadwalIds = (clone $query)->pluck('id');
+$pendingPayment = Pembayaran::with('jadwal')
+    ->whereIn('pembayaran.id_jadwal', $jadwalIds) // Tambahkan 'pembayaran.' di depan
+    ->where('pembayaran.status', 'pending')      // Tambahkan 'pembayaran.' di depan
+    ->join('jadwal', 'pembayaran.id_jadwal', '=', 'jadwal.id')
+    ->where('jadwal.tanggal', '>=', Carbon::today()) 
+    ->orderBy('jadwal.tanggal', 'asc')              
+    ->orderBy('jadwal.jam', 'asc')                  
+    ->select('pembayaran.*')                        
+    ->first();                                   // Hanya ambil 1 data terdekat
         }
 
         return view('pasien.dashboard', compact(
@@ -121,8 +129,8 @@ class PasienController extends Controller
         // Mengambil data jadwal dengan urutan tanggal dan jam terbaru
         $riwayatJadwal = Jadwal::with(['dokter', 'pembayaran'])
             ->where('id_pasien', $profilPasien->id)
-            ->orderBy('tanggal', 'desc') // Urutan dari tanggal paling baru
-            ->orderBy('jam', 'desc')     // Jika tanggal sama, urutkan dari jam paling akhir
+            ->orderBy('tanggal', 'asc') // Urutan dari tanggal paling baru
+            ->orderBy('jam', 'asc')     // Jika tanggal sama, urutkan dari jam paling akhir
             ->get();
 
         return view('pasien.riwayat-jadwal', compact('riwayatJadwal'));
