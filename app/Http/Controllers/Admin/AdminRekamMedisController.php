@@ -21,15 +21,20 @@ class AdminRekamMedisController extends Controller
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->whereHas('jadwal.pasien.user', fn($sq) => $sq->where('nama', 'like', "%{$search}%"))
-                  ->orWhereHas('jadwal.dokter.user', fn($sq) => $sq->where('nama', 'like', "%{$search}%"));
+                  ->orWhereHas('jadwal.dokter.user', fn($sq) => $sq->where('nama', 'like', "%{$search}%"))
+                  ->orWhere('diagnosa', 'like', "%{$search}%");
             });
+        }
+
+        if ($request->filled('diagnosa')) {
+            $query->where('diagnosa', 'like', '%' . $request->diagnosa . '%');
         }
 
         $sort = $request->get('sort', 'terbaru');
         if ($sort === 'terlama') {
-            $query->orderBy('created_at', 'asc');
+            $query->orderBy('id', 'asc');
         } else {
-            $query->orderByDesc('created_at');
+            $query->orderByDesc('id');
         }
 
         $rekamMedis = $query->paginate(10)->withQueryString();

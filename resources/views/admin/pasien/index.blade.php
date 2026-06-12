@@ -13,7 +13,7 @@
 
     <!-- Filters -->
     <form method="GET" action="{{ route('admin.pasien.index') }}" class="flex flex-wrap gap-4 mb-4">
-        <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama pasien…"
+        <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama / nomor HP pasien…"
             class="flex-1 min-w-[200px] max-w-[500px] px-5 py-3 bg-white border border-slate-200 rounded-[12px] text-[14px] focus:outline-none focus:ring-2 focus:ring-slate-500/20 focus:border-slate-500 transition-all shadow-[0_2px_10px_rgb(0,0,0,0.02)]">
 
         <select name="jenis_kelamin" class="px-5 py-3 bg-gray-400 text-white font-medium border-0 rounded-[12px] text-[14px] focus:outline-none shadow-sm min-w-[170px] appearance-none cursor-pointer">
@@ -23,9 +23,9 @@
         </select>
 
         <select name="sort" class="px-5 py-3 bg-gray-400 text-white font-medium border-0 rounded-[12px] text-[14px] focus:outline-none shadow-sm min-w-[200px] appearance-none cursor-pointer">
+            <option value="terbaru"   {{ request('sort', 'terbaru') === 'terbaru'   ? 'selected' : '' }}>Sortir : Terbaru</option>
             <option value="nama_asc"  {{ request('sort') === 'nama_asc'  ? 'selected' : '' }}>Sortir : Nama A – Z</option>
             <option value="nama_desc" {{ request('sort') === 'nama_desc' ? 'selected' : '' }}>Sortir : Nama Z – A</option>
-            <option value="terbaru"   {{ request('sort') === 'terbaru'   ? 'selected' : '' }}>Sortir : Terbaru</option>
         </select>
 
         <button type="submit" class="px-6 py-3 bg-slate-500 text-white font-medium rounded-[12px] text-[14px] hover:bg-slate-600 transition-colors shadow-sm">Cari</button>

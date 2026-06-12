@@ -55,18 +55,37 @@ class PasienController extends Controller
         }
 
         $request->validate([
-            'keluhan'  => 'required|string',
-            'diagnosa' => 'required|string',
+            'keluhan'               => 'required|string',
+            'diagnosa'              => 'required|string',
+            'catatan'               => 'nullable|string',
+            'resep'                 => 'nullable|array',
+            'resep.*.obat'          => 'nullable|string|max:200',
+            'resep.*.dosis'         => 'nullable|string|max:100',
+            'resep.*.aturan_pakai'  => 'nullable|string|max:200',
         ]);
 
-        RekamMedis::create([
+        $rekamMedis = RekamMedis::create([
             'id_jadwal'  => $jadwal->id,
             'keluhan'    => $request->keluhan,
             'diagnosa'   => $request->diagnosa,
-            'tindakan'   => $request->tindakan,
             'catatan'    => $request->catatan,
             'created_by' => auth()->id(),
         ]);
+
+        // Simpan setiap baris resep yang terisi
+        if ($request->filled('resep')) {
+            foreach ($request->resep as $baris) {
+                $obat = trim($baris['obat'] ?? '');
+                if ($obat !== '') {
+                    \App\Models\Resep::create([
+                        'id_rekam'    => $rekamMedis->id,
+                        'obat'        => $obat,
+                        'dosis'       => $baris['dosis'] ?? null,
+                        'aturan_pakai'=> $baris['aturan_pakai'] ?? null,
+                    ]);
+                }
+            }
+        }
 
         // Update status jadwal menjadi selesai
         $jadwal->update(['status' => 'selesai']);
