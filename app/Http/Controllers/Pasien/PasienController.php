@@ -107,12 +107,60 @@ class PasienController extends Controller
     }
 
     // =======================================================
-    // TAMPIL FORM (Menyediakan data dokter)
+    // R: READ (Membaca Riwayat Jadwal Urut Terbaru)
+    // =======================================================
+    public function riwayatJadwal()
+    {
+        $profilPasien = Auth::user()->pasien;
+
+        // Pastikan profil pasien ada sebelum query
+        if (!$profilPasien) {
+            return view('pasien.riwayat-jadwal', ['riwayatJadwal' => collect([])]);
+        }
+
+        // Mengambil data jadwal dengan urutan tanggal dan jam terbaru
+        $riwayatJadwal = Jadwal::with(['dokter', 'pembayaran'])
+            ->where('id_pasien', $profilPasien->id)
+            ->orderBy('tanggal', 'desc') // Urutan dari tanggal paling baru
+            ->orderBy('jam', 'desc')     // Jika tanggal sama, urutkan dari jam paling akhir
+            ->get();
+
+        return view('pasien.riwayat-jadwal', compact('riwayatJadwal'));
+    }
+
+    // =======================================================
+    // TAMPIL FORM (Menyediakan data dokter & spesialisasi)
     // =======================================================
     public function buatJanji()
     {
         $dokters = Dokter::with('user')->get();
-        return view('pasien.buat-janji', compact('dokters'));
+        // Ambil semua data spesialisasi untuk filter dropdown
+        $spesialisasis = \App\Models\Spesialisasi::all(); 
+        
+        return view('pasien.buat-janji', compact('dokters', 'spesialisasis'));
+    }
+
+    // =======================================================
+    // API UNTUK FILTER DINAMIS
+    // =======================================================
+    public function getDokterBySpesialisasi($id_spesialisasi)
+    {
+        // Jika memilih 'all', tampilkan semua dokter. Jika tidak, filter berdasarkan id_spesialisasi
+        if ($id_spesialisasi === 'all') {
+            $dokters = Dokter::with('user')->get();
+        } else {
+            $dokters = Dokter::with('user')->where('id_spesialisasi', $id_spesialisasi)->get();
+        }
+
+        // Format data menjadi JSON ringan agar cepat di-load oleh JavaScript
+        $data = $dokters->map(function ($dokter) {
+            return [
+                'id' => $dokter->id,
+                'nama' => $dokter->user->nama ?? ($dokter->user->name ?? 'Dokter Tanpa Nama')
+            ];
+        });
+
+        return response()->json($data);
     }
 
     // =======================================================
@@ -182,15 +230,33 @@ class PasienController extends Controller
     }
 
     // =======================================================
-    // C: CREATE (Membuat Data)
+    // C: CREATE (Membuat Data dengan Validasi Tanggal & Jam)
     // =======================================================
     public function storeJadwal(Request $request)
     {
+        // 1. Validasi dasar untuk memastikan tanggal tidak backdate (hari yang lalu)
         $request->validate([
             'id_dokter' => 'required|exists:dokter,id',
             'tanggal'   => 'required|date|after_or_equal:today',
             'jam'       => 'required|integer',
         ]);
+
+        // 2. VALIDASI TAMBAHAN: Cek jika pendaftaran dilakukan hari ini, jamnya tidak boleh sudah lewat
+        $tanggalInput = Carbon::parse($request->tanggal);
+        
+        if ($tanggalInput->isToday()) {
+            // Mengambil jam saat ini di Zona Waktu Barat (WIB / Asia/Jakarta)
+            $jamSekarang = Carbon::now('Asia/Jakarta')->hour; 
+            
+            // Jika jam yang dipilih pasien kurang dari atau sama dengan jam saat ini, tolak!
+            if ((int)$request->jam <= $jamSekarang) {
+                return redirect()->back()
+                    ->withInput() 
+                    ->withErrors([
+                        'jam' => 'Waktu pendaftaran sudah lewat untuk hari ini. Silakan pilih jam atau tanggal yang akan datang.'
+                    ]);
+            }
+        }
 
         $profilPasien = Auth::user()->pasien;
 
@@ -209,14 +275,12 @@ class PasienController extends Controller
                 'status'    => 'menunggu', 
             ]);
 
-            // 2. Buat Pembayaran (Wajib ditambahkan agar tabel pembayaran terisi)
+            // 2. Buat Pembayaran 
             Pembayaran::create([
                 'id_jadwal' => $jadwal->id,
-                'jumlah'    => 50000,
-                // Gunakan 'cash' atau 'qris' sebagai nilai default yang valid menurut ENUM database Anda
-                // Jangan gunakan 'pending' karena 'pending' itu STATUS, bukan METODE
+                'jumlah'    => 75000,
                 'metode'    => 'cash', 
-                'status'    => 'pending', // Ini sudah benar, karena 'pending' ada dalam opsi ENUM status
+                'status'    => 'pending', 
             ]);
         });
 
@@ -224,41 +288,7 @@ class PasienController extends Controller
     }
 
     // =======================================================
-    // D: DELETE (Menghapus Data)
-    // =======================================================
-    public function destroyJadwal($id)
-    {
-        $jadwal = Jadwal::findOrFail($id);
-        $profilPasien = Auth::user()->pasien;
-
-        if ($profilPasien && $jadwal->id_pasien == $profilPasien->id) {
-            $jadwal->delete(); 
-            return redirect()->route('pasien.riwayat')->with('success', 'Jadwal temu berhasil dibatalkan.');
-        }
-
-        return redirect()->route('pasien.riwayat')->with('error', 'Akses ditolak!');
-    }
-
-    public function riwayatJadwal()
-    {
-        $profilPasien = Auth::user()->pasien;
-
-        // Pastikan profil pasien ada sebelum query
-        if (!$profilPasien) {
-            return view('pasien.riwayat-jadwal', ['riwayatJadwal' => collect([])]);
-        }
-
-        // Mengambil data jadwal dengan relasi dokter dan pembayaran
-        $riwayatJadwal = Jadwal::with(['dokter', 'pembayaran'])
-            ->where('id_pasien', $profilPasien->id)
-            ->orderBy('tanggal', 'desc')
-            ->get();
-
-        return view('pasien.riwayat-jadwal', compact('riwayatJadwal'));
-    }
-
-    // =======================================================
-    // TAMPIL DETAIL PEMBAYARAN (Baru Ditambahkan)
+    // TAMPIL DETAIL PEMBAYARAN
     // =======================================================
     public function detailPembayaran($id)
     {
@@ -273,5 +303,27 @@ class PasienController extends Controller
 
         // 3. Tampilkan ke view
         return view('pasien.detail-pembayaran', compact('pembayaran'));
+    }
+
+// =======================================================
+    // D: DELETE (Menghapus / Membatalkan Data Jadwal)
+    // =======================================================
+    public function destroyJadwal($id)
+    {
+        $jadwal = Jadwal::findOrFail($id);
+        $profilPasien = Auth::user()->pasien;
+
+        if ($profilPasien && $jadwal->id_pasien == $profilPasien->id) {
+            
+            // 1. Hapus data pembayaran yang terikat dengan jadwal ini terlebih dahulu
+            Pembayaran::where('id_jadwal', $jadwal->id)->delete();
+
+            // 2. Setelah bersih, baru hapus data jadwalnya
+            $jadwal->delete(); 
+
+            return redirect()->route('pasien.riwayat')->with('success', 'Jadwal temu berhasil dibatalkan.');
+        }
+
+        return redirect()->route('pasien.riwayat')->with('error', 'Akses ditolak!');
     }
 }

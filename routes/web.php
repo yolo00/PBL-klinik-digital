@@ -108,9 +108,6 @@ Route::middleware('auth')->group(function () {
     // --------------------------------------
     // 3. PASIEN ROUTES
     // --------------------------------------
-    // --------------------------------------
-    // 3. PASIEN ROUTES
-    // --------------------------------------
     Route::prefix('pasien')->name('pasien.')->middleware('role:P')->group(function () {
         
         // Dashboard & Profil
@@ -124,6 +121,9 @@ Route::middleware('auth')->group(function () {
         Route::post('/buat-janji', [PasienController::class, 'storeJadwal'])->name('store_jadwal');
         Route::get('/riwayat-jadwal', [PasienController::class, 'riwayatJadwal'])->name('riwayat');
         Route::delete('/jadwal/{id}/batal', [PasienController::class, 'destroyJadwal'])->name('batal_jadwal');
+        
+        // rute ini untuk menghandle filter AJAX
+        Route::get('/get-dokter/{id_spesialisasi}', [PasienController::class, 'getDokterBySpesialisasi'])->name('get-dokter');
         
         // Pembayaran
         Route::get('/pembayaran', function () { return view('pasien.pembayaran'); })->name('pembayaran'); 

@@ -19,16 +19,30 @@
 
     <form action="{{ route('pasien.store_jadwal') }}" method="POST" class="bg-white p-10 rounded-[2.5rem] shadow-sm border border-gray-100 space-y-10">
         @csrf 
+        
+        {{-- 1. DROPDOWN BARU: FILTER SPESIALISASI --}}
+        <div class="space-y-4">
+            <label class="block text-lg font-bold text-gray-800">🩺 Pilih Jenis Dokter (Spesialisasi)</label>
+            <select id="id_spesialisasi" class="w-full p-5 bg-gray-50 border border-gray-200 rounded-2xl outline-none">
+                <option value="all">Semua Spesialisasi / Jenis Dokter</option>
+                @foreach($spesialisasis as $spesialis)
+                    <option value="{{ $spesialis->id }}">
+                        {{ $spesialis->nama_spesialisasi ?? ($spesialis->nama ?? 'Spesialis') }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+
+        {{-- 2. DROPDOWN SEBELUMNYA (Diberikan id="id_dokter") --}}
         <div class="space-y-4">
             <label class="block text-lg font-bold text-gray-800">👤 Pilih Dokter</label>
-      <select name="id_dokter" class="w-full p-5 bg-gray-50 border border-gray-200 rounded-2xl outline-none" required>
-    @foreach($dokters as $dokter)
-        <option value="{{ $dokter->id }}">
-            {{-- Sesuaikan 'nama' dengan nama kolom asli di tabel akun_user --}}
-            {{ $dokter->user->nama ?? ($dokter->user->name ?? 'Dokter Tanpa Nama') }}
-        </option>
-    @endforeach
-</select>
+            <select name="id_dokter" id="id_dokter" class="w-full p-5 bg-gray-50 border border-gray-200 rounded-2xl outline-none" required>
+                @foreach($dokters as $dokter)
+                    <option value="{{ $dokter->id }}">
+                        {{ $dokter->user->nama ?? ($dokter->user->name ?? 'Dokter Tanpa Nama') }}
+                    </option>
+                @endforeach
+            </select>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
@@ -50,11 +64,46 @@
         <div class="pt-10 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center bg-gray-50 p-8 rounded-3xl gap-6">
             <div>
                 <p class="text-sm text-gray-500 mb-1 font-medium">Biaya Pendaftaran</p>
-                <p class="text-3xl font-black text-gray-900">Rp 50.000</p>
+                <p class="text-3xl font-black text-gray-900">Rp75.000</p>
             </div>
             <button type="submit" class="w-full md:w-auto bg-slate-500 text-white px-12 py-5 rounded-2xl font-bold text-lg hover:bg-blue-600 transition-all shadow-xl shadow-blue-100 flex items-center justify-center gap-3">
                 📅 Daftar Jadwal Sekarang
             </button>
         </div>
     </form>
+
+    {{-- SCRIPT JAVASCRIPT AJAX UNTUK PROSES FILTER DINAMIS --}}
+    <script>
+        document.getElementById('id_spesialisasi').addEventListener('change', function() {
+            const spesialisasiId = this.value;
+            const dokterSelect = document.getElementById('id_dokter');
+            
+            // Set status memuat data biar user tahu sistem sedang bekerja
+            dokterSelect.innerHTML = '<option value="">Memuat daftar dokter...</option>';
+            
+            // Panggil API route Laravel menggunakan Fetch API secara async
+            fetch(`/pasien/get-dokter/${spesialisasiId}`)
+                .then(response => response.json())
+                .then(data => {
+                    dokterSelect.innerHTML = ''; // Kosongkan placeholder memuat data
+                    
+                    if (data.length === 0) {
+                        dokterSelect.innerHTML = '<option value="">Tidak ada dokter untuk spesialisasi ini</option>';
+                        return;
+                    }
+                    
+                    // Masukkan data dokter hasil filter ke dalam opsi select baru
+                    data.forEach(dokter => {
+                        const option = document.createElement('option');
+                        option.value = dokter.id;
+                        option.textContent = dokter.nama;
+                        dokterSelect.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    dokterSelect.innerHTML = '<option value="">Gagal mengambil data dokter</option>';
+                });
+        });
+    </script>
 @endsection
