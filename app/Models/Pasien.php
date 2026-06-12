@@ -19,9 +19,10 @@ class Pasien extends Model
 
     public function user()
     {
+        // Pasien memiliki 'id_user' yang merujuk ke 'id' di tabel 'akun_user'
         return $this->belongsTo(\App\Models\AkunUser::class, 'id_user', 'id');
     }
-
+    
     public function jadwals()
     {
         return $this->hasMany(Jadwal::class, 'id_pasien', 'id');

@@ -11,9 +11,9 @@
 <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
     @php
         $stats = [
-            ['title' => 'Jadwal Hari Ini', 'value' => $data['jadwalHariIni'] . ' Jadwal', 'icon' => 'fa-clock'],
-            ['title' => 'Semua Jadwal', 'value' => $data['semuaJadwal'] . ' Jadwal', 'icon' => 'fa-calendar-check'],
-            ['title' => 'Rekam Belum Terisi', 'value' => $data['rekamBelumTerisi'] . ' Rekam', 'icon' => 'fa-clipboard-list'],
+            ['title' => 'Jadwal Hari Ini', 'value' => $jadwalHariIni . ' Jadwal', 'icon' => 'fa-clock'],
+            ['title' => 'Semua Jadwal', 'value' => $semuaJadwal . ' Jadwal', 'icon' => 'fa-calendar-check'],
+            ['title' => 'Rekam Belum Terisi', 'value' => $rekamBelumTerisi . ' Rekam', 'icon' => 'fa-clipboard-list'],
             ['title' => 'Status Anda', 'value' => 'Aktif', 'icon' => 'fa-circle-check', 'color' => 'text-emerald-500'],
         ];
     @endphp
@@ -50,17 +50,32 @@
                 <tbody class="text-sm font-bold">
                     @forelse($jadwalList as $jadwal)
                     <tr class="hover:bg-slate-50 rounded-2xl transition-all">
-                        <td class="px-6 py-5 text-slate-700">{{ $jadwal->pasien->user->nama ?? '-' }}</td>
-                        <td class="px-6 py-5 text-slate-400 font-semibold text-xs uppercase tracking-tighter">{{ $jadwal->jam }}</td>
+                    <td class="px-6 py-5">
+                        {{ $jadwal->pasien->user->nama ?? 'Pasien Tidak Ditemukan' }}
+                    </td>
+                        <td class="px-6 py-5 text-slate-400 font-semibold text-xs uppercase tracking-tighter">
+                            {{ $jadwal->jam }}
+                        </td>
                         <td class="px-6 py-5">
-                            <span class="px-4 py-1.5 {{ $jadwal->status == 'menunggu' ? 'bg-amber-50 text-amber-600' : 'bg-emerald-50 text-emerald-600' }} rounded-full text-[10px] font-black uppercase">{{ $jadwal->status }}</span>
+                            <span class="px-4 py-1.5 {{ $jadwal->status == 'menunggu' ? 'bg-amber-50 text-amber-600' : 'bg-emerald-50 text-emerald-600' }} rounded-full text-[10px] font-black uppercase">
+                                {{ $jadwal->status }}
+                            </span>
                         </td>
                         <td class="px-6 py-5 text-center">
-                            <a href="{{ route('dokter.jadwal.buat-rekam', $jadwal->id) }}" class="bg-slate-800 text-white px-6 py-2 rounded-full text-[10px] font-black uppercase hover:bg-emerald-600 transition-all">Mulai</a>
+                            @if($jadwal->status !== 'selesai')
+                            <a href="{{ route('dokter.jadwal.buat-rekam', $jadwal->id) }}" 
+                            class="bg-slate-800 text-white px-6 py-2 rounded-full text-[10px] font-black uppercase hover:bg-emerald-600 transition-all shadow-lg">
+                            Mulai
+                            </a>
+                            @endif
                         </td>
                     </tr>
                     @empty
-                    <tr><td colspan="4" class="text-center py-5 text-slate-400">Tidak ada jadwal hari ini.</td></tr>
+                    <tr>
+                        <td colspan="4" class="text-center py-10 text-slate-400 font-medium">
+                            Tidak ada antrian pasien untuk Anda hari ini.
+                        </td>
+                    </tr>
                     @endforelse
                 </tbody>
             </table>

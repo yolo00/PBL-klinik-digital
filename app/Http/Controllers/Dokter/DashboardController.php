@@ -9,19 +9,35 @@ use App\Models\RekamMedis;
 
 class DashboardController extends Controller
 {
-    // Di dalam DashboardController.php
     public function index()
     {
-        $dokterId = auth()->user()->dokter->id;
+        $user = auth()->user();
+        // Pastikan relasi 'dokter' sudah terdefinisi di User model
+        if (!$user->dokter) {
+            return back()->with('error', 'Profil dokter tidak ditemukan.');
+        }
         
-        $data = [
-            'jadwalHariIni' => Jadwal::where('id_dokter', $dokterId)->whereDate('tanggal', date('Y-m-d'))->count(),
-            'semuaJadwal'   => Jadwal::where('id_dokter', $dokterId)->count(),
-            'rekamBelumTerisi' => Jadwal::where('id_dokter', $dokterId)->where('status', 'dikonfirmasi')->count(),
-        ];
-
-        $jadwalList = Jadwal::where('id_dokter', $dokterId)->whereDate('tanggal', date('Y-m-d'))->with('pasien.user')->get();
-
-        return view('dokter.dashboard-dokter', compact('data', 'jadwalList'));
+        $dokterId = $user->dokter->id;
+        $today = date('Y-m-d');
+    
+        // Menggunakan query yang akurat
+        $jadwalHariIni = \App\Models\Jadwal::where('id_dokter', $dokterId)
+                                           ->whereDate('tanggal', $today)
+                                           ->count();
+    
+        $semuaJadwal = \App\Models\Jadwal::where('id_dokter', $dokterId)->count();
+    
+        // Rekam belum terisi (asumsi: jadwal statusnya 'dikonfirmasi' tapi belum selesai)
+        $rekamBelumTerisi = \App\Models\Jadwal::where('id_dokter', $dokterId)
+                                               ->where('status', 'dikonfirmasi') 
+                                               ->count();
+    
+        $jadwalList = \App\Models\Jadwal::with(['pasien.user'])
+                            ->where('id_dokter', $dokterId)
+                            ->whereDate('tanggal', $today)
+                            ->orderBy('jam', 'asc')
+                            ->get();
+    
+                            return view('dokter.dashboard-dokter', compact('jadwalHariIni', 'semuaJadwal', 'rekamBelumTerisi', 'jadwalList'));
     }
 }

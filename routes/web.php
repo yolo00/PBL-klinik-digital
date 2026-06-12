@@ -19,9 +19,12 @@ use App\Http\Controllers\Admin\AdminRekamMedisController;
 use App\Http\Controllers\Admin\AdminPembayaranController;
 use App\Http\Controllers\Admin\AdminJadwalSistemController;
 use App\Http\Controllers\Admin\AdminJadwalDokterController;
-// Dokter Routes Controllers (Dialias agar tidak bentrok dengan milik Pasien)
-use App\Http\Controllers\Dokter\PasienController as DokterPasienController;
-use App\Http\Controllers\Dokter\RekamMedisController as DokterRekamMedisController;
+// Dokter Routes Controllers
+use App\Http\Controllers\Dokter\DashboardController;
+use App\Http\Controllers\Dokter\JadwalController;
+use App\Http\Controllers\Dokter\PasienController;
+use App\Http\Controllers\Dokter\RekamMedisController;
+use App\Http\Controllers\Dokter\ProfilController;
 
 // Pasien Routes Controller
 use App\Http\Controllers\Pasien\PasienController as PasienUtamaController;
@@ -84,55 +87,53 @@ Route::middleware('auth')->group(function () {
     Route::delete('/jadwal-sistem/{jadwalSistem}',   [AdminJadwalSistemController::class, 'destroy'])->name('jadwal-sistem.destroy');
     });
 
-    // --------------------------------------
+// --------------------------------------
     // 2. DOKTER ROUTES
     // --------------------------------------
     Route::prefix('dokter')->middleware('role:D')->group(function () {
-        // Halaman Tampilan Umum / View
-        Route::get('/dashboard', [\App\Http\Controllers\Dokter\DashboardController::class, 'index'])->name('dokter.dashboard');
-        Route::get('/pengaturan-jadwal', function () { return view('dokter.pengaturan-jadwal'); })->name('dokter.pengaturan');
-        Route::get('/profil', [\App\Http\Controllers\Dokter\ProfilController::class, 'index'])->name('dokter.profil');
-        Route::get('/pasien', function () { return view('dokter.pasien-dokter'); })->name('dokter.pasien');
-        
-        // Alur Jadwal & Aksi Pembuatan Rekam Medis
-        Route::get('/jadwal', [DokterPasienController::class, 'index'])->name('dokter.jadwal');
-        Route::get('/jadwal/{id}/buat-rekam', [App\Http\Controllers\Dokter\PasienController::class, 'buatRekam'])->name('dokter.jadwal.buat-rekam');
-        
-        // PERBAIKAN: Hapus '/dokter' karena sudah tercover oleh prefix di atas
-        Route::post('/jadwal/{id}/simpan-rekam', [App\Http\Controllers\Dokter\PasienController::class, 'storeRekamMedis'])->name('dokter.rekam-medis.store');
 
-        // Alur Riwayat Rekam Medis
-        Route::get('/rekam-medis', [DokterRekamMedisController::class, 'index'])->name('dokter.rekam-medis');
-    });
-    
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dokter.dashboard');
+        Route::get('/profil', [ProfilController::class, 'index'])->name('dokter.profil');
+        Route::get('/pengaturan-jadwal', function () {
+            return view('dokter.pengaturan-jadwal');
+        })->name('dokter.pengaturan');
+        Route::get('/jadwal', [JadwalController::class, 'index'])->name('dokter.jadwal');
+        Route::get('/jadwal/{id}/buat-rekam', [PasienController::class, 'buatRekam'])->name('dokter.jadwal.buat-rekam');
+        Route::post('/jadwal/{id}/simpan-rekam', [PasienController::class, 'storeRekamMedis'])->name('dokter.rekam-medis.store');
+        Route::get('/pasien', [PasienController::class, 'index'])->name('dokter.pasien');
+        Route::get('/rekam-medis', [RekamMedisController::class, 'index'])->name('dokter.rekam-medis');
+        Route::get('/rekam-medis/{id}', [RekamMedisController::class, 'show'])->name('dokter.rekam.show');
+        Route::get('/rekam-medis/{id}/export-pdf', [RekamMedisController::class, 'exportPdf'])->name('dokter.rekam.export-pdf');
+        Route::get('/pasien/{id}/riwayat', [RekamMedisController::class, 'riwayat'])->name('dokter.rekam.riwayat');
+
+    }); // ← TUTUP DOKTER
+
     // --------------------------------------
     // 3. PASIEN ROUTES
     // --------------------------------------
     Route::prefix('pasien')->name('pasien.')->middleware('role:P')->group(function () {
-        
+
         Route::get('/dashboard', [PasienUtamaController::class, 'index'])->name('dashboard');
         Route::get('/buat-janji', [PasienUtamaController::class, 'buatJanji'])->name('buat-janji');
         Route::post('/buat-janji', [PasienUtamaController::class, 'storeJadwal'])->name('store_jadwal');
         Route::post('/profil/update', [PasienUtamaController::class, 'updateProfil'])->name('profil.update');
         Route::delete('/jadwal/{id}/batal', [PasienUtamaController::class, 'destroyJadwal'])->name('batal_jadwal');
         Route::get('/riwayat-jadwal', [PasienUtamaController::class, 'riwayatJadwal'])->name('riwayat');
-
         Route::get('/profil/edit', function () { return view('pasien.edit-profil'); })->name('profil.edit');
-        Route::get('/pembayaran', function () { return view('pasien.pembayaran'); })->name('pembayaran'); 
+        Route::get('/pembayaran', function () { return view('pasien.pembayaran'); })->name('pembayaran');
         Route::get('/riwayat-pembayaran', function () { return view('pasien.riwayat-pembayaran'); })->name('riwayat-pembayaran');
         Route::get('/profil', function () { return view('pasien.profil'); })->name('profil');
-        
         Route::get('/riwayat-rekam-medis', function () {
             $rekamMedis = collect([
                 (object) ['id' => 1, 'tanggal' => '12 April 2026', 'dokter' => 'Dr. Fenni', 'diagnosa' => 'Influenza & Demam']
             ]);
             return view('pasien.riwayat-rekam-medis', compact('rekamMedis'));
         })->name('rekam-medis');
-
         Route::get('/riwayat-rekam-medis/detail/{id}', function ($id) {
             return view('pasien.lihat', ['id' => $id]);
         })->name('rekam-medis.detail');
-    });
+
+    }); // ← TUTUP PASIEN
 
     // --------------------------------------
     // 4. LOGOUT
@@ -141,7 +142,7 @@ Route::middleware('auth')->group(function () {
         auth()->logout();
         request()->session()->invalidate();
         request()->session()->regenerateToken();
-        return redirect('/'); 
+        return redirect('/');
     })->name('logout');
 
-});
+}); // ← TUTUP middleware('auth')

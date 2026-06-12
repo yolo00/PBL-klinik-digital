@@ -9,12 +9,23 @@ class RekamMedis extends Model
 {
     use HasFactory;
 
-    protected $table = 'rekam_medis';
+    protected $table      = 'rekam_medis';
     protected $primaryKey = 'id';
-    public $timestamps = true;
+    public    $timestamps = true;
 
+    /**
+     * BUG FIX: hilangkan 'id_pasien' dari fillable karena kolom ini
+     * tidak ada di tabel rekam_medis (pasien diambil via relasi jadwal).
+     * Tambahkan 'tindakan' dan 'catatan' yang sebelumnya sering hilang.
+     */
     protected $fillable = [
-        'id_jadwal', 'keluhan', 'diagnosa', 'catatan', 'created_by', 'updated_by',
+        'id_jadwal',
+        'keluhan',
+        'diagnosa',
+        'tindakan',
+        'catatan',
+        'created_by',
+        'updated_by',
     ];
 
     // ─── Relasi ───────────────────────────────────────────────
@@ -39,15 +50,47 @@ class RekamMedis extends Model
         return $this->belongsTo(AkunUser::class, 'updated_by', 'id');
     }
 
+    /**
+     * Relasi ke Pasien melalui Jadwal (hasOneThrough)
+     * BUG FIX: urutan parameter hasOneThrough diperbaiki.
+     * hasOneThrough(FinalModel, IntermediateModel, fk_on_intermediate, fk_on_final, lk_on_this, lk_on_intermediate)
+     */
+    public function pasien()
+    {
+        return $this->hasOneThrough(
+            Pasien::class,  // Model tujuan akhir
+            Jadwal::class,  // Model perantara
+            'id',           // FK di jadwal yang menunjuk ke rekam_medis.id_jadwal? Tidak — ini local key di jadwal
+            'id',           // FK di pasien
+            'id_jadwal',    // Local key di rekam_medis → cocok dengan jadwal.id
+            'id_pasien'     // Local key di jadwal → cocok dengan pasien.id
+        );
+    }
+
+    /**
+     * Relasi ke Dokter melalui Jadwal
+     */
+    public function dokter()
+    {
+        return $this->hasOneThrough(
+            Dokter::class,
+            Jadwal::class,
+            'id',
+            'id',
+            'id_jadwal',
+            'id_dokter'
+        );
+    }
+
     // ─── Accessor ─────────────────────────────────────────────
 
-    /** Shortcut ke nama pasien via jadwal */
+    /** Nama pasien via jadwal → digunakan di tabel rekam medis */
     public function getNamaPasienAttribute(): string
     {
         return $this->jadwal?->pasien?->user?->nama ?? '(Tanpa Pasien)';
     }
 
-    /** Shortcut ke nama dokter via jadwal */
+    /** Nama dokter via jadwal */
     public function getNamaDokterAttribute(): string
     {
         return $this->jadwal?->dokter?->user?->nama ?? '—';
