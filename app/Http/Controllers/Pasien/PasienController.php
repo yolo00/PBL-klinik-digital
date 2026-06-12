@@ -100,7 +100,7 @@ $pendingPayment = Pembayaran::with('jadwal')
     ->orderBy('jadwal.tanggal', 'asc')              
     ->orderBy('jadwal.jam', 'asc')                  
     ->select('pembayaran.*')                        
-    ->first();                                   // Hanya ambil 1 data terdekat
+    ->first();// Hanya ambil 1 data terdekat
         }
 
         return view('pasien.dashboard', compact(
@@ -242,11 +242,20 @@ $pendingPayment = Pembayaran::with('jadwal')
     // =======================================================
     public function storeJadwal(Request $request)
     {
-        // 1. Validasi dasar untuk memastikan tanggal tidak backdate (hari yang lalu)
+        // 1. Validasi dasar dengan menambahkan array pesan kustom Bahasa Indonesia di parameter kedua
         $request->validate([
             'id_dokter' => 'required|exists:dokter,id',
             'tanggal'   => 'required|date|after_or_equal:today',
             'jam'       => 'required|integer',
+        ], [
+            // Pesan error kustom bahasa indonesia
+            'id_dokter.required'     => 'Silakan pilih dokter terlebih dahulu.',
+            'id_dokter.exists'       => 'Dokter yang dipilih tidak terdaftar.',
+            'tanggal.required'       => 'Tanggal kunjungan wajib diisi.',
+            'tanggal.date'           => 'Format tanggal tidak valid.',
+            'tanggal.after_or_equal' => 'Tanggal kunjungan tidak boleh hari yang sudah lewat.',
+            'jam.required'           => 'Waktu jam kunjungan wajib diisi.',
+            'jam.integer'            => 'Format jam tidak valid.',
         ]);
 
         // 2. VALIDASI TAMBAHAN: Cek jika pendaftaran dilakukan hari ini, jamnya tidak boleh sudah lewat
