@@ -19,7 +19,10 @@
     <form method="GET" action="{{ route('admin.rekam-medis.index') }}" class="flex flex-wrap gap-4 mb-6">
         <input type="text" name="search" value="{{ request('search') }}"
             placeholder="Cari nama pasien / dokter…"
-            class="flex-1 min-w-[200px] max-w-[500px] px-5 py-3 bg-white border border-slate-200 rounded-[12px] text-[14px] focus:outline-none focus:ring-2 focus:ring-slate-500/20 focus:border-slate-500 transition-all">
+            class="flex-1 min-w-[200px] max-w-[400px] px-5 py-3 bg-white border border-slate-200 rounded-[12px] text-[14px] focus:outline-none focus:ring-2 focus:ring-slate-500/20 focus:border-slate-500 transition-all">
+        <input type="text" name="diagnosa" value="{{ request('diagnosa') }}"
+            placeholder="Cari diagnosa…"
+            class="flex-1 min-w-[180px] max-w-[360px] px-5 py-3 bg-white border border-slate-200 rounded-[12px] text-[14px] focus:outline-none focus:ring-2 focus:ring-slate-500/20 focus:border-slate-500 transition-all">
         <select name="sort"
             class="px-5 py-3 bg-gray-400 text-white font-medium border-0 rounded-[12px] text-[14px] focus:outline-none shadow-sm min-w-[180px] appearance-none cursor-pointer">
             <option value="terbaru" {{ request('sort', 'terbaru') === 'terbaru' ? 'selected' : '' }}>Sortir : Terbaru</option>

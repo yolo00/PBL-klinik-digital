@@ -30,10 +30,11 @@ class AdminDokterController extends Controller
         }
 
         // Sortir
-        $sort = $request->get('sort', 'nama_asc');
+        $sort = $request->get('sort', 'terbaru');
         match ($sort) {
+            'nama_asc'  => $query->orderBy('akun_user.nama', 'asc'),
             'nama_desc' => $query->orderBy('akun_user.nama', 'desc'),
-            default     => $query->orderBy('akun_user.nama', 'asc'),
+            default     => $query->orderByDesc('dokter.id'),
         };
 
         $dokters = $query->paginate(10)->withQueryString();

@@ -24,15 +24,16 @@ class AdminPasienController extends Controller
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
-                $q->where('akun_user.nama', 'like', "%{$search}%");
+                $q->where('akun_user.nama', 'like', "%{$search}%")
+                  ->orWhere('akun_user.no_hp', 'like', "%{$search}%");
             });
         }
 
-        $sort = $request->get('sort', 'nama_asc');
+        $sort = $request->get('sort', 'terbaru');
         match ($sort) {
+            'nama_asc'  => $query->orderBy('akun_user.nama', 'asc'),
             'nama_desc' => $query->orderBy('akun_user.nama', 'desc'),
-            'terbaru'   => $query->orderByDesc('pasien.id'),   // id bukan id_pasien
-            default     => $query->orderBy('akun_user.nama', 'asc'),
+            default     => $query->orderByDesc('pasien.id'),
         };
 
         $pasiens = $query->paginate(10)->withQueryString();
