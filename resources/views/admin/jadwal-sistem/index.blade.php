@@ -216,7 +216,7 @@
                 <tr class="text-[14px] text-slate-600 font-medium border-b border-gray-100">
                     <th class="px-6 py-5">ID</th>
                     <th class="px-6 py-5">Tanggal</th>
-                    <th class="px-6 py-5">Status</th>
+                    <th class="px-6 py-5">Tipe</th>
                     <th class="px-6 py-5">Jam Operasional</th>
                     <th class="px-6 py-5">Keterangan</th>
                     <th class="px-6 py-5 text-center">Kelola</th>

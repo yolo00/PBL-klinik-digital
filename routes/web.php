@@ -15,7 +15,7 @@ use App\Http\Controllers\Admin\AdminRekamMedisController;
 use App\Http\Controllers\Admin\AdminPembayaranController;
 use App\Http\Controllers\Admin\AdminJadwalSistemController;
 use App\Http\Controllers\Admin\AdminJadwalDokterController;
-
+use App\Http\Controllers\Admin\AdminSpesialisasiController;
 // Dokter
 use App\Http\Controllers\Dokter\DashboardController;
 use App\Http\Controllers\Dokter\JadwalController;
@@ -55,6 +55,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('jadwal', AdminJadwalController::class);
         Route::resource('rekam-medis', AdminRekamMedisController::class);
         Route::resource('pembayaran', AdminPembayaranController::class);
+        Route::resource('spesialisasi', AdminSpesialisasiController::class);
 
         Route::get('/jadwal-sistem', [AdminJadwalSistemController::class, 'index'])->name('jadwal-sistem');
         Route::get('/jadwal-sistem/harian/{jadwalSistem}/edit', [AdminJadwalSistemController::class, 'editHarian'])->name('jadwal-sistem.harian.edit');

@@ -12,8 +12,7 @@ class Spesialisasi extends Model
     // Tabel spesialisasi tidak memiliki timestamps
     public $timestamps = false;
 
-    protected $fillable = ['nama'];
-
+    protected $fillable = ['nama', 'base_price'];
     // ─── Relasi ───────────────────────────────────────────────
 
     public function dokters()

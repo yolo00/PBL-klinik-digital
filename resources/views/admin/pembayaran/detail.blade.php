@@ -104,7 +104,47 @@
                 </p>
             </div>
 
+            {{-- Pesan --}}
+            @if($pembayaran->pesan)
+            <div class="space-y-1 md:col-span-2 mt-2">
+                <p class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Pesan Tambahan</p>
+                <p class="text-[14px] text-slate-700 bg-slate-50 p-4 rounded-xl border border-slate-100">{{ $pembayaran->pesan }}</p>
+            </div>
+            @endif
+
         </div>
+
+        @if($pembayaran->metode === 'qris')
+        {{-- Detail Integrasi QRIS Xendit --}}
+        <div class="mt-8 pt-6 border-t border-slate-100">
+            <h3 class="text-[14px] font-bold text-slate-800 mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-qrcode text-purple-600"></i> Informasi QRIS (Xendit)
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 bg-purple-50/50 p-6 rounded-2xl border border-purple-100/50">
+                <div class="space-y-1">
+                    <p class="text-[11px] font-bold text-purple-400 uppercase tracking-widest">Xendit External ID</p>
+                    <p class="text-[13px] font-mono text-purple-900">{{ $pembayaran->xendit_external_id ?? 'Belum digenerate' }}</p>
+                </div>
+                <div class="space-y-1">
+                    <p class="text-[11px] font-bold text-purple-400 uppercase tracking-widest">Xendit QR ID</p>
+                    <p class="text-[13px] font-mono text-purple-900">{{ $pembayaran->xendit_qr_id ?? '—' }}</p>
+                </div>
+                <div class="space-y-1">
+                    <p class="text-[11px] font-bold text-purple-400 uppercase tracking-widest">Batas Waktu Pembayaran</p>
+                    <p class="text-[13px] font-semibold text-purple-900">
+                        {{ $pembayaran->payment_expired_at ? \Carbon\Carbon::parse($pembayaran->payment_expired_at)->translatedFormat('d M Y, H:i') : '—' }}
+                    </p>
+                </div>
+                <div class="space-y-1">
+                    <p class="text-[11px] font-bold text-purple-400 uppercase tracking-widest">Status QR String</p>
+                    <p class="text-[13px] font-semibold {{ $pembayaran->qr_string ? 'text-emerald-600' : 'text-slate-400' }}">
+                        {{ $pembayaran->qr_string ? 'Tersedia (Ready to scan)' : 'Belum tersedia' }}
+                    </p>
+                </div>
+            </div>
+        </div>
+        @endif
+
     </div>
 
     {{-- Rekam Medis terkait --}}

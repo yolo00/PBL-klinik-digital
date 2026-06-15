@@ -97,11 +97,27 @@
                     <i class="fa-solid fa-money-bill-wave w-5 text-center"></i>
                     Data Pembayaran
                 </a>
-                <a href="{{ route('admin.jadwal-sistem') }}" class="flex items-center gap-4 px-4 py-4 rounded-xl {{ request()->routeIs('admin.jadwal-sistem*') ? 'sidebar-active' : 'sidebar-link' }}">
-                    <i class="fa-solid fa-sliders w-5 shrink-0 text-center"></i>
-                    Jadwal Sistem
-                </a>
+                {{-- Pengaturan Sistem Dropdown --}}
+                <div class="pt-5 pb-2 px-2 flex items-center justify-between text-slate-500/70">
+                    <span class="text-[11px] font-bold uppercase tracking-widest">Pengaturan</span>
+                </div>
 
+                <button onclick="document.getElementById('pengaturan-menu').classList.toggle('hidden'); document.getElementById('pengaturan-icon').classList.toggle('rotate-180');" class="flex items-center justify-between px-4 py-4 rounded-xl w-full {{ request()->routeIs('admin.jadwal-sistem*') || request()->routeIs('admin.spesialisasi*') ? 'sidebar-active' : 'sidebar-link' }}">
+                    <div class="flex items-center gap-4">
+                        <i class="fa-solid fa-gear w-5 shrink-0 text-center"></i>
+                        <span>Pengaturan Sistem</span>
+                    </div>
+                    <i id="pengaturan-icon" class="fa-solid fa-chevron-down text-xs transition-transform duration-200 {{ request()->routeIs('admin.jadwal-sistem*') || request()->routeIs('admin.spesialisasi*') ? 'rotate-180' : '' }}"></i>
+                </button>
+                
+                <div id="pengaturan-menu" class="flex flex-col gap-1 pl-12 pr-4 pt-2 {{ request()->routeIs('admin.jadwal-sistem*') || request()->routeIs('admin.spesialisasi*') ? '' : 'hidden' }}">
+                    <a href="{{ route('admin.jadwal-sistem') }}" class="py-2 text-sm {{ request()->routeIs('admin.jadwal-sistem*') ? 'text-white font-bold' : 'text-slate-400 hover:text-white' }}">
+                        Jadwal Sistem
+                    </a>
+                    <a href="{{ route('admin.spesialisasi.index') }}" class="py-2 text-sm {{ request()->routeIs('admin.spesialisasi*') ? 'text-white font-bold' : 'text-slate-400 hover:text-white' }}">
+                        Spesialisasi Klinik
+                    </a>
+                </div>
             </nav>
         </div>
     </aside>
