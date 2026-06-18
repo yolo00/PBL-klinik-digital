@@ -13,25 +13,32 @@
         {{ session('success') }}
     </div>
     @endif
+    @if(session('error'))
+    <div class="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-2xl font-medium shadow-sm">
+        {{ session('error') }}
+    </div>
+    @endif
 
     <div class="bg-white rounded-3xl shadow-md border border-slate-100 overflow-hidden">
-        
+
         <div class="p-8 border-b border-slate-50 flex flex-col md:flex-row justify-between items-center gap-6">
             <div class="relative w-full md:w-96">
                 <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-slate-400">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                 </span>
-                <input type="text" placeholder="Cari dokter atau tanggal..." class="w-full pl-12 pr-4 py-3.5 bg-slate-50 border-none rounded-2xl text-base focus:ring-2 focus:ring-emerald-500 transition shadow-sm">
+                <input id="searchInput" type="text" placeholder="Cari dokter atau tanggal..."
+                    class="w-full pl-12 pr-4 py-3.5 bg-slate-50 border-none rounded-2xl text-base focus:ring-2 focus:ring-emerald-500 transition shadow-sm">
             </div>
-            <select class="w-full md:w-48 bg-slate-50 border-none rounded-2xl text-base text-slate-600 focus:ring-2 focus:ring-emerald-500 py-3.5 px-4 shadow-sm cursor-pointer">
-                <option>Semua Status</option>
-                <option>Mendatang</option>
-                <option>Selesai</option>
+            <select id="filterStatus" class="w-full md:w-48 bg-slate-50 border-none rounded-2xl text-base text-slate-600 focus:ring-2 focus:ring-emerald-500 py-3.5 px-4 shadow-sm cursor-pointer">
+                <option value="">Semua Status</option>
+                <option value="menunggu">Mendatang</option>
+                <option value="selesai">Selesai</option>
+                <option value="dibatalkan">Dibatalkan</option>
             </select>
         </div>
 
         <div class="overflow-x-auto">
-            <table class="w-full text-left">
+            <table class="w-full text-left" id="jadwalTable">
                 <thead class="bg-slate-50/50 border-b border-slate-100">
                     <tr>
                         <th class="px-8 py-5 text-sm font-bold uppercase text-slate-400 tracking-widest">Tanggal & Waktu</th>
@@ -42,9 +49,13 @@
                         <th class="px-8 py-5 text-sm font-bold uppercase text-slate-400 tracking-widest text-center">Aksi</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100">
+                <tbody class="divide-y divide-slate-100" id="jadwalBody">
                     @forelse($riwayatJadwal as $jadwal)
-                    <tr class="hover:bg-slate-50/80 transition-all duration-200">
+                    <tr class="hover:bg-slate-50/80 transition-all duration-200"
+                        data-dokter="{{ strtolower($jadwal->dokter->user->nama ?? '') }}"
+                        data-tanggal="{{ $jadwal->tanggal }}"
+                        data-status="{{ $jadwal->status }}">
+
                         {{-- Tanggal & Waktu --}}
                         <td class="px-8 py-6">
                             <div class="text-lg font-bold text-slate-800">
@@ -57,9 +68,12 @@
 
                         {{-- Dokter --}}
                         <td class="px-8 py-6">
-                            <div class="text-lg font-bold text-slate-700">
+                            <div class="text-base font-bold text-slate-700">
                                 {{ $jadwal->dokter->user->nama ?? 'Dokter Tidak Terdaftar' }}
                             </div>
+                            @if($jadwal->dokter && $jadwal->dokter->spesialisasi)
+                            <div class="text-xs text-slate-400 mt-0.5">{{ $jadwal->dokter->spesialisasi->nama }}</div>
+                            @endif
                         </td>
 
                         {{-- Status Jadwal --}}
@@ -68,41 +82,75 @@
                                 <span class="inline-flex px-3 py-1 rounded-full text-[11px] font-bold bg-blue-50 text-blue-600 uppercase border border-blue-100 shadow-sm">Mendatang</span>
                             @elseif($jadwal->status == 'selesai')
                                 <span class="inline-flex px-3 py-1 rounded-full text-[11px] font-bold bg-slate-100 text-gray-600 uppercase border border-slate-200 shadow-sm">Selesai</span>
+                            @elseif($jadwal->status == 'dikonfirmasi')
+                                <span class="inline-flex px-3 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-600 uppercase border border-emerald-100 shadow-sm">Dikonfirmasi</span>
                             @else
                                 <span class="inline-flex px-3 py-1 rounded-full text-[11px] font-bold bg-red-50 text-red-400 uppercase border border-red-100 shadow-sm">Dibatalkan</span>
                             @endif
                         </td>
 
-                        {{-- Pembayaran --}}
+                        {{-- Pembayaran — logika utama --}}
                         <td class="px-8 py-6">
                             @if($jadwal->pembayaran)
-                                <div class="flex flex-col">
-                                    <span class="text-sm font-bold text-slate-800">
-                                        Rp {{ number_format($jadwal->pembayaran->jumlah, 0, ',', '.') }}
-                                    </span>
-                                    <span class="text-[11px] text-slate-400 uppercase tracking-wider font-semibold">
-                                        {{ $jadwal->pembayaran->metode }}
-                                    </span>
+                                @php
+                                    $p       = $jadwal->pembayaran;
+                                    $isQris  = $p->metode === 'qris';
+                                    $isPending = $p->status === 'pending';
+                                    $isLunas   = $p->status === 'lunas';
+                                    $isBatal   = $p->status === 'batal';
+                                @endphp
+
+                                <div class="text-sm font-bold text-slate-800">
+                                    Rp {{ number_format($p->jumlah, 0, ',', '.') }}
+                                </div>
+                                <div class="text-[11px] text-slate-400 uppercase tracking-wider font-semibold mb-2">
+                                    {{ $p->metode === 'qris' ? 'QRIS' : 'Cash' }}
                                 </div>
 
-                                {{-- Logika Tombol --}}
-                                <div class="mt-2">
-                                    @if($jadwal->pembayaran->status == 'pending')
-                                        <span class="inline-flex px-3 py-1 rounded-lg bg-yellow-100 text-yellow-600 text-[10px] font-bold uppercase">
-                                            Menunggu
-                                        </span>
-                                    @elseif($jadwal->pembayaran->status == 'lunas')
-                                        <span class="text-emerald-600 font-bold text-xs">Lunas</span>
-                                    @elseif($jadwal->pembayaran->status == 'batal')
-                                        <span class="text-red-600 font-bold text-xs">Batal</span>
-                                    @endif
-                                </div>
+                                @if($isQris && $isPending)
+                                    {{-- QRIS pending → tombol bayar --}}
+                                    <a href="{{ route('pasien.pembayaran.qris', $p->id) }}"
+                                       class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-500 text-white text-[11px] font-bold uppercase hover:bg-emerald-600 transition shadow-sm">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v1m6.364 1.636l-.707.707M20 12h-1M17.657 17.657l-.707-.707M12 20v-1m-5.657-1.636l.707-.707M4 12H3m2.343-5.657l.707.707"/>
+                                        </svg>
+                                        Bayar QRIS
+                                    </a>
+
+                                @elseif($isQris && $isLunas)
+                                    {{-- QRIS lunas → link ke struk --}}
+                                    <a href="{{ route('pasien.pembayaran.struk', $p->id) }}"
+                                       class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-50 text-emerald-700 text-[11px] font-bold uppercase border border-emerald-200 hover:bg-emerald-500 hover:text-white transition shadow-sm">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                        </svg>
+                                        Lunas · Lihat Struk
+                                    </a>
+
+                                @elseif(!$isQris && $isPending)
+                                    {{-- Cash pending --}}
+                                    <span class="inline-flex px-3 py-1 rounded-lg bg-amber-50 text-amber-600 text-[10px] font-bold uppercase border border-amber-200">
+                                        Belum Dibayar
+                                    </span>
+
+                                @elseif(!$isQris && $isLunas)
+                                    {{-- Cash lunas --}}
+                                    <span class="inline-flex px-3 py-1 rounded-lg bg-emerald-50 text-emerald-700 text-[10px] font-bold uppercase border border-emerald-200">
+                                        ✓ Lunas
+                                    </span>
+
+                                @elseif($isBatal)
+                                    <span class="inline-flex px-3 py-1 rounded-lg bg-red-50 text-red-500 text-[10px] font-bold uppercase border border-red-200">
+                                        Batal
+                                    </span>
+                                @endif
+
                             @else
                                 <span class="text-slate-300 text-sm italic">Belum ada</span>
                             @endif
                         </td>
 
-                        {{-- Akses Rekam Medis --}}
+                        {{-- Rekam Medis --}}
                         <td class="px-8 py-6">
                             @if($jadwal->status == 'selesai')
                                 <a href="{{ route('pasien.rekam-medis.detail', $jadwal->id) }}"
@@ -116,17 +164,20 @@
                             @endif
                         </td>
 
-                        {{-- Kolom Aksi --}}
+                        {{-- Aksi --}}
                         <td class="px-8 py-6 text-center">
                             @if($jadwal->status == 'menunggu')
-                                <form action="{{ route('pasien.batal_jadwal', $jadwal->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin membatalkan jadwal janji temu ini?')">
+                                <form action="{{ route('pasien.batal_jadwal', $jadwal->id) }}" method="POST"
+                                      onsubmit="return confirm('Yakin ingin membatalkan jadwal ini?')">
                                     @csrf @method('DELETE')
-                                    <button type="submit" class="inline-flex px-4 py-2.5 rounded-xl bg-red-50 text-red-500 text-xs font-bold uppercase hover:bg-red-500 hover:text-white transition shadow-sm">
+                                    <button type="submit"
+                                        class="inline-flex px-4 py-2.5 rounded-xl bg-red-50 text-red-500 text-xs font-bold uppercase hover:bg-red-500 hover:text-white transition shadow-sm">
                                         Batalkan
                                     </button>
                                 </form>
                             @elseif($jadwal->status == 'dibatalkan')
-                                <a href="{{ route('pasien.buat-janji') }}" class="inline-flex px-4 py-2.5 rounded-xl bg-emerald-50 text-emerald-600 text-xs font-bold uppercase border border-emerald-100 hover:bg-emerald-500 hover:text-white transition shadow-sm">
+                                <a href="{{ route('pasien.buat-janji') }}"
+                                    class="inline-flex px-4 py-2.5 rounded-xl bg-emerald-50 text-emerald-600 text-xs font-bold uppercase border border-emerald-100 hover:bg-emerald-500 hover:text-white transition shadow-sm">
                                     Pesan Lagi
                                 </a>
                             @else
@@ -145,12 +196,46 @@
             </table>
         </div>
 
-        <div class="p-8 bg-slate-50 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div class="p-8 bg-slate-50 border-t border-slate-100 flex justify-between items-center">
             <span class="text-sm font-medium text-slate-500">
-                Total: <span class="text-slate-900 font-bold">{{ $riwayatJadwal->count() }}</span> Jadwal Terdaftar
+                Total: <span class="text-slate-900 font-bold" id="totalCount">{{ $riwayatJadwal->count() }}</span> Jadwal Terdaftar
             </span>
         </div>
     </div>
 </div>
 
+@push('scripts')
+<script>
+    // ─── Client-side search + filter ─────────────────────────
+    const searchInput  = document.getElementById('searchInput');
+    const filterStatus = document.getElementById('filterStatus');
+    const rows         = document.querySelectorAll('#jadwalBody tr[data-status]');
+    const totalCount   = document.getElementById('totalCount');
+
+    function applyFilter() {
+        const q      = searchInput.value.toLowerCase();
+        const status = filterStatus.value;
+        let visible  = 0;
+
+        rows.forEach(row => {
+            const matchSearch = !q
+                || row.dataset.dokter.includes(q)
+                || row.dataset.tanggal.includes(q);
+            const matchStatus = !status || row.dataset.status === status;
+
+            if (matchSearch && matchStatus) {
+                row.style.display = '';
+                visible++;
+            } else {
+                row.style.display = 'none';
+            }
+        });
+
+        totalCount.textContent = visible;
+    }
+
+    searchInput.addEventListener('input', applyFilter);
+    filterStatus.addEventListener('change', applyFilter);
+</script>
+@endpush
 @endsection

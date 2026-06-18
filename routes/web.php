@@ -26,12 +26,21 @@ use App\Http\Controllers\Dokter\ProfilController;
 // Pasien
 use App\Http\Controllers\Pasien\PasienController;
 
+//Pembayaran
+use App\Http\Controllers\Pasien\XenditController;
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
 */
 
+//Webhook Xendit
+Route::post('/xendit/callback', [XenditController::class, 'callback'])
+    ->name('xendit.callback');
+
+//Home/Landing pages
 Route::get('/', [HomeController::class, 'home'])->name('home');
 Route::get('/about', [HomeController::class, 'about'])->name('about');
 
@@ -105,9 +114,11 @@ Route::middleware('auth')->group(function () {
         Route::get('/get-dokter/{id_spesialisasi}', [PasienController::class, 'getDokterBySpesialisasi'])->name('get-dokter');
 
         // Pembayaran
-        Route::get('/pembayaran', function () { return view('pasien.pembayaran'); })->name('pembayaran');
-        Route::get('/riwayat-pembayaran', function () { return view('pasien.riwayat-pembayaran'); })->name('riwayat-pembayaran');
-        Route::get('/pembayaran/detail/{id}', [PasienController::class, 'detailPembayaran'])->name('pembayaran.detail');
+        Route::get('/pembayaran/{id}/qris',      [XenditController::class, 'showQris'])        ->name('pembayaran.qris');
+        Route::get('/pembayaran/{id}/status',    [XenditController::class, 'cekStatus'])       ->name('pembayaran.status');
+        Route::post('/pembayaran/{id}/konfirmasi',[XenditController::class, 'konfirmasiManual'])->name('pembayaran.konfirmasi');
+        Route::get('/pembayaran/{id}/struk',     [XenditController::class, 'struk'])           ->name('pembayaran.struk');
+        Route::get('/get-harga-dokter/{id_dokter}', [PasienController::class, 'getHargaDokter'])->name('get-harga-dokter');
 
         // Rekam Medis
         Route::get('/riwayat-rekam-medis', function () {

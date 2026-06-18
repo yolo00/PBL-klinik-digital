@@ -15,6 +15,7 @@ class Pembayaran extends Model
     ];
 
     protected $casts = [
+        'payment_expired_at' => 'datetime',
         'jumlah' => 'decimal:2',
     ];
 
@@ -72,3 +73,4 @@ class Pembayaran extends Model
         };
     }
 }
+
