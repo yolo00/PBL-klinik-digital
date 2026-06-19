@@ -10,10 +10,10 @@
                 <div class="md:col-span-7 space-y-6 md:pr-10">
                     <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-emerald-200 bg-emerald-50">
                         <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                        <p class="text-[14px] font-bold text-emerald-700 tracking-wide uppercase">Sistem Klinik Digital Kampus</p>
+                        <p class="text-[14px] font-bold text-emerald-700 tracking-wide uppercase">Sistem Informasi Klinik Digital</p>
                     </div>
-                    <h1 class="text-[40px] md:text-[56px] font-bold text-slate-800 leading-[1.1] tracking-tight">Semua Layanan Klinik<br><span class="text-emerald-600">Kampus, Satu Tempat</span></h1>
-                    <p class="text-[18px] text-slate-600 pt-2 leading-relaxed max-w-[550px] font-medium">UniHealth menghadirkan pengalaman pendaftaran dan penjadwalan konsultasi klinik yang mudah dan revolusioner di dalam lingkungan kampus.</p>
+                    <h1 class="text-[40px] md:text-[56px] font-bold text-slate-800 leading-[1.1] tracking-tight">Layanan Kesehatan Digital<br><span class="text-emerald-600">Lebih Mudah, Lebih Terintegrasi</span></h1>
+                    <p class="text-[18px] text-slate-600 pt-2 leading-relaxed max-w-[550px] font-medium">UniHealth menghadirkan sistem layanan kesehatan digital yang membantu pasien melakukan pendaftaran, konsultasi, dan pengelolaan rekam medis secara lebih cepat, aman, dan terintegrasi.</p>
                     <div class="pt-6 flex flex-col sm:flex-row gap-4">
                         <button class="bg-emerald-600 text-white px-8 py-4 rounded-full font-bold text-[16px] hover:bg-emerald-700 shadow-lg shadow-emerald-500/30 transform hover:-translate-y-0.5 transition-all duration-300">Mulai Konsultasi</button>
                         <button class="bg-white border-2 border-emerald-100 text-emerald-700 px-8 py-4 rounded-full font-bold text-[16px] hover:bg-emerald-600 hover:text-white hover:border-emerald-600 shadow-sm shadow-emerald-500/20 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 cursor-pointer">Pelajari Lebih Lanjut</button>
@@ -28,15 +28,15 @@
                     </div>
                     <div class="bg-white rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow flex gap-4 items-start group border border-slate-50">
                         <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold flex-shrink-0 group-hover:bg-emerald-600 group-hover:text-white transition-colors">1</div>
-                        <p class="text-[15px] font-medium text-slate-700 pt-1 leading-relaxed">Login atau daftar menggunakan akun email kampus anda</p>
+                        <p class="text-[15px] font-medium text-slate-700 pt-1 leading-relaxed">Masuk atau daftar menggunakan akun pasien yang telah tersedia</p>
                     </div>
                     <div class="bg-white rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow flex gap-4 items-start group border border-slate-50">
                         <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold flex-shrink-0 group-hover:bg-emerald-600 group-hover:text-white transition-colors">2</div>
-                        <p class="text-[15px] font-medium text-slate-700 pt-1 leading-relaxed">Daftar jadwal dengan memilih tanggal waktu dan dokter anda</p>
+                        <p class="text-[15px] font-medium text-slate-700 pt-1 leading-relaxed">Pilih jadwal pemeriksaan berdasarkan dokter, layanan, dan waktu yang tersedia</p>
                     </div>
                     <div class="bg-white rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow flex gap-4 items-start group border border-slate-50">
                         <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold flex-shrink-0 group-hover:bg-emerald-600 group-hover:text-white transition-colors">3</div>
-                        <p class="text-[15px] font-medium text-slate-700 pt-1 leading-relaxed">Datang ke lokasi klinik kampus untuk melakukan konsultasi</p>
+                        <p class="text-[15px] font-medium text-slate-700 pt-1 leading-relaxed">Datang ke fasilitas kesehatan sesuai jadwal pemeriksaan yang telah dipilih</p>
                     </div>
                 </div>
             </div>
@@ -46,7 +46,7 @@
         <div class="px-6 py-20 max-w-[1400px] mx-auto relative z-20 fade-in fade-in-3">
             <div class="text-center mb-14">
                 <h2 class="inline-block bg-emerald-100/80 text-emerald-800 py-2.5 px-8 rounded-full font-bold text-[16px] border border-emerald-200">Layanan Inti</h2>
-                <p class="mt-5 text-[36px] font-bold text-slate-800 tracking-tight">Perawatan Komprehensif Untuk Anda</p>
+                <p class="mt-5 text-[36px] font-bold text-slate-800 tracking-tight">Layanan Kesehatan Terpercaya Untuk Masyarakat</p>
             </div>
             
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
@@ -68,7 +68,7 @@
                 <div class="bg-white rounded-[28px] p-8 flex flex-col items-center justify-center text-center shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-slate-100 hover:border-emerald-200 hover:shadow-[0_8px_30px_rgb(16,185,129,0.12)] group transition-all duration-300 transform hover:-translate-y-2">
                     <img src="https://placehold.co/100x100/ecfdf5/059669?text=OV" alt="Obat" class="w-20 h-20 rounded-[20px] mb-6 group-hover:scale-110 transition-transform shadow-sm">
                     <span class="font-bold text-[18px] text-slate-800 group-hover:text-emerald-700 transition-colors">Stok Obat & Vitamin</span>
-                    <p class="text-[14px] text-slate-500 mt-3 font-medium leading-relaxed">Penyediaan suplemen & obat mahasiswa.</p>
+                    <p class="text-[14px] text-slate-500 mt-3 font-medium leading-relaxed">Informasi dan pengelolaan obat sesuai kebutuhan pasien.</p>
                 </div>
             </div>
         </div>
@@ -106,8 +106,8 @@
                             Informasi Penting
                         </h3>
                         <ul class="space-y-6 text-[15px] text-slate-600 font-medium list-none mt-2">
-                            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Melayani mahasiswa dan staff aktif</li>
-                            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Wajib membawa kartu identitas</li>
+                            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Melayani pasien umum dengan kebutuhan kesehatan yang beragam</li>
+                            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Membawa identitas pasien untuk proses verifikasi layanan</li>
                             <li class="flex items-start gap-3"><svg class="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Datang 10 menit sebelum jadwal temu</li>
                         </ul>
                     </div>
@@ -118,7 +118,7 @@
                                 <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center border border-rose-100"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg></div>
                                 Lokasi
                             </h3>
-                            <p class="text-[14.5px] text-slate-600 leading-relaxed font-medium pl-1">Politeknik Negeri Batam.<br>Jl. Ahmad Yani, Batam Center,<br>Batam Kota, Kepri 29461</p>
+                            <p class="text-[14.5px] text-slate-600 leading-relaxed font-medium pl-1">UniHealth Clinic.<br>Batam, Kepulauan Riau,<br>Indonesia</p>
                         </div>
 
                         <div class="mt-8 border-t border-slate-100 pt-6">
@@ -146,7 +146,7 @@
                     <img src="https://placehold.co/100x100/ffffff/064e3b?text=U" alt="Footer Logo" class="w-[50px] h-[50px] rounded-[14px] shadow-sm">
                     <span class="font-bold text-[28px] text-white tracking-tight">UniHealth</span>
                 </div>
-                <p class="text-[15px] pt-2 leading-relaxed max-w-sm mb-8">Sistem terintegrasi yang menghadirkan layanan kesehatan, pendaftaran, dan jadwal dokter yang aman dan mudah di kampus.</p>
+                <p class="text-[15px] pt-2 leading-relaxed max-w-sm mb-8">Sistem layanan kesehatan digital yang membantu klinik, puskesmas, dan rumah sakit dalam mengelola pendaftaran pasien, jadwal dokter, serta rekam medis secara efisien.</p>
             </div>
             
             <div class="md:col-span-2 md:border-l border-emerald-800/50 md:pl-8">
@@ -170,7 +170,7 @@
             <div class="md:col-span-3">
                 <h4 class="font-bold text-white mb-6 text-[16px]">Hubungi Kami</h4>
                 <div class="space-y-4 text-[14.5px]">
-                    <p class="leading-relaxed"><strong class="text-white">Alamat Kampus:</strong><br>Jl. Ahmad Yani, Batam Center,<br>Batam Kota, 29461</p>
+                    <p class="leading-relaxed"><strong class="text-white">Alamat Klinik:</strong><br>Batam, Kepulauan Riau,<br>Indonesia</p>
                     <p><strong class="text-white">Email:</strong><br><a href="mailto:health67@gmail.com" class="hover:text-emerald-400 transition-colors font-medium">health67@gmail.com</a></p>
                     <p><strong class="text-white">Telepon:</strong><br><span class="font-medium text-emerald-100">0671-2345-6789</span></p>
                 </div>
@@ -178,7 +178,7 @@
         </div>
         
         <div class="max-w-[1400px] mx-auto border-t border-emerald-900/50 mt-16 pt-8 flex justify-between items-center text-[14px]">
-            <p>© 2026 UniHealth System. All rights reserved.</p>
+            <p>© 2026 UniHealth System. Seluruh hak dilindungi.</p>
         </div>
     </footer>
 </body>

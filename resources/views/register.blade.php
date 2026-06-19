@@ -22,9 +22,9 @@
             <img src="https://placehold.co/100x100/059669/ffffff?text=U" alt="UniHealth Logo" class="w-14 h-14 rounded-[18px] shadow-sm">
         </div>
         
-        <p class="text-center text-[13px] font-bold tracking-[0.2em] text-emerald-600 mb-2 uppercase">Registrasi Akun Pasien</p>
-        <h1 class="text-center text-[36px] font-bold text-slate-800 mb-4 tracking-tight">Bergabung ke UniHealth</h1>
-        <p class="text-center text-[15px] font-medium text-slate-500 mb-8 max-w-sm mx-auto">Akses jadwal klinik dan janji temu pasien Anda di kampus.</p>
+        <p class="text-center text-[13px] font-bold tracking-[0.2em] text-emerald-600 mb-2 uppercase">Pendaftaran Akun Pasien</p>
+        <h1 class="text-center text-[36px] font-bold text-slate-800 mb-4 tracking-tight">Daftar untuk Menggunakan UniHealth</h1>
+        <p class="text-center text-[15px] font-medium text-slate-500 mb-8 max-w-sm mx-auto">Akses layanan kesehatan, jadwal pemeriksaan, dan janji temu dengan tenaga medis secara mudah melalui UniHealth.</p>
         
         <form action="{{ route('register.submit') }}" method="POST" class="space-y-5">
             @csrf
@@ -43,13 +43,13 @@
             <div class="grid grid-cols-2 gap-5">
                 <div class="col-span-2 md:col-span-1">
                     <label class="mb-1.5 block text-[15px] font-semibold text-slate-700">Nama Lengkap</label>
-                    <input type="text" name="nama" id="nama" value="{{ old('nama') }}" required placeholder="Masukkan nama"
+                    <input type="text" name="nama" id="nama" value="{{ old('nama') }}" required placeholder="Masukkan nama lengkap"
                         class="w-full rounded-[20px] border border-slate-200 bg-slate-50 px-5 py-3.5 text-[15px] text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:bg-white transition-all shadow-sm focus:shadow-md focus:shadow-emerald-500/30" />
                 </div>
 
                 <div class="col-span-2 md:col-span-1">
                     <label class="mb-1.5 block text-[15px] font-semibold text-slate-700">Email</label>
-                    <input type="email" name="email" id="email" value="{{ old('email') }}" required placeholder="Masukkan email"
+                    <input type="email" name="email" id="email" value="{{ old('email') }}" required placeholder="Masukkan alamat email"
                         class="w-full rounded-[20px] border border-slate-200 bg-slate-50 px-5 py-3.5 text-[15px] text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:bg-white transition-all shadow-sm focus:shadow-md focus:shadow-emerald-500/30" />
                 </div>
             </div>
@@ -85,14 +85,14 @@
 
                 <div class="col-span-2 md:col-span-1">
                     <label class="mb-1.5 block text-[15px] font-semibold text-slate-700">Nomor Kontak</label>
-                    <input type="text" name="no_hp" id="no_hp" value="{{ old('no_hp') }}" required placeholder="Masukkan nomor HP"
+                    <input type="text" name="no_hp" id="no_hp" value="{{ old('no_hp') }}" required placeholder="Masukkan nomor telepon"
                         class="w-full rounded-[20px] border border-slate-200 bg-slate-50 px-5 py-3.5 text-[15px] text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:bg-white transition-all shadow-sm focus:shadow-md focus:shadow-emerald-500/30" />
                 </div>
             </div>
 
             {{-- Golongan Darah (field baru dari SQL revisi) --}}
             <div>
-                <label class="mb-1.5 block text-[15px] font-semibold text-slate-700">Golongan Darah <span class="text-slate-400 font-normal text-[13px]">(opsional)</span></label>
+                <label class="mb-1.5 block text-[15px] font-semibold text-slate-700">Golongan Darah <span class="text-slate-400 font-normal text-[13px]">(opsional untuk data medis)</span></label>
                 <div class="flex gap-3 flex-wrap">
                     @foreach(['A','B','AB','O'] as $gol)
                     <label class="flex-1 min-w-[60px] cursor-pointer">
@@ -120,7 +120,7 @@
                 <div class="col-span-2 md:col-span-1">
                     <label class="mb-1.5 block text-[15px] font-semibold text-slate-700">Kata Sandi</label>
                     <div class="relative">
-                        <input type="password" name="password" id="password" required placeholder="Buat kata sandi anda"
+                        <input type="password" name="password" id="password" required placeholder="Buat kata sandi Anda"
                             class="w-full rounded-[20px] border border-slate-200 bg-slate-50 px-5 py-3.5 text-[15px] text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:bg-white transition-all shadow-sm focus:shadow-md focus:shadow-emerald-500/30" />
                         <button type="button" class="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-emerald-600 transition-colors" onclick="const p=this.previousElementSibling; p.type=p.type==='password'?'text':'password';">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
@@ -131,7 +131,7 @@
                 <div class="col-span-2 md:col-span-1">
                     <label class="mb-1.5 block text-[15px] font-semibold text-slate-700">Konfirmasi Sandi</label>
                     <div class="relative">
-                        <input type="password" name="password_confirmation" id="password_confirmation" required placeholder="Ulangi kata sandi"
+                        <input type="password" name="password_confirmation" id="password_confirmation" required placeholder="Masukkan ulang kata sandi"
                             class="w-full rounded-[20px] border border-slate-200 bg-slate-50 px-5 py-3.5 text-[15px] text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:bg-white transition-all shadow-sm focus:shadow-md focus:shadow-emerald-500/30" />
                         <button type="button" class="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-emerald-600 transition-colors" onclick="const p=this.previousElementSibling; p.type=p.type==='password'?'text':'password';">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
@@ -143,13 +143,13 @@
             <div class="pt-6">
                 <button type="submit" id="btn-daftar"
                     class="w-full md:w-[70%] mx-auto block rounded-[20px] bg-emerald-600 px-5 py-4 text-[16px] font-bold text-white hover:bg-emerald-700 focus:ring-4 focus:ring-emerald-500/30 transition-all shadow-lg shadow-emerald-500/25 transform hover:-translate-y-0.5">
-                    Daftar Sekarang
+                    Buat Akun Pasien
                 </button>
             </div>
             
             <div class="text-center mt-6">
-                <p class="text-[14px] text-slate-600 font-medium">Sudah punya akun? <a href="/login" class="font-bold text-emerald-600 hover:text-emerald-700 hover:underline transition-colors">Masuk di sini</a></p>
-                <p class="text-[13px] text-slate-500 font-semibold mt-3 hover:text-emerald-600 cursor-pointer transition-colors">Punya pertanyaan? Hubungi Kami</p>
+                <p class="text-[14px] text-slate-600 font-medium">Sudah memiliki akun? <a href="/login" class="font-bold text-emerald-600 hover:text-emerald-700 hover:underline transition-colors">Masuk di sini</a></p>
+                <p class="text-[13px] text-slate-500 font-semibold mt-3 hover:text-emerald-600 cursor-pointer transition-colors">Membutuhkan bantuan? Hubungi Kami</p>
             </div>
         </form>
     </div>

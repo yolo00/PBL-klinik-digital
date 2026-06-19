@@ -10,24 +10,27 @@ use App\Models\RekamMedis;
 
 class PasienController extends Controller
 {
+    /**
+     * Daftar pasien dengan SEARCH + PAGINATION
+     */
     public function index(Request $request)
     {
         $dokterId = auth()->user()->dokter->id;
-        $search   = $request->input('search', '');
+        $search   = $request->input('search');
 
-        $pasiens = Pasien::whereHas('jadwals', function ($query) use ($dokterId) {
-                $query->where('id_dokter', $dokterId);
+        $pasiens = Pasien::whereHas('jadwals', function ($q) use ($dokterId) {
+                $q->where('id_dokter', $dokterId);
             })
             ->with('user')
-            ->when($search, function ($query) use ($search) {
-                $query->whereHas('user', function ($q) use ($search) {
-                    $q->where('nama', 'like', "%{$search}%")
+            ->when($search, function ($q) use ($search) {
+                $q->whereHas('user', function ($u) use ($search) {
+                    $u->where('nama', 'like', "%{$search}%")
                       ->orWhere('no_hp', 'like', "%{$search}%")
                       ->orWhere('email', 'like', "%{$search}%");
                 });
             })
             ->paginate(10)
-            ->withQueryString(); // agar search ikut di link pagination
+            ->withQueryString(); // agar parameter search ikut di link pagination
 
         return view('dokter.pasien-dokter', compact('pasiens', 'search'));
     }
@@ -36,11 +39,7 @@ class PasienController extends Controller
     {
         $jadwal   = Jadwal::with(['pasien.user', 'pasien.alergi', 'dokter.user'])->findOrFail($id);
         $dokterId = auth()->user()->dokter->id;
-
-        if ($jadwal->id_dokter !== $dokterId) {
-            abort(403, 'Akses tidak diizinkan.');
-        }
-
+        if ($jadwal->id_dokter !== $dokterId) abort(403);
         return view('dokter.edit-rekam-medis', compact('jadwal'));
     }
 
@@ -48,17 +47,14 @@ class PasienController extends Controller
     {
         $jadwal   = Jadwal::findOrFail($id);
         $dokterId = auth()->user()->dokter->id;
-
-        if ($jadwal->id_dokter !== $dokterId) {
-            abort(403, 'Akses tidak diizinkan.');
-        }
+        if ($jadwal->id_dokter !== $dokterId) abort(403);
 
         $request->validate([
             'keluhan'  => 'required|string',
             'diagnosa' => 'required|string',
         ]);
 
-        $rekam = \App\Models\RekamMedis::create([
+        $rekam = RekamMedis::create([
             'id_jadwal'  => $jadwal->id,
             'keluhan'    => $request->keluhan,
             'diagnosa'   => $request->diagnosa,
@@ -67,6 +63,7 @@ class PasienController extends Controller
             'created_by' => auth()->id(),
         ]);
 
+        // Simpan resep obat jika ada
         if ($request->has('resep')) {
             foreach ($request->resep as $item) {
                 if (empty($item['obat'])) continue;
@@ -80,7 +77,6 @@ class PasienController extends Controller
         }
 
         $jadwal->update(['status' => 'selesai']);
-
         return redirect()->route('dokter.jadwal')->with('success', 'Rekam medis berhasil disimpan!');
     }
 }

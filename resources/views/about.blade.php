@@ -11,7 +11,7 @@
                     <p class="text-[14px] font-bold text-emerald-700 tracking-wide uppercase">Tentang Kami</p>
                 </div>
                 <h1 class="text-[40px] md:text-[56px] font-bold text-slate-800 leading-[1.1] tracking-tight">Mengenal Lebih Dekat<br><span class="text-emerald-600">UniHealth</span></h1>
-                <p class="text-[18px] text-slate-600 pt-4 leading-relaxed max-w-[650px] mx-auto font-medium">Sistem klinik digital yang menghadirkan layanan kesehatan modern, efisien, dan terintegrasi untuk lingkungan kampus.</p>
+                <p class="text-[18px] text-slate-600 pt-4 leading-relaxed max-w-[650px] mx-auto font-medium">Sistem informasi kesehatan digital yang membantu klinik, puskesmas, dan rumah sakit dalam memberikan layanan kesehatan yang modern, efisien, dan terintegrasi.</p>
             </div>
         </div>
 
@@ -26,9 +26,9 @@
                 </div>
                 
                 <div class="space-y-6 text-[16px] md:text-[17px] text-slate-600 leading-relaxed font-medium">
-                    <p>Web Klinik Digital adalah sebuah sistem berbasis web yang dirancang untuk membantu proses administrasi dan pengelolaan layanan kesehatan di klinik secara digital. Sistem ini dibuat sebagai solusi atas berbagai kendala pada pengelolaan data medis secara konvensional, seperti penumpukan dokumen fisik, risiko kehilangan data, serta lambatnya proses pendaftaran dan penjadwalan pasien.</p>
+                    <p>UniHealth adalah sistem berbasis web yang dirancang untuk membantu proses administrasi dan pengelolaan layanan kesehatan pada klinik, puskesmas, dan rumah sakit secara digital. Sistem ini dibuat sebagai solusi atas berbagai kendala pada pengelolaan data medis secara konvensional, seperti penumpukan dokumen fisik, risiko kehilangan data, serta lambatnya proses pendaftaran dan penjadwalan pasien.</p>
                     
-                    <p>Melalui Web Klinik Digital, seluruh data pasien, rekam medis, jadwal pemeriksaan, dan proses administrasi dapat disimpan dan dikelola secara terpusat dalam database. Dengan demikian, petugas klinik dapat melakukan pencarian data dengan lebih cepat, mengurangi kesalahan pencatatan, serta meningkatkan efisiensi pelayanan kepada pasien.</p>
+                    <p>Melalui UniHealth, seluruh data pasien, rekam medis, jadwal pemeriksaan, dan proses administrasi dapat disimpan dan dikelola secara terpusat dalam database. Dengan demikian, petugas klinik dapat melakukan pencarian data dengan lebih cepat, mengurangi kesalahan pencatatan, serta meningkatkan efisiensi pelayanan kepada pasien.</p>
                     
                     <p>Selain itu, sistem ini juga mendukung proses digitalisasi layanan kesehatan sehingga aktivitas klinik menjadi lebih terstruktur, akurat, dan mudah dipantau. Penggunaan teknologi web memungkinkan sistem dapat diakses dengan lebih fleksibel oleh admin, dokter, maupun petugas klinik sesuai hak akses masing-masing.</p>
                 </div>
@@ -48,9 +48,9 @@
                     <div class="w-24 h-24 rounded-full bg-gradient-to-br from-emerald-400 to-teal-600 mx-auto mb-6 flex items-center justify-center text-white text-[36px] font-bold shadow-lg shadow-emerald-500/20 group-hover:scale-110 transition-transform duration-300">M</div>
                     <h3 class="font-bold text-[20px] text-slate-800 group-hover:text-emerald-700 transition-colors">Michael Sando Turnip</h3>
                     <div class="mt-4 space-y-2">
-                        <span class="inline-block bg-emerald-50 text-emerald-700 text-[13px] font-bold px-4 py-1.5 rounded-full border border-emerald-200">Pengelola Database</span>
+                        <span class="inline-block bg-emerald-50 text-emerald-700 text-[13px] font-bold px-4 py-1.5 rounded-full border border-emerald-200">Pengelola Basis Data</span>
                         <br>
-                        <span class="inline-block bg-slate-50 text-slate-700 text-[13px] font-bold px-4 py-1.5 rounded-full border border-slate-200">Developer Halaman Admin</span>
+                        <span class="inline-block bg-slate-50 text-slate-700 text-[13px] font-bold px-4 py-1.5 rounded-full border border-slate-200">Pengembang Modul Admin</span>
                     </div>
                 </div>
 
@@ -61,7 +61,7 @@
                     <div class="mt-4 space-y-2">
                         <span class="inline-block bg-sky-50 text-sky-700 text-[13px] font-bold px-4 py-1.5 rounded-full border border-sky-200">Frontend Developer</span>
                         <br>
-                        <span class="inline-block bg-slate-50 text-slate-700 text-[13px] font-bold px-4 py-1.5 rounded-full border border-slate-200">Developer Halaman Pasien</span>
+                        <span class="inline-block bg-slate-50 text-slate-700 text-[13px] font-bold px-4 py-1.5 rounded-full border border-slate-200">Pengembang Modul Pasien</span>
                     </div>
                 </div>
 
@@ -70,9 +70,9 @@
                     <div class="w-24 h-24 rounded-full bg-gradient-to-br from-violet-400 to-indigo-600 mx-auto mb-6 flex items-center justify-center text-white text-[36px] font-bold shadow-lg shadow-violet-500/20 group-hover:scale-110 transition-transform duration-300">F</div>
                     <h3 class="font-bold text-[20px] text-slate-800 group-hover:text-emerald-700 transition-colors">Fenni Patrik Simanjuntak</h3>
                     <div class="mt-4 space-y-2">
-                        <span class="inline-block bg-violet-50 text-violet-700 text-[13px] font-bold px-4 py-1.5 rounded-full border border-violet-200">Developer Halaman Dokter</span>
+                        <span class="inline-block bg-violet-50 text-violet-700 text-[13px] font-bold px-4 py-1.5 rounded-full border border-violet-200">Desainer Web</span>
                         <br>
-                        <span class="inline-block bg-slate-50 text-slate-700 text-[13px] font-bold px-4 py-1.5 rounded-full border border-slate-200">Desainer Logo Web</span>
+                        <span class="inline-block bg-slate-50 text-slate-700 text-[13px] font-bold px-4 py-1.5 rounded-full border border-slate-200">Pengembang Modul Dokter</span>
                     </div>
                 </div>
             </div>
@@ -111,7 +111,7 @@
                             <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                         </div>
                         <h3 class="font-bold text-[17px] text-slate-800 mb-2">Alamat</h3>
-                        <p class="text-[15px] text-slate-700 font-semibold leading-relaxed">Jl. Ahmad Yani, Batam Center,<br>Batam Kota, 29461</p>
+                        <p class="text-[15px] text-slate-700 font-semibold leading-relaxed">Batam, Kepulauan Riau,<br>Indonesia</p>
                     </div>
                 </div>
             </div>
@@ -126,7 +126,7 @@
                     <img src="https://placehold.co/100x100/ffffff/064e3b?text=U" alt="Footer Logo" class="w-[50px] h-[50px] rounded-[14px] shadow-sm">
                     <span class="font-bold text-[28px] text-white tracking-tight">UniHealth</span>
                 </div>
-                <p class="text-[15px] pt-2 leading-relaxed max-w-sm mb-8">Sistem terintegrasi yang menghadirkan layanan kesehatan, pendaftaran, dan jadwal dokter yang aman dan mudah di kampus.</p>
+                <p class="text-[15px] pt-2 leading-relaxed max-w-sm mb-8">Sistem terintegrasi yang menghadirkan layanan kesehatan, pendaftaran, dan jadwal dokter yang aman dan mudah di fasilitas kesehatan.</p>
             </div>
             
             <div class="md:col-span-2 md:border-l border-emerald-800/50 md:pl-8">
@@ -150,7 +150,7 @@
             <div class="md:col-span-3">
                 <h4 class="font-bold text-white mb-6 text-[16px]">Hubungi Kami</h4>
                 <div class="space-y-4 text-[14.5px]">
-                    <p class="leading-relaxed"><strong class="text-white">Alamat Kampus:</strong><br>Jl. Ahmad Yani, Batam Center,<br>Batam Kota, 29461</p>
+                    <p class="leading-relaxed"><strong class="text-white">Alamat Fasilitas Kesehatan:</strong><br>Batam, Kepulauan Riau,<br>Indonesia</p>
                     <p><strong class="text-white">Email:</strong><br><a href="mailto:health67@gmail.com" class="hover:text-emerald-400 transition-colors font-medium">health67@gmail.com</a></p>
                     <p><strong class="text-white">Telepon:</strong><br><span class="font-medium text-emerald-100">0671-2345-6789</span></p>
                 </div>
