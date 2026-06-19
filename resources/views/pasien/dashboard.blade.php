@@ -108,7 +108,7 @@
         </div>
         <div class="text-right">
             <p class="font-bold text-blue-600 text-xl mb-2">Rp {{ number_format($pendingPayment->jumlah, 0, ',', '.') }}</p>
-            <a href="{{ route('pasien.pembayaran.detail', $pendingPayment->id) }}" class="bg-emerald-500 text-white px-6 py-2 rounded-xl font-bold hover:bg-emerald-600 transition shadow-md shadow-emerald-100 active:scale-95 inline-block">Bayar</a>
+            <a href="{{ route('pasien.pembayaran.qris', $pendingPayment->id) }}" class="bg-emerald-500 text-white px-6 py-2 rounded-xl font-bold hover:bg-emerald-600 transition shadow-md shadow-emerald-100 active:scale-95 inline-block">Bayar</a>
         </div>
     </div>
     @else

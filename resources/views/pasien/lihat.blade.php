@@ -16,19 +16,20 @@
             <div>
                 <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">No. Rekam Medis</label>
                 <div class="text-lg font-bold text-slate-800 bg-white px-4 py-2.5 rounded-xl border border-slate-200 inline-block min-w-[120px]">
-                    #00164
+                    #{{ str_pad($rekamMedis->id, 5, '0', STR_PAD_LEFT) }}
                 </div>
             </div>
             <div>
                 <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Dokter Pemeriksa</label>
                 <div class="text-lg font-bold text-slate-800 bg-white px-4 py-2.5 rounded-xl border border-slate-200">
-                    Dr. Fenni | <span class="text-emerald-600 text-sm">Dokter Umum</span>
+                    {{ $rekamMedis->jadwal->dokter->user->nama ?? '-' }} | 
+                    <span class="text-emerald-600 text-sm">{{ $rekamMedis->jadwal->dokter->spesialisasi->nama ?? 'Dokter Umum' }}</span>
                 </div>
             </div>
             <div>
                 <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Tanggal Kunjungan</label>
                 <div class="text-lg font-bold text-slate-800 bg-white px-4 py-2.5 rounded-xl border border-slate-200">
-                    12 April 2026, 09:00 WIB
+                    {{ \Carbon\Carbon::parse($rekamMedis->created_at)->translatedFormat('d F Y, H:i') }} WIB
                 </div>
             </div>
         </div>
@@ -42,7 +43,7 @@
                     Keluhan Pasien
                 </h3>
                 <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100 text-slate-700 leading-relaxed text-lg">
-                    Pasien merasa hangat dan meriang sejak 2 hari yang lalu, disertai batuk ringan.
+                    {{ $rekamMedis->keluhan }}
                 </div>
             </section>
 
@@ -54,30 +55,32 @@
                     Diagnosa Dokter
                 </h3>
                 <div class="bg-blue-50/30 p-6 rounded-2xl border border-blue-100 text-blue-900 font-bold text-lg">
-                    Demam Ringan (Influenza awal)
+                    {{ $rekamMedis->diagnosa }}
                 </div>
             </section>
 
-            <section>
-                <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-4 flex items-center">
-                    <span class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-500 flex items-center justify-center mr-3">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
-                    </span>
-                    Resep & Anjuran Obat
-                </h3>
-                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100">
-                    <ul class="space-y-3">
-                        <li class="flex items-start">
-                            <span class="text-emerald-500 mr-2">•</span>
-                            <span class="text-lg text-slate-700">Paracetamol 500mg (3x1 hari setelah makan)</span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="text-emerald-500 mr-2">•</span>
-                            <span class="text-lg text-slate-700">Vitamin C, 1 tablet setelah makan setiap hari hingga pulih</span>
-                        </li>
-                    </ul>
-                </div>
-            </section>
+           <section>
+    <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-4 flex items-center">
+        Resep & Anjuran Obat
+    </h3>
+    <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100">
+        {{-- Karena relasinya hasMany, kita cek apakah ada data --}}
+        @if(isset($rekamMedis->resep) && $rekamMedis->resep->isNotEmpty())
+            <ul class="space-y-3">
+                @foreach($rekamMedis->resep as $item)
+                    <li class="flex items-start">
+                        <span class="text-emerald-500 mr-2">•</span>
+                        <span class="text-lg text-slate-700">
+                            {{ $item->obat }} - {{ $item->dosis }} ({{ $item->aturan_pakai }})
+                        </span>
+                    </li>
+                @endforeach
+            </ul>
+        @else
+            <p class="text-slate-500 italic">Tidak ada resep obat.</p>
+        @endif
+    </div>
+</section>
 
             <section>
                 <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-4 flex items-center">
@@ -87,21 +90,17 @@
                     Catatan Dokter
                 </h3>
                 <div class="bg-amber-50/20 p-6 rounded-2xl border border-amber-100 text-slate-600 italic text-lg leading-relaxed">
-                    "Istirahat total selama 2 hari, perbanyak minum air putih hangat, dan hindari makanan berminyak."
+                    {{ $rekamMedis->catatan ?? 'Tidak ada catatan tambahan.' }}
                 </div>
             </section>
         </div>
 
         <div class="p-8 bg-slate-50 border-t border-slate-100 flex justify-end gap-4">
-    
-    <button
-        class="bg-emerald-500 text-white px-8 py-3 rounded-2xl font-bold hover:bg-emerald-600 transition shadow-md flex items-center">
-        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path>
-        </svg>
-        Export PDF Rekam
-    </button>
-</div>
+            <button class="bg-emerald-500 text-white px-8 py-3 rounded-2xl font-bold hover:bg-emerald-600 transition shadow-md flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path></svg>
+                Export PDF Rekam
+            </button>
+        </div>
     </div>
 </div>
 @endsection

@@ -42,7 +42,6 @@
             <thead>
                 <tr class="text-[14px] text-slate-600 font-medium border-b border-gray-100">
                     <th class="px-6 py-5">ID</th>
-                    <th class="px-6 py-5">Nomor Struk</th>
                     <th class="px-6 py-5">Pasien</th>
                     <th class="px-6 py-5">Dokter</th>
                     <th class="px-6 py-5">Metode</th>
@@ -55,7 +54,6 @@
                 @forelse($pembayarans as $bayar)
                 <tr class="hover:bg-gray-50 transition-colors">
                     <td class="px-6 py-5 align-middle text-slate-500">#{{ $bayar->id }}</td>
-                    <td class="px-6 py-5 align-middle font-mono text-slate-700 text-[13px]">{{ $bayar->nomor_struk ?? '—' }}</td>
                     <td class="px-6 py-5 align-middle">{{ $bayar->jadwal->pasien?->user?->nama ?? '—' }}</td>
                     <td class="px-6 py-5 align-middle text-slate-600">{{ $bayar->jadwal->dokter?->user?->nama ?? '—' }}</td>
                     <td class="px-6 py-5 align-middle">

@@ -35,7 +35,7 @@ class RekamMedis extends Model
         return $this->belongsTo(Jadwal::class, 'id_jadwal', 'id');
     }
 
-    public function reseps()
+    public function resep()
     {
         return $this->hasMany(Resep::class, 'id_rekam', 'id');
     }

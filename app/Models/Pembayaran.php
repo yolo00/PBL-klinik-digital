@@ -10,10 +10,12 @@ class Pembayaran extends Model
     protected $primaryKey = 'id';          // SQL: PRIMARY KEY (`id`)
 
     protected $fillable = [
-        'id_jadwal', 'jumlah', 'metode', 'status', 'nomor_struk',
+        'id_jadwal', 'jumlah', 'metode', 'status', 'nomor_struk', 'pesan',
+        'xendit_external_id', 'xendit_qr_id', 'qr_string', 'payment_expired_at'
     ];
 
     protected $casts = [
+        'payment_expired_at' => 'datetime',
         'jumlah' => 'decimal:2',
     ];
 
@@ -71,3 +73,4 @@ class Pembayaran extends Model
         };
     }
 }
+

@@ -15,7 +15,7 @@ use App\Http\Controllers\Admin\AdminRekamMedisController;
 use App\Http\Controllers\Admin\AdminPembayaranController;
 use App\Http\Controllers\Admin\AdminJadwalSistemController;
 use App\Http\Controllers\Admin\AdminJadwalDokterController;
-
+use App\Http\Controllers\Admin\AdminSpesialisasiController;
 // Dokter
 use App\Http\Controllers\Dokter\DashboardController;
 use App\Http\Controllers\Dokter\JadwalController;
@@ -26,12 +26,21 @@ use App\Http\Controllers\Dokter\ProfilController;
 // Pasien
 use App\Http\Controllers\Pasien\PasienController;
 
+//Pembayaran
+use App\Http\Controllers\Pasien\XenditController;
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
 */
 
+//Webhook Xendit
+Route::post('/xendit/callback', [XenditController::class, 'callback'])
+    ->name('xendit.callback');
+
+//Home/Landing pages
 Route::get('/', [HomeController::class, 'home'])->name('home');
 Route::get('/about', [HomeController::class, 'about'])->name('about');
 
@@ -55,6 +64,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('jadwal', AdminJadwalController::class);
         Route::resource('rekam-medis', AdminRekamMedisController::class);
         Route::resource('pembayaran', AdminPembayaranController::class);
+        Route::resource('spesialisasi', AdminSpesialisasiController::class);
 
         Route::get('/jadwal-sistem', [AdminJadwalSistemController::class, 'index'])->name('jadwal-sistem');
         Route::get('/jadwal-sistem/harian/{jadwalSistem}/edit', [AdminJadwalSistemController::class, 'editHarian'])->name('jadwal-sistem.harian.edit');
@@ -104,21 +114,19 @@ Route::middleware('auth')->group(function () {
         Route::get('/get-dokter/{id_spesialisasi}', [PasienController::class, 'getDokterBySpesialisasi'])->name('get-dokter');
 
         // Pembayaran
-        Route::get('/pembayaran', function () { return view('pasien.pembayaran'); })->name('pembayaran');
-        Route::get('/riwayat-pembayaran', function () { return view('pasien.riwayat-pembayaran'); })->name('riwayat-pembayaran');
-        Route::get('/pembayaran/detail/{id}', [PasienController::class, 'detailPembayaran'])->name('pembayaran.detail');
-
+        Route::get('/pembayaran/{id}/qris',      [XenditController::class, 'showQris'])        ->name('pembayaran.qris');
+        Route::get('/pembayaran/{id}/status',    [XenditController::class, 'cekStatus'])       ->name('pembayaran.status');
+        Route::post('/pembayaran/{id}/konfirmasi',[XenditController::class, 'konfirmasiManual'])->name('pembayaran.konfirmasi');
+        Route::get('/pembayaran/{id}/struk',     [XenditController::class, 'struk'])           ->name('pembayaran.struk');
+        Route::get('/get-harga-dokter/{id_dokter}', [PasienController::class, 'getHargaDokter'])->name('get-harga-dokter');
         // Rekam Medis
-        Route::get('/riwayat-rekam-medis', function () {
-            $rekamMedis = collect([
-                (object) ['id' => 1, 'tanggal' => '12 April 2026', 'dokter' => 'Dr. Fenni', 'diagnosa' => 'Influenza & Demam']
-            ]);
-            return view('pasien.riwayat-rekam-medis', compact('rekamMedis'));
-        })->name('rekam-medis');
-        Route::get('/riwayat-rekam-medis/detail/{id}', function ($id) {
-            return view('pasien.lihat', ['id' => $id]);
-        })->name('rekam-medis.detail');
+        Route::get('/riwayat-rekam-medis', [PasienController::class, 'riwayatRekamMedis'])->name('rekam-medis');
+        
+        // Untuk sementara biarkan detailnya seperti ini sampai kamu membuat method detailnya di Controller
+       Route::get('/riwayat-rekam-medis/detail/{id}', [PasienController::class, 'detailRekamMedis'])->name('rekam-medis.detail');
     });
+
+    
 
     // --------------------------------------
     // 4. LOGOUT
