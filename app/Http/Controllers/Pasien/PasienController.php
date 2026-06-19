@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class PasienController extends Controller
 {
@@ -329,6 +330,26 @@ public function detailRekamMedis($id)
         return redirect()->route('pasien.riwayat')
             ->with('success', 'Jadwal berhasil dibuat! Silakan lakukan pembayaran di klinik.');
     }
+    // =======================================================
+    // CREATE PDF Rekam Medis
+    // =======================================================
+    public function exportPdf($id)
+{
+    $profilPasien = Auth::user()->pasien;
+
+    // Mengambil data rekam medis yang dimiliki oleh pasien yang sedang login
+    $rekamMedis = RekamMedis::with(['jadwal.dokter.user', 'jadwal.dokter.spesialisasi', 'resep'])
+        ->whereHas('jadwal', function($query) use ($profilPasien) {
+            $query->where('id_pasien', $profilPasien->id);
+        })
+        ->findOrFail($id);
+
+    // Mengubah data menjadi PDF menggunakan view 'pasien.pdf-rekam-medis'
+    $pdf = Pdf::loadView('pasien.pdf-rekam-medis', compact('rekamMedis'));
+    
+    // Memberikan nama file download
+    return $pdf->download('Rekam-Medis-'.$rekamMedis->id.'.pdf');
+}
 
     // =======================================================
     // D: DELETE (Batal Jadwal)

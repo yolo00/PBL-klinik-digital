@@ -27,11 +27,13 @@
                 </div>
             </div>
             <div>
-                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Tanggal Kunjungan</label>
-                <div class="text-lg font-bold text-slate-800 bg-white px-4 py-2.5 rounded-xl border border-slate-200">
-                    {{ \Carbon\Carbon::parse($rekamMedis->created_at)->translatedFormat('d F Y, H:i') }} WIB
-                </div>
-            </div>
+    <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Tanggal Kunjungan</label>
+    <div class="text-lg font-bold text-slate-800 bg-white px-4 py-2.5 rounded-xl border border-slate-200">
+        {{-- Mengambil data tanggal dan jam dari relasi jadwal --}}
+        {{ \Carbon\Carbon::parse($rekamMedis->jadwal->tanggal)->translatedFormat('d F Y') }}, 
+        {{ $rekamMedis->jadwal->jam_format ?? '00:00' }} WIB
+    </div>
+</div>
         </div>
 
         <div class="p-8 space-y-10">
@@ -96,9 +98,10 @@
         </div>
 
         <div class="p-8 bg-slate-50 border-t border-slate-100 flex justify-end gap-4">
-            <button class="bg-emerald-500 text-white px-8 py-3 rounded-2xl font-bold hover:bg-emerald-600 transition shadow-md flex items-center">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path></svg>
-                Export PDF Rekam
+<a href="{{ route('pasien.rekam-medis.pdf', $rekamMedis->id) }}" class="flex items-center justify-center bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-xl transition">
+    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+    Export PDF Rekam
+</a>
             </button>
         </div>
     </div>
