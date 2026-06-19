@@ -17,7 +17,7 @@
         <div class="flex items-center gap-2">
             <a href="{{ route('dokter.rekam.export-pdf', $rekamMedis->id) }}"
                class="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-700 transition-all shadow-sm">
-                <i class="fa-solid fa-file-pdf"></i> Export PDF
+                <i class="fa-solid fa-file-pdf"></i> Ekspor PDF
             </a>
             <a href="{{ url()->previous() }}"
                class="inline-flex items-center gap-2 px-5 py-2.5 bg-white border border-slate-200 text-slate-600 rounded-xl text-sm font-semibold hover:bg-slate-50 transition-all shadow-sm">
@@ -58,7 +58,7 @@
             <p class="text-slate-700 leading-relaxed">{{ $rekamMedis->keluhan ?? 'Tidak ada data keluhan.' }}</p>
         </div>
         <div class="bg-white rounded-2xl border border-blue-100 shadow-sm p-6">
-            <p class="text-[11px] font-bold text-blue-400 uppercase tracking-widest mb-3">Diagnosa Dokter</p>
+            <p class="text-[11px] font-bold text-blue-400 uppercase tracking-widest mb-3">Diagnosis Dokter</p>
             <p class="text-blue-700 font-semibold leading-relaxed text-lg">{{ $rekamMedis->diagnosa ?? '-' }}</p>
         </div>
     </div>
