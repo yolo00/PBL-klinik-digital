@@ -117,6 +117,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/pembayaran/{id}/qris',      [XenditController::class, 'showQris'])        ->name('pembayaran.qris');
         Route::get('/pembayaran/{id}/status',    [XenditController::class, 'cekStatus'])       ->name('pembayaran.status');
         Route::post('/pembayaran/{id}/konfirmasi',[XenditController::class, 'konfirmasiManual'])->name('pembayaran.konfirmasi');
+        Route::post('/pembayaran/{id}/simulate', [XenditController::class, 'simulatePayment'])->name('pembayaran.simulate');
         Route::get('/pembayaran/{id}/struk',     [XenditController::class, 'struk'])           ->name('pembayaran.struk');
         Route::get('/get-harga-dokter/{id_dokter}', [PasienController::class, 'getHargaDokter'])->name('get-harga-dokter');
         // Rekam Medis

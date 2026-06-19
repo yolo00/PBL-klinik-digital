@@ -79,7 +79,7 @@ class XenditController extends Controller
                 ->post("{$this->baseUrl}/qr_codes", [
                     'external_id'     => $externalId,
                     'type'            => 'DYNAMIC',
-                    'callback_url' => env('XENDIT_CALLBACK_URL', route('xendit.callback')),
+                    'callback_url' => env('XENDIT_CALLBACK_URL'),
                     'amount'          => (int) $pembayaran->jumlah,
                     'currency'        => 'IDR',
                     'expires_at'      => $expiredAt->toIso8601String(),
@@ -123,7 +123,7 @@ class XenditController extends Controller
     {
         // Verifikasi Xendit callback token
         $callbackToken = config('services.xendit.callback_token');
-        if ($callbackToken) {
+        if (!empty($callbackToken)) {
             $receivedToken = $request->header('x-callback-token');
             if ($receivedToken !== $callbackToken) {
                 Log::warning('Xendit callback token tidak valid');
@@ -137,9 +137,7 @@ class XenditController extends Controller
 
         // QR Paid event
         if ($event === 'qr.payment') {
-            $externalId = $data['data']['external_id']
-                        ?? $data['external_id']
-                        ?? null;
+            $externalId = $data['qr_code']['external_id'] ?? null;
 
             if (!$externalId) {
                 return response()->json(['error' => 'external_id tidak ditemukan'], 400);
@@ -151,9 +149,9 @@ class XenditController extends Controller
                 $nomorStruk = 'STR-' . now()->format('Ymd') . '-' . str_pad($pembayaran->id, 3, '0', STR_PAD_LEFT);
 
                 $pembayaran->update([
-                    'status'       => 'lunas',
-                    'nomor_struk'  => $nomorStruk,
-                    'pesan'        => $data['data']['payment_details']['account_details'] ?? null,
+                    'status'      => 'lunas',
+                    'nomor_struk' => $nomorStruk,
+                    'pesan'       => $data['payment_details']['source'] ?? null,
                 ]);
 
                 Log::info("Pembayaran ID {$pembayaran->id} berhasil via QRIS Xendit");
@@ -226,5 +224,23 @@ class XenditController extends Controller
         }
 
         return view('pasien.struk-pembayaran', compact('pembayaran'));
+    }
+
+    public function simulatePayment($pembayaran_id)
+    {
+        $pembayaran = Pembayaran::findOrFail($pembayaran_id);
+        $profilPasien = Auth::user()->pasien;
+
+        if (!$profilPasien || $pembayaran->jadwal->id_pasien != $profilPasien->id) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+
+        $response = Http::withHeaders([
+            'Authorization' => 'Basic ' . base64_encode(config('services.xendit.secret_key') . ':'),
+        ])->post("https://api.xendit.co/qr_codes/{$pembayaran->xendit_external_id}/payments/simulate", [
+            'amount' => (int) $pembayaran->jumlah,
+        ]);
+
+        return response()->json($response->json());
     }
 }

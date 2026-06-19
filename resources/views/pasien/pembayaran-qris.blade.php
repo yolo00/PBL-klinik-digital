@@ -126,7 +126,7 @@
                 @csrf
                 <button type="submit"
                     class="w-full bg-emerald-500 hover:bg-emerald-600 py-4 rounded-2xl text-white font-bold text-sm shadow-lg shadow-emerald-100 transition duration-300 transform hover:-translate-y-1">
-                    ✅ SAYA SUDAH BAYAR
+                    ✅ Konfirmasi Pembayaran
                 </button>
             </form>
             <p class="text-[10px] text-slate-400 text-center -mt-3">
@@ -137,6 +137,18 @@
                class="w-full bg-emerald-500 hover:bg-emerald-600 py-4 rounded-2xl text-white font-bold text-sm shadow-lg shadow-emerald-100 transition text-center block">
                 Lihat Struk Pembayaran →
             </a>
+            @endif
+
+
+            @if($pembayaran->status === 'pending')
+            <form onsubmit="simulatePayment(event)">
+                @csrf
+                <button type="submit"
+                    class="w-full mt-2 bg-blue-500 hover:bg-blue-600 py-4 rounded-2xl text-white font-bold text-sm shadow-lg shadow-blue-100 transition duration-300">
+                    ✅ Konfirmasi Pembayaran (Simulasikan)
+                </button>
+            </form>
+            <p class="text-[10px] text-slate-400 text-center mt-1">Khusus sandbox/testing</p>
             @endif
 
         </div>
@@ -207,6 +219,36 @@
             }
         }, 5000);
     }
+
+    async function simulatePayment(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('button');
+    btn.disabled = true;
+    btn.textContent = '⏳ Memproses...';
+
+    try {
+        const res  = await fetch("{{ route('pasien.pembayaran.simulate', $pembayaran->id) }}", {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Content-Type': 'application/json',
+            },
+        });
+        const data = await res.json();
+
+        if (data.status === 'ACTIVE' || data.id) {
+            btn.textContent = '✅ Berhasil! Menunggu webhook...';
+            btn.classList.replace('bg-blue-500', 'bg-emerald-500');
+            // Polling akan otomatis detect perubahan status
+        } else {
+            btn.textContent = '❌ Gagal: ' + (data.message || 'Unknown error');
+            btn.disabled = false;
+        }
+    } catch (err) {
+        btn.textContent = '❌ Error, coba lagi';
+        btn.disabled = false;
+    }
+}
 
     startCountdown();
     startPolling();

@@ -44,6 +44,9 @@ require __DIR__.'/../vendor/autoload.php';
 |
 */
 
+$_SERVER['SCRIPT_NAME'] = '/PBL-klinik-digital/public/index.php';
+$_SERVER['SCRIPT_FILENAME'] = __FILE__;
+
 $app = require_once __DIR__.'/../bootstrap/app.php';
 
 $kernel = $app->make(Kernel::class);
