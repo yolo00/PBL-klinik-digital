@@ -1,66 +1,77 @@
 @extends('dokter.layouts.dokter')
-
 @section('title', 'Jadwal Saya')
+@section('breadcrumb', 'Jadwal — Daftar Pemeriksaan Pasien')
 
 @section('content')
-<div class="mb-8">
-    <h1 class="text-[30px] font-black text-slate-800 leading-tight">Jadwal Pasien</h1>
-    <p class="text-slate-400 font-medium mt-1">Daftar pemeriksaan pasien untuk hari ini.</p>
+<div class="mb-7">
+    <h1 class="text-2xl font-bold text-slate-800">Jadwal Pasien</h1>
+    <p class="text-slate-500 text-sm mt-1">Daftar seluruh pemeriksaan pasien yang terdaftar pada Anda.</p>
 </div>
 
-<div class="bg-white rounded-[40px] border border-slate-100 shadow-sm overflow-hidden">
+<div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
     <div class="overflow-x-auto">
-        <table class="w-full text-left border-collapse">
+        <table class="w-full data-table">
             <thead>
-                <tr class="bg-slate-50/50 text-[11px] font-black text-slate-400 uppercase tracking-[2px]">
-                    <th class="px-8 py-6">Jam Kerja</th>
-                    <th class="px-8 py-6">Nama Pasien</th> <th class="px-8 py-6">Status Jadwal</th>
-                    <th class="px-8 py-6 text-center">Aksi</th>
+                <tr>
+                    <th class="text-left">Jam Kerja</th>
+                    <th class="text-left">Nama Pasien</th>
+                    <th class="text-left">Tanggal</th>
+                    <th class="text-left">Status Jadwal</th>
+                    <th class="text-center">Aksi</th>
                 </tr>
             </thead>
-            <tbody class="divide-y divide-slate-50">
+            <tbody>
                 @forelse($jadwals as $jadwal)
-                <tr class="hover:bg-slate-50/80 transition-all">
-                    <td class="px-8 py-6">
-                        <span class="text-sm font-black text-slate-800">{{ $jadwal->jam }}:00 WIB</span>
+                <tr>
+                    <td>
+                        <span class="font-bold text-slate-800">{{ sprintf('%02d', $jadwal->jam) }}:00 WIB</span>
                     </td>
-                    
-                    <td class="px-8 py-6">
-                    <span class="text-sm font-bold text-slate-800">
-                        {{ $jadwal->pasien->user->nama ?? 'Nama Tidak Ditemukan' }}
-                    </span>
-                    </td>
-
-                    <td class="px-8 py-6">
-                        @if(($jadwal->status ?? 'menunggu') == 'menunggu')
-                            <span class="inline-flex items-center gap-1.5 px-4 py-1.5 bg-amber-50 text-amber-600 rounded-full text-[10px] font-black uppercase tracking-wider">
-                                <span class="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse"></span>
-                                Menunggu
+                    <td>
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center shrink-0">
+                                <i class="fa-solid fa-user text-blue-400 text-xs"></i>
+                            </div>
+                            <span class="font-semibold text-slate-800">
+                                {{ $jadwal->pasien->user->nama ?? 'Nama Tidak Ditemukan' }}
                             </span>
+                        </div>
+                    </td>
+                    <td class="text-slate-500 text-sm">
+                        {{ $jadwal->tanggal ? \Carbon\Carbon::parse($jadwal->tanggal)->format('d F Y') : '-' }}
+                    </td>
+                    <td>
+                        @if($jadwal->status === 'menunggu')
+                            <span class="badge-menunggu flex items-center gap-1.5 w-fit">
+                                <span class="w-1.5 h-1.5 bg-amber-400 rounded-full animate-pulse inline-block"></span> Menunggu
+                            </span>
+                        @elseif($jadwal->status === 'dikonfirmasi')
+                            <span class="badge-konfirmasi w-fit inline-block">Dikonfirmasi</span>
+                        @elseif($jadwal->status === 'selesai')
+                            <span class="badge-selesai w-fit inline-block">Selesai</span>
                         @else
-                            <span class="inline-flex items-center gap-1.5 px-4 py-1.5 bg-emerald-50 text-emerald-600 rounded-full text-[10px] font-black uppercase tracking-wider">
-                                Selesai
-                            </span>
+                            <span class="badge-batal w-fit inline-block">Dibatalkan</span>
                         @endif
                     </td>
-                    <td class="px-8 py-6">
-                        <div class="flex justify-center">
-                            @if(($jadwal->status ?? 'menunggu') == 'menunggu')
-                                <a href="{{ route('dokter.jadwal.buat-rekam', $jadwal->id) }}" class="px-4 py-2 bg-emerald-500 text-white rounded-xl text-xs font-bold hover:bg-emerald-600 transition-all shadow-sm">
-                                    BUAT REKAM MEDIS
-                                </a>
-                            @else
-                                <span class="text-slate-400 text-xs font-medium bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100">
-                                    Pemeriksaan Selesai
-                                </span>
-                            @endif
-                        </div>
+                    <td class="text-center">
+                        @if($jadwal->status === 'menunggu' || $jadwal->status === 'dikonfirmasi')
+                            <a href="{{ route('dokter.jadwal.buat-rekam', $jadwal->id) }}"
+                               class="inline-flex items-center gap-1.5 px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-semibold hover:bg-blue-700 transition-all shadow-sm">
+                                <i class="fa-solid fa-pen-to-square text-[10px]"></i> Buat Rekam Medis
+                            </a>
+                        @else
+                            <span class="text-slate-300 text-xs font-medium bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100">
+                                Pemeriksaan Selesai
+                            </span>
+                        @endif
                     </td>
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="4" class="px-8 py-12 text-center text-slate-400 font-medium">
-                        Tidak ada jadwal pemeriksaan untuk hari ini.
+                    <td colspan="5" class="py-14 text-center">
+                        <div class="flex flex-col items-center gap-2 text-slate-300">
+                            <i class="fa-solid fa-calendar-xmark text-4xl"></i>
+                            <p class="text-sm font-medium text-slate-400">Tidak ada jadwal pemeriksaan.</p>
+                        </div>
                     </td>
                 </tr>
                 @endforelse

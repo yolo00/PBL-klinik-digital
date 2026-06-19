@@ -1,72 +1,80 @@
 @extends('dokter.layouts.dokter')
 @section('title', 'Profil Dokter')
+@section('breadcrumb', 'Profil — Data Diri Anda')
 
 @section('content')
-<div class="bg-white rounded-[40px] border border-slate-100 shadow-sm overflow-hidden p-8 md:p-12">
+<div class="max-w-3xl mx-auto">
 
-    {{-- Header Profil --}}
-    <div class="flex flex-col md:flex-row items-center gap-8 mb-12 pb-12 border-b border-slate-50">
-        <div class="w-32 h-32 bg-slate-100 rounded-[35px] flex items-center justify-center overflow-hidden border-4 border-white shadow-md shrink-0">
-            @if($user->foto_profil)
-                <img src="{{ asset('storage/' . $user->foto_profil) }}" alt="Foto Profil" class="w-full h-full object-cover">
-            @else
-                <i class="fa-solid fa-user-doctor text-5xl text-slate-300"></i>
-            @endif
-        </div>
-
-        <div class="text-center md:text-left">
-            {{-- BUG FIX: nama diambil dari $user, bukan $dokter --}}
-            <h2 class="text-2xl font-black text-slate-800 mb-1">{{ $user->nama ?? 'Nama Dokter' }}</h2>
-            <p class="text-emerald-500 font-black uppercase tracking-[2px] text-[11px] mb-2">{{ $spesialisDisplay }}</p>
-            <p class="text-slate-400 text-sm font-medium">{{ $user->email ?? '-' }}</p>
+    {{-- Header Card Profil --}}
+    <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-8 mb-5">
+        <div class="flex flex-col md:flex-row items-center md:items-start gap-6">
+            {{-- Avatar --}}
+            <div class="w-24 h-24 rounded-2xl bg-blue-50 border-2 border-blue-100 flex items-center justify-center shrink-0 overflow-hidden">
+                @if($user->foto_profil)
+                    <img src="{{ asset('storage/' . $user->foto_profil) }}" alt="Foto" class="w-full h-full object-cover">
+                @else
+                    <i class="fa-solid fa-user-doctor text-4xl text-blue-300"></i>
+                @endif
+            </div>
+            {{-- Info --}}
+            <div class="text-center md:text-left">
+                <h2 class="text-2xl font-bold text-slate-800">{{ $user->nama ?? 'Nama Dokter' }}</h2>
+                <p class="text-blue-600 font-bold uppercase tracking-widest text-[11px] mt-1">{{ $spesialisDisplay }}</p>
+                <p class="text-slate-400 text-sm mt-1">{{ $user->email ?? '-' }}</p>
+                <div class="mt-3 flex flex-wrap justify-center md:justify-start gap-2">
+                    <span class="px-3 py-1 bg-blue-50 text-blue-600 rounded-lg text-xs font-semibold border border-blue-100">
+                        <i class="fa-solid fa-stethoscope mr-1"></i> Dokter Aktif
+                    </span>
+                </div>
+            </div>
         </div>
     </div>
 
     {{-- Detail Data --}}
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div class="space-y-2">
-            <label class="text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1">Alamat Email</label>
-            {{-- BUG FIX: email ada di akun_user ($user), bukan di tabel dokter --}}
-            <input type="email" value="{{ $user->email ?? '-' }}" readonly
-                   class="w-full px-6 py-4 bg-slate-50 rounded-2xl border-none text-slate-800 font-bold outline-none cursor-default">
-        </div>
+    <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-8">
+        <p class="text-[11px] font-bold text-blue-500 uppercase tracking-widest mb-6">Data Diri</p>
 
-        <div class="space-y-2">
-            <label class="text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1">Spesialisasi</label>
-            <input type="text" value="{{ $spesialisDisplay }}" readonly
-                   class="w-full px-6 py-4 bg-slate-50 rounded-2xl border-none text-slate-800 font-bold outline-none cursor-default">
-        </div>
-
-        <div class="space-y-2">
-            {{-- BUG FIX: tgl_lahir ada di akun_user ($user), bukan $dokter --}}
-            <label class="text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1">Tanggal Lahir</label>
-            <input type="text"
-                   value="{{ $user->tgl_lahir ? \Carbon\Carbon::parse($user->tgl_lahir)->format('d F Y') : '-' }}"
-                   readonly
-                   class="w-full px-6 py-4 bg-slate-50 rounded-2xl border-none text-slate-800 font-bold outline-none cursor-default">
-        </div>
-
-        <div class="space-y-2">
-            {{-- BUG FIX: jenis_kelamin ada di akun_user ($user), bukan $dokter --}}
-            <label class="text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1">Jenis Kelamin</label>
-            <input type="text"
-                   value="{{ $user->jenis_kelamin == 'L' ? 'Laki-laki' : ($user->jenis_kelamin == 'P' ? 'Perempuan' : '-') }}"
-                   readonly
-                   class="w-full px-6 py-4 bg-slate-50 rounded-2xl border-none text-slate-800 font-bold outline-none cursor-default">
-        </div>
-
-        <div class="space-y-2 md:col-span-2">
-            {{-- BUG FIX: no_hp ada di akun_user ($user), bukan $dokter --}}
-            <label class="text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1">Nomor Telepon</label>
-            <input type="text" value="{{ $user->no_hp ?? '-' }}" readonly
-                   class="w-full px-6 py-4 bg-slate-50 rounded-2xl border-none text-slate-800 font-bold outline-none cursor-default">
-        </div>
-
-        <div class="space-y-2 md:col-span-2">
-            <label class="text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1">Pendidikan</label>
-            <input type="text" value="{{ $dokter->pendidikan ?? '-' }}" readonly
-                   class="w-full px-6 py-4 bg-slate-50 rounded-2xl border-none text-slate-800 font-bold outline-none cursor-default">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest block mb-2">Alamat Email</label>
+                <div class="px-4 py-3 bg-slate-50 rounded-xl border border-slate-100 text-slate-800 font-medium text-sm">
+                    {{ $user->email ?? '-' }}
+                </div>
+            </div>
+            <div>
+                <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest block mb-2">Spesialisasi</label>
+                <div class="px-4 py-3 bg-slate-50 rounded-xl border border-slate-100 text-slate-800 font-medium text-sm">
+                    {{ $spesialisDisplay }}
+                </div>
+            </div>
+            <div>
+                <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest block mb-2">Tanggal Lahir</label>
+                <div class="px-4 py-3 bg-slate-50 rounded-xl border border-slate-100 text-slate-800 font-medium text-sm">
+                    {{ $user->tgl_lahir ? \Carbon\Carbon::parse($user->tgl_lahir)->format('d F Y') : '-' }}
+                </div>
+            </div>
+            <div>
+                <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest block mb-2">Jenis Kelamin</label>
+                <div class="px-4 py-3 bg-slate-50 rounded-xl border border-slate-100 text-slate-800 font-medium text-sm">
+                    {{ $user->jenis_kelamin == 'L' ? 'Laki-laki' : ($user->jenis_kelamin == 'P' ? 'Perempuan' : '-') }}
+                </div>
+            </div>
+            <div class="md:col-span-2">
+                <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest block mb-2">Nomor Telepon</label>
+                <div class="px-4 py-3 bg-slate-50 rounded-xl border border-slate-100 text-slate-800 font-medium text-sm">
+                    {{ $user->no_hp ?? '-' }}
+                </div>
+            </div>
+            @if($dokter && $dokter->pendidikan)
+            <div class="md:col-span-2">
+                <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest block mb-2">Pendidikan</label>
+                <div class="px-4 py-3 bg-slate-50 rounded-xl border border-slate-100 text-slate-800 font-medium text-sm">
+                    {{ $dokter->pendidikan }}
+                </div>
+            </div>
+            @endif
         </div>
     </div>
+
 </div>
 @endsection
