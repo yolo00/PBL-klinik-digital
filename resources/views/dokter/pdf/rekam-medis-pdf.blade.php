@@ -229,7 +229,7 @@
     @endif
 
     {{-- Resep Obat --}}
-    @if($rekamMedis->reseps->count() > 0)
+    @if($rekamMedis->resep->count() > 0)
     <div class="section">
         <div class="section-header">Resep Obat</div>
         <div class="section-body" style="padding: 0;">
@@ -243,7 +243,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($rekamMedis->reseps as $i => $resep)
+                    @foreach($rekamMedis->resep as $i => $resep)
                     <tr>
                         <td>{{ $i + 1 }}</td>
                         <td>{{ $resep->obat }}</td>

@@ -46,7 +46,7 @@ class RekamMedisController extends Controller
         $rekamMedis = RekamMedis::with([
             'jadwal.pasien.user',
             'jadwal.dokter.user',
-            'reseps',
+            'resep',
         ])->findOrFail($id);
 
         return view('dokter.detail-rekam-medis', compact('rekamMedis'));
@@ -86,7 +86,7 @@ class RekamMedisController extends Controller
         $rekamMedis = RekamMedis::with([
             'jadwal.pasien.user',
             'jadwal.dokter.user',
-            'reseps',
+            'resep',
         ])->findOrFail($id);
 
         $dokterId = auth()->user()->dokter->id;
