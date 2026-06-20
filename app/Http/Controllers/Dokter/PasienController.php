@@ -7,16 +7,19 @@ use Illuminate\Http\Request;
 use App\Models\Jadwal;
 use App\Models\Pasien;
 use App\Models\RekamMedis;
+use App\Models\Resep;
 
 class PasienController extends Controller
 {
     /**
-     * Daftar pasien dengan SEARCH + PAGINATION
+     * Skenario: Melihat Daftar Pasien
+     * - Tampilkan pasien sesuai jadwal konsultasi dokter
+     * - Data booking pasien tersedia → tampilkan daftar
      */
     public function index(Request $request)
     {
         $dokterId = auth()->user()->dokter->id;
-        $search   = $request->input('search');
+        $search   = $request->input('search', '');
 
         $pasiens = Pasien::whereHas('jadwals', function ($q) use ($dokterId) {
                 $q->where('id_dokter', $dokterId);
@@ -30,30 +33,76 @@ class PasienController extends Controller
                 });
             })
             ->paginate(10)
-            ->withQueryString(); // agar parameter search ikut di link pagination
+            ->withQueryString();
 
         return view('dokter.pasien-dokter', compact('pasiens', 'search'));
     }
 
+    /**
+     * Skenario: Mengisi Rekam Medis
+     * - Buka form input rekam medis
+     * - Load data jadwal + pasien + alergi + dokter
+     */
     public function buatRekam($id)
     {
-        $jadwal   = Jadwal::with(['pasien.user', 'pasien.alergi', 'dokter.user'])->findOrFail($id);
+        $jadwal = Jadwal::with([
+            'pasien.user',
+            'pasien.alergi',
+            'dokter.user',
+            'rekamMedis', // cek apakah sudah ada rekam medis
+        ])->findOrFail($id);
+
         $dokterId = auth()->user()->dokter->id;
-        if ($jadwal->id_dokter !== $dokterId) abort(403);
+
+        // Pastikan jadwal ini milik dokter yang login
+        if ((int)$jadwal->id_dokter !== (int)$dokterId) {
+            abort(403, 'Anda tidak memiliki akses ke jadwal ini.');
+        }
+
+        // Jika rekam medis sudah ada, redirect ke halaman detail
+        if ($jadwal->rekamMedis) {
+            return redirect()
+                ->route('dokter.rekam.show', $jadwal->rekamMedis->id)
+                ->with('info', 'Rekam medis untuk jadwal ini sudah diisi sebelumnya.');
+        }
+
         return view('dokter.edit-rekam-medis', compact('jadwal'));
     }
 
+    /**
+     * Skenario: Mengisi Rekam Medis — Simpan
+     * - Validasi: keluhan dan diagnosa WAJIB diisi
+     * - Jika diagnosa kosong → tampilkan validasi error
+     * - Simpan data + resep ke database
+     * - Update status jadwal menjadi selesai
+     */
     public function storeRekamMedis(Request $request, $id)
     {
         $jadwal   = Jadwal::findOrFail($id);
         $dokterId = auth()->user()->dokter->id;
-        if ($jadwal->id_dokter !== $dokterId) abort(403);
 
+        if ((int)$jadwal->id_dokter !== (int)$dokterId) {
+            abort(403, 'Anda tidak memiliki akses ke jadwal ini.');
+        }
+
+        // Skenario: Validasi — diagnosa wajib diisi
         $request->validate([
-            'keluhan'  => 'required|string',
-            'diagnosa' => 'required|string',
+            'keluhan'  => 'required|string|min:3',
+            'diagnosa' => 'required|string|min:3',
+            'tindakan' => 'nullable|string',
+            'catatan'  => 'nullable|string',
+            'resep'    => 'nullable|array',
+            'resep.*.obat'         => 'nullable|string|max:255',
+            'resep.*.dosis'        => 'nullable|string|max:100',
+            'resep.*.aturan_pakai' => 'nullable|string|max:255',
+        ], [
+            'keluhan.required'  => 'Keluhan pasien wajib diisi.',
+            'keluhan.min'       => 'Keluhan terlalu singkat, minimal 3 karakter.',
+            'diagnosa.required' => 'Diagnosis dokter wajib diisi.',
+            'diagnosa.min'      => 'Diagnosis terlalu singkat, minimal 3 karakter.',
         ]);
 
+        // Simpan rekam medis
         $rekam = RekamMedis::create([
             'id_jadwal'  => $jadwal->id,
             'keluhan'    => $request->keluhan,
@@ -63,20 +112,24 @@ class PasienController extends Controller
             'created_by' => auth()->id(),
         ]);
 
-        // Simpan resep obat jika ada
-        if ($request->has('resep')) {
+        // Skenario: Mengisi Resep — simpan tiap baris resep yang terisi
+        if ($request->has('resep') && is_array($request->resep)) {
             foreach ($request->resep as $item) {
-                if (empty($item['obat'])) continue;
-                \App\Models\Resep::create([
+                if (empty(trim($item['obat'] ?? ''))) continue;
+                Resep::create([
                     'id_rekam'     => $rekam->id,
-                    'obat'         => $item['obat'],
-                    'dosis'        => $item['dosis'] ?? null,
-                    'aturan_pakai' => $item['aturan_pakai'] ?? null,
+                    'obat'         => trim($item['obat']),
+                    'dosis'        => trim($item['dosis'] ?? ''),
+                    'aturan_pakai' => trim($item['aturan_pakai'] ?? ''),
                 ]);
             }
         }
 
+        // Update status jadwal → selesai
         $jadwal->update(['status' => 'selesai']);
-        return redirect()->route('dokter.jadwal')->with('success', 'Rekam medis berhasil disimpan!');
+
+        return redirect()
+            ->route('dokter.rekam.show', $rekam->id)
+            ->with('success', 'Rekam medis dan resep berhasil disimpan!');
     }
 }

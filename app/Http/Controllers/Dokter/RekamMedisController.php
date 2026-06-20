@@ -11,12 +11,12 @@ use Barryvdh\DomPDF\Facade\Pdf;
 class RekamMedisController extends Controller
 {
     /**
-     * Semua rekam medis dokter ini dengan SEARCH + PAGINATION
+     * Skenario: Melihat Rekam Medis Pasien — daftar semua
      */
     public function index(Request $request)
     {
         $dokterId = auth()->user()->dokter->id;
-        $search   = $request->input('search');
+        $search   = $request->input('search', '');
 
         $rekamMedis = RekamMedis::whereHas('jadwal', function ($q) use ($dokterId) {
                 $q->where('id_dokter', $dokterId);
@@ -39,27 +39,38 @@ class RekamMedisController extends Controller
     }
 
     /**
-     * Detail satu rekam medis
+     * Skenario: Melihat Rekam Medis Pasien — detail lengkap
+     * - Tampilkan informasi kesehatan pasien secara detail
+     * - Termasuk resep, diagnosa, keluhan, tindakan
      */
     public function show($id)
     {
         $rekamMedis = RekamMedis::with([
             'jadwal.pasien.user',
+            'jadwal.pasien.alergi',
             'jadwal.dokter.user',
+            'jadwal.dokter.spesialisasi',
             'resep',
+            'createdBy',
         ])->findOrFail($id);
+
+        // Pastikan hanya dokter yang menangani yang bisa lihat
+        $dokterId = auth()->user()->dokter->id;
+        if ((int)$rekamMedis->jadwal->id_dokter !== (int)$dokterId) {
+            abort(403, 'Anda tidak memiliki akses ke rekam medis ini.');
+        }
 
         return view('dokter.detail-rekam-medis', compact('rekamMedis'));
     }
 
     /**
-     * Riwayat rekam medis satu pasien dengan SEARCH + PAGINATION
+     * Skenario: Melihat riwayat rekam medis per pasien
      */
     public function riwayat(Request $request, $id)
     {
         $dokterId = auth()->user()->dokter->id;
         $pasien   = Pasien::with('user')->findOrFail($id);
-        $search   = $request->input('search');
+        $search   = $request->input('search', '');
 
         $rekamMedis = RekamMedis::whereHas('jadwal', function ($q) use ($id, $dokterId) {
                 $q->where('id_pasien', $id)->where('id_dokter', $dokterId);
@@ -79,24 +90,33 @@ class RekamMedisController extends Controller
     }
 
     /**
-     * Export PDF
+     * Skenario: Export Resep PDF
+     * - Data resep tersedia → sistem membuat file PDF
+     * - File diunduh dengan nama yang sesuai
      */
     public function exportPdf($id)
     {
         $rekamMedis = RekamMedis::with([
             'jadwal.pasien.user',
+            'jadwal.pasien.alergi',
             'jadwal.dokter.user',
+            'jadwal.dokter.spesialisasi',
             'resep',
         ])->findOrFail($id);
 
         $dokterId = auth()->user()->dokter->id;
-        if ($rekamMedis->jadwal->id_dokter !== $dokterId) abort(403);
+
+        // Hanya dokter yang menangani yang bisa export
+        if ((int)$rekamMedis->jadwal->id_dokter !== (int)$dokterId) {
+            abort(403, 'Anda tidak memiliki akses untuk mengekspor rekam medis ini.');
+        }
 
         $pdf = Pdf::loadView('dokter.pdf.rekam-medis-pdf', compact('rekamMedis'))
                   ->setPaper('a4', 'portrait');
 
-        $nama     = str_replace(' ', '_', $rekamMedis->jadwal->pasien->user->nama ?? 'pasien');
-        $filename = 'rekam_medis_' . $nama . '_' . $rekamMedis->id . '.pdf';
+        $namaPasien = str_replace(' ', '_', $rekamMedis->jadwal->pasien->user->nama ?? 'pasien');
+        $tanggal    = now()->format('Ymd');
+        $filename   = 'rekam_medis_' . $namaPasien . '_' . $tanggal . '_' . $rekamMedis->id . '.pdf';
 
         return $pdf->download($filename);
     }
