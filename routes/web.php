@@ -126,6 +126,9 @@ Route::middleware('auth')->group(function () {
         // Untuk sementara biarkan detailnya seperti ini sampai kamu membuat method detailnya di Controller
        Route::get('/riwayat-rekam-medis/detail/{id}', [PasienController::class, 'detailRekamMedis'])->name('rekam-medis.detail');
        Route::get('/riwayat-rekam-medis/pdf/{id}', [PasienController::class, 'exportPdf'])->name('rekam-medis.pdf');
+
+       // Letakkan di dalam grup middleware pasien Anda
+        Route::get('/get-jam-dokter', [PasienController::class, 'getJamDokter'])->name('pasien.getJamDokter');
     });
 
     

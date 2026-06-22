@@ -22,7 +22,7 @@
 
         {{-- 1. Filter Spesialisasi --}}
         <div class="space-y-4">
-            <label class="block text-lg font-bold text-gray-800">🩺 Pilih Jenis Dokter (Spesialisasi)</label>
+            <label class="block text-lg font-bold text-gray-800"><b>🩺 Pilih Jenis Dokter (Spesialisasi)</b></label>
             <select id="id_spesialisasi" class="w-full p-5 bg-gray-50 border border-gray-200 rounded-2xl outline-none">
                 <option value="all">Semua Spesialisasi / Jenis Dokter</option>
                 @foreach($spesialisasis as $spesialis)
@@ -107,16 +107,14 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
             <div class="space-y-4">
                 <label class="block text-lg font-bold text-gray-800">📅 Pilih Tanggal</label>
-                <input type="date" name="tanggal" required
+                <input type="date" name="tanggal" id="tanggal" required
                        min="{{ date('Y-m-d') }}"
                        class="w-full p-5 bg-gray-50 border border-gray-200 rounded-2xl outline-none">
             </div>
             <div class="space-y-4">
                 <label class="block text-lg font-bold text-gray-800">⏰ Pilih Waktu</label>
-                <select name="jam" class="w-full p-5 bg-gray-50 border border-gray-200 rounded-2xl outline-none" required>
-                    @for($i = 8; $i <= 16; $i++)
-                        <option value="{{ $i }}">{{ $i }}:00 WIB</option>
-                    @endfor
+                <select name="jam" id="jam" class="w-full p-5 bg-gray-50 border border-gray-200 rounded-2xl outline-none" required>
+                    <option value="">Pilih dokter dan tanggal terlebih dahulu</option>
                 </select>
             </div>
         </div>
@@ -193,8 +191,49 @@
                 : 'Bayar di klinik saat tiba';
     }
 
+    // ─── Ambil Jam Tersedia via AJAX Berdasarkan Dokter & Tanggal ───
+    function fetchJamTersedia() {
+        const dokterId = document.getElementById('id_dokter').value;
+        const tanggalVal = document.getElementById('tanggal').value;
+        const jamSelect = document.getElementById('jam');
+
+        if (!dokterId || !tanggalVal) {
+            jamSelect.innerHTML = '<option value="">Pilih dokter dan tanggal terlebih dahulu</option>';
+            return;
+        }
+
+        jamSelect.innerHTML = '<option value="">Memuat jam tersedia...</option>';
+
+        fetch(`/pasien/get-jam-dokter?id_dokter=${dokterId}&tanggal=${tanggalVal}`)
+            .then(r => r.json())
+            .then(res => {
+                jamSelect.innerHTML = '';
+                if (res.status === 'success' && res.data.length > 0) {
+                    res.data.forEach(jamObj => {
+                        const opt = document.createElement('option');
+                        opt.value = jamObj.value;
+                        opt.textContent = jamObj.label;
+                        jamSelect.appendChild(opt);
+                    });
+                } else if (res.status === 'not_available') {
+                    jamSelect.innerHTML = '<option value="">Dokter tidak praktik di hari ini</option>';
+                } else {
+                    jamSelect.innerHTML = '<option value="">Tidak ada slot jam tersedia</option>';
+                }
+            })
+            .catch(() => {
+                jamSelect.innerHTML = '<option value="">Gagal mengambil data jadwal</option>';
+            });
+    }
+
     // ─── Update UI saat dokter berganti ─────────────────────
-    document.getElementById('id_dokter').addEventListener('change', updateHargaDisplay);
+    document.getElementById('id_dokter').addEventListener('change', function() {
+        updateHargaDisplay();
+        fetchJamTersedia();
+    });
+
+    // ─── Update UI saat tanggal berganti ────────────────────
+    document.getElementById('tanggal').addEventListener('change', fetchJamTersedia);
 
     // ─── Pilih metode ────────────────────────────────────────
     const metodeOptions = document.querySelectorAll('.metode-option');
@@ -243,6 +282,7 @@
                 dokterSelect.innerHTML = '';
                 if (!data.length) {
                     dokterSelect.innerHTML = '<option value="">Tidak ada dokter</option>';
+                    fetchJamTersedia();
                     return;
                 }
                 data.forEach(d => {
@@ -253,14 +293,16 @@
                     dokterSelect.appendChild(opt);
                 });
                 updateHargaDisplay();
+                fetchJamTersedia();
             })
             .catch(() => {
                 dokterSelect.innerHTML = '<option value="">Gagal mengambil data</option>';
             });
     });
 
-    // ─── Init harga ──────────────────────────────────────────
+    // ─── Init awal data saat halaman dimuat ──────────────────
     updateHargaDisplay();
+    fetchJamTersedia();
 </script>
 @endpush
 @endsection

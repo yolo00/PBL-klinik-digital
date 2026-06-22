@@ -10,6 +10,7 @@ use App\Models\Alergi;
 use App\Models\JadwalSistem;
 use App\Models\Pembayaran;
 use App\Models\RekamMedis;
+use App\Models\JadwalDokter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -159,7 +160,63 @@ class PasienController extends Controller
         return response()->json(['base_price' => $harga]);
     }
 
-// =======================================================
+    // =======================================================
+    // API — ambil jam tersedia berdasarkan jadwal dokter (JSON)
+    // =======================================================
+    public function getJamDokter(Request $request)
+    {
+        $id_dokter = $request->id_dokter;
+        $tanggal = $request->tanggal;
+
+        if (!$id_dokter || !$tanggal) {
+            return response()->json(['status' => 'empty', 'data' => []]);
+        }
+
+        // 1. Konversi tanggal pilihan menjadi nama hari Bahasa Indonesia
+        $dayEnglish = Carbon::parse($tanggal)->format('l');
+        $daftarHari = [
+            'Monday'    => 'Senin',
+            'Tuesday'   => 'Selasa',
+            'Wednesday' => 'Rabu',
+            'Thursday'  => 'Kamis',
+            'Friday'    => 'Jumat',
+            'Saturday'  => 'Sabtu',
+            'Sunday'    => 'Minggu'
+        ];
+        $hariIndo = $daftarHari[$dayEnglish] ?? '';
+
+        // 2. Ambil jadwal dokter yang aktif di hari tersebut
+        $jadwal = JadwalDokter::where('id_dokter', $id_dokter)
+                              ->where('hari', $hariIndo)
+                              ->where('is_aktif', true)
+                              ->first();
+
+        if (!$jadwal) {
+            return response()->json(['status' => 'not_available', 'data' => []]);
+        }
+
+        // 3. Generate slot jam berdasarkan jam_mulai sampai jam_selesai (integer)
+        $listJam = [];
+        for ($jam = $jadwal->jam_mulai; $jam < $jadwal->jam_selesai; $jam++) {
+            
+            // Cek jika jam ini masuk dalam range jam istirahat dokter
+            if ($jadwal->override_istirahat_mulai && $jadwal->override_istirahat_selesai) {
+                if ($jam >= $jadwal->override_istirahat_mulai && $jam < $jadwal->override_istirahat_selesai) {
+                    continue; // Lewati jam istirahat
+                }
+            }
+            
+            // Format jam agar mudah dibaca di frontend, value tetap integer karena storeJadwal butuh integer
+            $listJam[] = [
+                'value' => $jam,
+                'label' => sprintf('%02d:00 WIB', $jam)
+            ];
+        }
+
+        return response()->json(['status' => 'success', 'data' => $listJam]);
+    }
+
+    // =======================================================
     // R: READ (Riwayat Rekam Medis)
     // =======================================================
     public function riwayatRekamMedis()
@@ -184,19 +241,19 @@ class PasienController extends Controller
         return view('pasien.riwayat-rekam-medis', compact('rekamMedis'));
     }
 
-public function detailRekamMedis($id)
-{
-    $profilPasien = Auth::user()->pasien;
+    public function detailRekamMedis($id)
+    {
+        $profilPasien = Auth::user()->pasien;
 
-    // Tambahkan 'resep' di dalam array with()
-    $rekamMedis = RekamMedis::with(['jadwal.dokter.user', 'jadwal.dokter.spesialisasi', 'resep']) // Pastikan 'resep' di sini
-    ->whereHas('jadwal', function($query) use ($profilPasien) {
-        $query->where('id_pasien', $profilPasien->id);
-    })
-    ->findOrFail($id);
+        // Tambahkan 'resep' di dalam array with()
+        $rekamMedis = RekamMedis::with(['jadwal.dokter.user', 'jadwal.dokter.spesialisasi', 'resep']) // Pastikan 'resep' di sini
+        ->whereHas('jadwal', function($query) use ($profilPasien) {
+            $query->where('id_pasien', $profilPasien->id);
+        })
+        ->findOrFail($id);
 
-    return view('pasien.lihat', compact('rekamMedis'));
-}
+        return view('pasien.lihat', compact('rekamMedis'));
+    }
 
     // =======================================================
     // EDIT & UPDATE Profil
@@ -330,26 +387,27 @@ public function detailRekamMedis($id)
         return redirect()->route('pasien.riwayat')
             ->with('success', 'Jadwal berhasil dibuat! Silakan lakukan pembayaran di klinik.');
     }
+    
     // =======================================================
     // CREATE PDF Rekam Medis
     // =======================================================
     public function exportPdf($id)
-{
-    $profilPasien = Auth::user()->pasien;
+    {
+        $profilPasien = Auth::user()->pasien;
 
-    // Mengambil data rekam medis yang dimiliki oleh pasien yang sedang login
-    $rekamMedis = RekamMedis::with(['jadwal.dokter.user', 'jadwal.dokter.spesialisasi', 'resep'])
-        ->whereHas('jadwal', function($query) use ($profilPasien) {
-            $query->where('id_pasien', $profilPasien->id);
-        })
-        ->findOrFail($id);
+        // Mengambil data rekam medis yang dimiliki oleh pasien yang sedang login
+        $rekamMedis = RekamMedis::with(['jadwal.dokter.user', 'jadwal.dokter.spesialisasi', 'resep'])
+            ->whereHas('jadwal', function($query) use ($profilPasien) {
+                $query->where('id_pasien', $profilPasien->id);
+            })
+            ->findOrFail($id);
 
-    // Mengubah data menjadi PDF menggunakan view 'pasien.pdf-rekam-medis'
-    $pdf = Pdf::loadView('pasien.pdf-rekam-medis', compact('rekamMedis'));
-    
-    // Memberikan nama file download
-    return $pdf->download('Rekam-Medis-'.$rekamMedis->id.'.pdf');
-}
+        // Mengubah data menjadi PDF menggunakan view 'pasien.pdf-rekam-medis'
+        $pdf = Pdf::loadView('pasien.pdf-rekam-medis', compact('rekamMedis'));
+        
+        // Memberikan nama file download
+        return $pdf->download('Rekam-Medis-'.$rekamMedis->id.'.pdf');
+    }
 
     // =======================================================
     // D: DELETE (Batal Jadwal)
