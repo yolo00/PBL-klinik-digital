@@ -12,85 +12,77 @@
     </div>
 
     <div class="bg-white rounded-3xl shadow-md border border-slate-100 overflow-hidden">
-        <div class="p-8 bg-slate-50/50 border-b border-slate-100 grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div>
-                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">No. Rekam Medis</label>
-                <div class="text-lg font-bold text-slate-800 bg-white px-4 py-2.5 rounded-xl border border-slate-200 inline-block min-w-[120px]">
+        {{-- Tampilan Grid Disesuaikan agar lebih rapi --}}
+        <div class="p-8 bg-slate-50/50 border-b border-slate-100 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            
+            <div class="bg-white p-4 rounded-xl border border-slate-200">
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">No. Rekam Medis</label>
+                <div class="text-lg font-bold text-slate-800">
                     #{{ str_pad($rekamMedis->id, 5, '0', STR_PAD_LEFT) }}
                 </div>
             </div>
-            <div>
-                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Dokter Pemeriksa</label>
-                <div class="text-lg font-bold text-slate-800 bg-white px-4 py-2.5 rounded-xl border border-slate-200">
-                    {{ $rekamMedis->jadwal->dokter->user->nama ?? '-' }} | 
-                    <span class="text-emerald-600 text-sm">{{ $rekamMedis->jadwal->dokter->spesialisasi->nama ?? 'Dokter Umum' }}</span>
+
+            <div class="bg-white p-4 rounded-xl border border-slate-200">
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Dokter Pemeriksa</label>
+                <div class="text-sm font-bold text-slate-800 leading-tight">
+                    {{ $rekamMedis->jadwal->dokter->user->nama ?? '-' }}
+                    <p class="text-emerald-600 font-medium mt-1">{{ $rekamMedis->jadwal->dokter->spesialisasi->nama ?? 'Dokter Umum' }}</p>
                 </div>
             </div>
-            <div>
-    <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Tanggal Kunjungan</label>
-    <div class="text-lg font-bold text-slate-800 bg-white px-4 py-2.5 rounded-xl border border-slate-200">
-        {{-- Mengambil data tanggal dan jam dari relasi jadwal --}}
-        {{ \Carbon\Carbon::parse($rekamMedis->jadwal->tanggal)->translatedFormat('d F Y') }}, 
-        {{ $rekamMedis->jadwal->jam_format ?? '00:00' }} WIB
-    </div>
-</div>
+
+            <div class="bg-white p-4 rounded-xl border border-slate-200">
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Tanggal Kunjungan</label>
+                <div class="text-sm font-bold text-slate-800">
+                    {{ \Carbon\Carbon::parse($rekamMedis->jadwal->tanggal)->translatedFormat('d M Y') }}
+                    <p class="text-slate-500 font-medium">{{ $rekamMedis->jadwal->jam_format ?? '00:00' }} WIB</p>
+                </div>
+            </div>
+
+            <div class="bg-white p-4 rounded-xl border border-slate-200">
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Waktu Pengisian</label>
+                <div class="text-sm font-bold text-slate-800">
+                    {{ \Carbon\Carbon::parse($rekamMedis->created_at)->translatedFormat('d M Y') }}
+                    <p class="text-emerald-600 font-medium">Pukul {{ \Carbon\Carbon::parse($rekamMedis->created_at)->format('H:i') }} WIB</p>
+                </div>
+            </div>
         </div>
 
+        {{-- Sisa konten di bawah tidak diubah --}}
         <div class="p-8 space-y-10">
             <section>
-                <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-4 flex items-center">
-                    <span class="w-8 h-8 rounded-lg bg-red-50 text-red-500 flex items-center justify-center mr-3">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                    </span>
-                    Keluhan Pasien
-                </h3>
+                <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-4 flex items-center">Keluhan Pasien</h3>
                 <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100 text-slate-700 leading-relaxed text-lg">
                     {{ $rekamMedis->keluhan }}
                 </div>
             </section>
 
             <section>
-                <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-4 flex items-center">
-                    <span class="w-8 h-8 rounded-lg bg-blue-50 text-blue-500 flex items-center justify-center mr-3">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    </span>
-                    Diagnosa Dokter
-                </h3>
+                <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-4 flex items-center">Diagnosa Dokter</h3>
                 <div class="bg-blue-50/30 p-6 rounded-2xl border border-blue-100 text-blue-900 font-bold text-lg">
                     {{ $rekamMedis->diagnosa }}
                 </div>
             </section>
 
-           <section>
-    <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-4 flex items-center">
-        Resep & Anjuran Obat
-    </h3>
-    <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100">
-        {{-- Karena relasinya hasMany, kita cek apakah ada data --}}
-        @if(isset($rekamMedis->resep) && $rekamMedis->resep->isNotEmpty())
-            <ul class="space-y-3">
-                @foreach($rekamMedis->resep as $item)
-                    <li class="flex items-start">
-                        <span class="text-emerald-500 mr-2">•</span>
-                        <span class="text-lg text-slate-700">
-                            {{ $item->obat }} - {{ $item->dosis }} ({{ $item->aturan_pakai }})
-                        </span>
-                    </li>
-                @endforeach
-            </ul>
-        @else
-            <p class="text-slate-500 italic">Tidak ada resep obat.</p>
-        @endif
-    </div>
-</section>
+            <section>
+                <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-4 flex items-center">Resep & Anjuran Obat</h3>
+                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100">
+                    @if(isset($rekamMedis->resep) && $rekamMedis->resep->isNotEmpty())
+                        <ul class="space-y-3">
+                            @foreach($rekamMedis->resep as $item)
+                                <li class="flex items-start">
+                                    <span class="text-emerald-500 mr-2">•</span>
+                                    <span class="text-lg text-slate-700">{{ $item->obat }} - {{ $item->dosis }} ({{ $item->aturan_pakai }})</span>
+                                </li>
+                            @endforeach
+                        </ul>
+                    @else
+                        <p class="text-slate-500 italic">Tidak ada resep obat.</p>
+                    @endif
+                </div>
+            </section>
 
             <section>
-                <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-4 flex items-center">
-                    <span class="w-8 h-8 rounded-lg bg-amber-50 text-amber-500 flex items-center justify-center mr-3">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-                    </span>
-                    Catatan Dokter
-                </h3>
+                <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-4 flex items-center">Catatan Dokter</h3>
                 <div class="bg-amber-50/20 p-6 rounded-2xl border border-amber-100 text-slate-600 italic text-lg leading-relaxed">
                     {{ $rekamMedis->catatan ?? 'Tidak ada catatan tambahan.' }}
                 </div>
@@ -98,11 +90,9 @@
         </div>
 
         <div class="p-8 bg-slate-50 border-t border-slate-100 flex justify-end gap-4">
-<a href="{{ route('pasien.rekam-medis.pdf', $rekamMedis->id) }}" class="flex items-center justify-center bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-xl transition">
-    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-    Export PDF Rekam
-</a>
-            </button>
+            <a href="{{ route('pasien.rekam-medis.pdf', $rekamMedis->id) }}" class="flex items-center justify-center bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-xl transition">
+                Export PDF Rekam
+            </a>
         </div>
     </div>
 </div>
