@@ -12,7 +12,7 @@
                 <p class="text-blue-50 text-sm opacity-90">Daftar jadwal konsultasi Anda di sini dengan mudah.</p>
             </div>
             <a href="{{ route('pasien.buat-janji') }}" class="bg-white text-blue-600 px-8 py-3 rounded-xl font-bold hover:bg-blue-50 transition shadow-md active:scale-95">
-                Daftar Jadwal
+                 Buat Janji Temu
             </a>
         </div>
     </section>
