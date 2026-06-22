@@ -46,6 +46,63 @@
             </select>
         </div>
 
+        {{-- BAGIAN BARU: Informasi Riwayat Kesehatan Pasien (Sinkronisasi Profil) --}}
+        <div class="space-y-4 p-6 bg-gray-50 rounded-2xl border border-gray-200">
+            <label class="block text-lg font-bold text-gray-800">📋 Informasi Medis Pasien</label>
+            
+            @php
+                $pasien = optional(auth()->user()->pasien);
+                $riwayatPenyakit = $pasien->riwayat_penyakit;
+                
+                // Memastikan data alergi diparsing dengan aman baik berupa Collection, Array, maupun String
+                if ($pasien->alergi instanceof \Illuminate\Support\Collection) {
+                    $alergiText = $pasien->alergi->isNotEmpty() ? $pasien->alergi->pluck('nama_alergi')->implode(', ') : null;
+                } elseif (is_array($pasien->alergi)) {
+                    $alergiText = !empty($pasien->alergi) ? implode(', ', array_column($pasien->alergi, 'nama_alergi')) : null;
+                } else {
+                    $alergiText = $pasien->alergi;
+                }
+            @endphp
+
+            {{-- KONDISI 1: Jika Kedua Data Belum Terisi (Pasien Baru) --}}
+            @if(empty($riwayatPenyakit) && empty($alergiText))
+                <div class="bg-amber-50 border border-amber-200 rounded-xl p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div class="flex items-start gap-3">
+                        <span class="text-2xl mt-0.5 shrink-0">⚠️</span>
+                        <div>
+                            <h5 class="text-base font-bold text-amber-800">Data Medis Belum Lengkap</h5>
+                            <p class="text-sm text-amber-700 mt-0.5">Anda belum mengisi riwayat penyakit dan alergi obat di profil. Mohon lengkapi demi keamanan diagnosis dokter.</p>
+                        </div>
+                    </div>
+                    {{-- langsung diarahkan ke halaman edit profil --}}
+                    <a href="{{ route('pasien.profil.edit') }}" class="inline-flex items-center justify-center bg-amber-500 hover:bg-amber-600 text-white text-sm font-bold px-5 py-3 rounded-xl transition whitespace-nowrap shadow-md shadow-amber-100">
+                        Lengkapi Profil Sekarang ➡️
+                    </a>
+                </div>
+
+            {{-- KONDISI 2: Jika Data Sudah Terisi --}}
+            @else
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {{-- Menampilkan Riwayat Penyakit --}}
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Riwayat Penyakit</label>
+                        <div class="text-base font-semibold text-gray-800 bg-white px-5 py-4 rounded-xl border border-gray-200 min-h-[50px]">
+                            {{ $riwayatPenyakit ?? 'Tidak ada riwayat penyakit' }}
+                        </div>
+                    </div>
+
+                    {{-- Menampilkan Data Alergi --}}
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Alergi Obat / Makanan</label>
+                        <div class="text-base font-semibold text-gray-800 bg-white px-5 py-4 rounded-xl border border-gray-200 min-h-[50px]">
+                            {{ $alergiText ?? 'Tidak ada alergi' }}
+                        </div>
+                    </div>
+                </div>
+                <p class="text-xs text-gray-400 italic">*Data di atas diambil otomatis dari profil Anda. Jika ada perubahan data medis terbaru, silakan perbarui melalui menu profil.</p>
+            @endif
+        </div>
+
         {{-- 3. Tanggal & Waktu --}}
         <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
             <div class="space-y-4">

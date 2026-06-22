@@ -53,18 +53,18 @@
                 <div>
                     <label class="block text-sm font-bold text-slate-700 mb-2">Golongan Darah</label>
                     <select name="gol_darah" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 outline-none bg-white">
-                        <option value="" disabled selected>Pilih Golongan Darah</option>
+                        <option value="" disabled {{ !isset($pasien->gol_darah) ? 'selected' : '' }}>Pilih Golongan Darah</option>
                         @foreach(['A', 'B', 'AB', 'O'] as $gol)
                             <option value="{{ $gol }}" {{ ($pasien->gol_darah ?? '') == $gol ? 'selected' : '' }}>{{ $gol }}</option>
                         @endforeach
                     </select>
                 </div>
 
-                {{-- Alergi & Riwayat Penyakit --}}
+                {{-- Alergi & Riwayat Penyakit (SUDAH AMAN & BEBAS CRASH) --}}
                 <div class="md:col-span-2">
                     <label class="block text-sm font-bold text-slate-700 mb-2">Alergi (Pisahkan dengan koma, contoh: Debu, Kacang, Udang)</label>
                     <textarea name="alergi" rows="2" placeholder="Sebutkan alergi jika ada..."
-                              class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 outline-none transition">{{ old('alergi', $pasien->alergi->pluck('nama_alergi')->implode(', ')) }}</textarea>
+                              class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 outline-none transition">{{ old('alergi', ($pasien && $pasien->alergi) ? $pasien->alergi->pluck('nama_alergi')->implode(', ') : '') }}</textarea>
                 </div>
                 
                 <div class="md:col-span-2">
