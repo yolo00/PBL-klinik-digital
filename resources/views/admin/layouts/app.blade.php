@@ -97,6 +97,10 @@
                     <i class="fa-solid fa-money-bill-wave w-5 text-center"></i>
                     Data Pembayaran
                 </a>
+                <a href="{{ route('admin.cuti-dokter.index') }}" class="flex items-center gap-4 px-4 py-4 rounded-xl {{ request()->routeIs('admin.cuti-dokter*') ? 'sidebar-active' : 'sidebar-link' }}">
+                    <i class="fa-solid fa-calendar-xmark w-5 text-center"></i>
+                    Cuti Dokter
+                </a>
                 {{-- Pengaturan Sistem Dropdown --}}
                 <div class="pt-5 pb-2 px-2 flex items-center justify-between text-slate-500/70">
                     <span class="text-[11px] font-bold uppercase tracking-widest">Pengaturan</span>

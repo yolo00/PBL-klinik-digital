@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /*
     ___                                     ___                            _   
@@ -34,6 +35,7 @@ use Illuminate\Notifications\Notifiable;
 
 class AkunUser extends Authenticatable
 {
+    use SoftDeletes;
     use Notifiable;
 
     protected $table = 'akun_user';

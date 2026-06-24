@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Pembayaran extends Model
 {
+    use SoftDeletes;
+
     protected $table = 'pembayaran';
     protected $primaryKey = 'id';          // SQL: PRIMARY KEY (`id`)
 

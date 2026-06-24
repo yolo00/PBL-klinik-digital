@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\AdminPembayaranController;
 use App\Http\Controllers\Admin\AdminJadwalSistemController;
 use App\Http\Controllers\Admin\AdminJadwalDokterController;
 use App\Http\Controllers\Admin\AdminSpesialisasiController;
+use App\Http\Controllers\Admin\AdminCutiDokterController;
 // Dokter
 use App\Http\Controllers\Dokter\DashboardController;
 use App\Http\Controllers\Dokter\JadwalController;
@@ -65,6 +66,13 @@ Route::middleware('auth')->group(function () {
         Route::resource('rekam-medis', AdminRekamMedisController::class);
         Route::resource('pembayaran', AdminPembayaranController::class);
         Route::resource('spesialisasi', AdminSpesialisasiController::class);
+
+        // Cuti Dokter
+        Route::get('/cuti-dokter', [AdminCutiDokterController::class, 'index'])->name('cuti-dokter.index');
+        Route::get('/cuti-dokter/{id}', [AdminCutiDokterController::class, 'show'])->name('cuti-dokter.show');
+        Route::post('/cuti-dokter/{id}/approve', [AdminCutiDokterController::class, 'approve'])->name('cuti-dokter.approve');
+        Route::post('/cuti-dokter/{id}/reject', [AdminCutiDokterController::class, 'reject'])->name('cuti-dokter.reject');
+        Route::delete('/cuti-dokter/{id}', [AdminCutiDokterController::class, 'destroy'])->name('cuti-dokter.destroy');
 
         Route::get('/jadwal-sistem', [AdminJadwalSistemController::class, 'index'])->name('jadwal-sistem');
         Route::get('/jadwal-sistem/harian/{jadwalSistem}/edit', [AdminJadwalSistemController::class, 'editHarian'])->name('jadwal-sistem.harian.edit');
