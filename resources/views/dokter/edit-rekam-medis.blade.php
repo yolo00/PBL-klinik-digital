@@ -91,22 +91,15 @@
             </div>
         </div>
 
-        {{-- Tindakan --}}
-        <div class="mb-6">
-            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-3">Tindakan Medis</label>
-            <div class="border border-slate-100 rounded-2xl p-1 bg-slate-50">
-                <textarea name="tindakan" rows="2"
-                    placeholder="Tindakan medis yang diberikan (opsional)…"
-                    class="w-full bg-white rounded-xl p-4 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 transition resize-none border border-slate-200">{{ old('tindakan') }}</textarea>
-            </div>
-        </div>
+
 
         {{-- Catatan --}}
         <div class="mb-7">
-            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-3">Catatan Tambahan</label>
+            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-3">Catatan Tambahan <span class="text-red-400">Opsional</span></label>
+
             <div class="border border-slate-100 rounded-2xl p-1 bg-slate-50">
                 <textarea name="catatan" rows="2"
-                    placeholder="Catatan medis tambahan (opsional)…"
+                    placeholder="Catatan medis tambahan…"
                     class="w-full bg-white rounded-xl p-4 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 transition resize-none border border-slate-200">{{ old('catatan') }}</textarea>
             </div>
         </div>
@@ -115,7 +108,7 @@
         <div class="mb-7">
             <div class="flex items-center justify-between mb-4">
                 <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                    <i class="fa-solid fa-pills text-blue-400 mr-1"></i> Resep Obat
+                    <i class="fa-solid fa-pills text-blue-400 mr-1"></i> Resep Obat <span class="text-red-400">Opsional</span>
                 </label>
                 <button type="button" id="btn-tambah-resep"
                     class="flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-600 rounded-xl text-xs font-semibold hover:bg-blue-100 transition-all border border-blue-200">
@@ -159,7 +152,7 @@
                     </tbody>
                 </table>
             </div>
-            <p class="text-xs text-slate-400 mt-2 ml-1">Biarkan kosong jika tidak ada resep obat.</p>
+            <p class="text-xs text-slate-400 mt-2 ml-1">Biarkan kosong jika tidak ada resep obat (Opsional).</p>
         </div>
 
         {{-- Action Buttons --}}
@@ -170,7 +163,7 @@
             </a>
             <button type="submit"
                 class="px-8 py-2.5 bg-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-700 shadow-sm transition-all flex items-center gap-2">
-                <i class="fa-solid fa-floppy-disk"></i> Simpan Rekam Medis
+                <i class="fa-solid fa-circle-check"></i> Konfirmasi Rekam Medis
             </button>
         </div>
     </form>

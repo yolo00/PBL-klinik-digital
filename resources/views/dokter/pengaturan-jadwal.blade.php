@@ -62,36 +62,37 @@
                     <th class="text-left">Sampai Tanggal</th>
                     <th class="text-left">Alasan</th>
                     <th class="text-center">Status</th>
-                    <th class="text-center">Aksi</th>
                 </tr>
             </thead>
             <tbody>
-                {{-- Contoh data statis, ganti dengan @forelse jika sudah dinamis --}}
-                <tr>
-                    <td class="font-semibold text-slate-700">30 Maret 2026</td>
-                    <td class="font-semibold text-slate-700">30 Maret 2026</td>
-                    <td class="text-slate-500">Keperluan keluarga</td>
-                    <td class="text-center">
-                        <span class="badge-selesai">Disetujui</span>
-                    </td>
-                    <td class="text-center">
-                        <div class="flex justify-center gap-2">
-                            <button class="px-3 py-1.5 bg-slate-100 text-slate-600 rounded-lg text-xs font-semibold hover:bg-slate-200 transition-all">
-                                Lihat
-                            </button>
-                            <button class="px-3 py-1.5 bg-red-50 text-red-500 rounded-lg text-xs font-semibold hover:bg-red-100 transition-all">
-                                Hapus
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-                {{-- Jika tidak ada data:
-                <tr>
-                    <td colspan="5" class="py-10 text-center text-slate-400 text-sm">Belum ada pengajuan cuti.</td>
-                </tr>
-                --}}
+                @forelse($cutis ?? [] as $cuti)
+                    <tr>
+                        <td class="font-semibold text-slate-700">
+                            {{ \Carbon\Carbon::parse($cuti->dari_tanggal)->format('d F Y') }}
+                        </td>
+                        <td class="font-semibold text-slate-700">
+                            {{ \Carbon\Carbon::parse($cuti->sampai_tanggal)->format('d F Y') }}
+                        </td>
+                        <td class="text-slate-500">{{ $cuti->alasan ?? '-' }}</td>
+                        <td class="text-center">
+                            <span class="inline-flex items-center justify-center px-3 py-1 rounded-lg text-xs font-bold border border-slate-100 bg-slate-50 {{ $cuti->status_color }}">
+                                {{ $cuti->status_label }}
+                            </span>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="4" class="py-10 text-center text-slate-400 text-sm">Belum ada pengajuan cuti.</td>
+                    </tr>
+                @endforelse
             </tbody>
         </table>
+
+        @if(isset($cutis) && $cutis->hasPages())
+            <div class="px-4 py-4">
+                {{ $cutis->links() }}
+            </div>
+        @endif
     </div>
 </div>
 
@@ -102,8 +103,9 @@
         <h2 class="font-bold text-slate-700 text-sm uppercase tracking-wider">Form Pengajuan Cuti</h2>
     </div>
 
-    <form action="#" method="POST" class="space-y-6">
+    <form action="{{ route('dokter.pengaturan.store') }}" method="POST" class="space-y-6">
         @csrf
+
 
         {{-- Tanggal --}}
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -111,7 +113,7 @@
                 <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest block">Tanggal Mulai</label>
                 <div class="relative group">
                     <i class="fa-solid fa-calendar-plus absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-blue-500 transition-colors text-sm"></i>
-                    <input type="date"
+                    <input type="date" name="dari_tanggal" min="{{ now()->toDateString() }}"
                         class="w-full pl-11 pr-5 py-3 bg-slate-50 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 transition-all">
                 </div>
             </div>
@@ -119,7 +121,7 @@
                 <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest block">Sampai Tanggal</label>
                 <div class="relative group">
                     <i class="fa-solid fa-calendar-check absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-blue-500 transition-colors text-sm"></i>
-                    <input type="date"
+                    <input type="date" name="sampai_tanggal" min="{{ now()->toDateString() }}"
                         class="w-full pl-11 pr-5 py-3 bg-slate-50 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 transition-all">
                 </div>
                 <p class="text-[10px] text-slate-400 italic">* Kosongkan jika hanya cuti sehari</p>
@@ -128,8 +130,8 @@
 
         {{-- Alasan --}}
         <div class="space-y-2">
-            <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest block">Alasan Pengajuan</label>
-            <textarea rows="4" placeholder="Tuliskan alasan pengajuan cuti Anda di sini..."
+            <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest block">Alasan Pengajuan <span class="text-red-400">(Opsional)</span></label>
+            <textarea name="alasan" rows="4" placeholder="Tuliskan alasan pengajuan cuti Anda di sini..."
                 class="w-full px-5 py-3.5 bg-slate-50 rounded-xl border border-slate-200 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 transition-all resize-none"></textarea>
         </div>
 
