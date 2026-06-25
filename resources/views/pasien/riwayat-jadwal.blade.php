@@ -142,24 +142,31 @@
                             @endif
                         </td>
 
-                        {{-- Aksi --}}
+{{-- Aksi --}}
                         <td class="px-8 py-6 text-center">
                             @if($jadwal->status == 'menunggu')
-                                <form action="{{ route('pasien.batal_jadwal', $jadwal->id) }}" method="POST"
-                                      onsubmit="return confirm('Yakin ingin membatalkan jadwal ini?')">
-                                    @csrf @method('DELETE')
-                                    <button type="submit"
-                                        class="inline-flex px-4 py-2.5 rounded-xl bg-red-50 text-red-500 text-xs font-bold uppercase hover:bg-red-500 hover:text-white transition shadow-sm">
-                                        Batalkan
-                                    </button>
-                                </form>
+                                {{-- Logika H-1: Tombol muncul hanya jika tanggal jadwal > besok --}}
+                                @if(\Carbon\Carbon::parse($jadwal->tanggal)->gt(\Carbon\Carbon::now()->addDay()))
+                                    <form action="{{ route('pasien.batal_jadwal', $jadwal->id) }}" method="POST"
+                                          onsubmit="return confirm('Yakin ingin membatalkan jadwal ini? Pembatalan hanya bisa dilakukan H-1.')">
+                                        @csrf @method('DELETE')
+                                        <button type="submit"
+                                            class="inline-flex px-4 py-2.5 rounded-xl bg-red-50 text-red-500 text-xs font-bold uppercase hover:bg-red-500 hover:text-white transition shadow-sm">
+                                            Batalkan
+                                        </button>
+                                    </form>
+                                @else
+                                    <span class="inline-flex px-4 py-2.5 rounded-xl bg-slate-100 text-slate-400 text-xs font-bold uppercase cursor-not-allowed">
+                                        Tidak dapat batal
+                                    </span>
+                                @endif
+
                             @elseif($jadwal->status == 'dibatalkan')
                                 <a href="{{ route('pasien.buat-janji') }}"
                                     class="inline-flex px-4 py-2.5 rounded-xl bg-emerald-50 text-emerald-600 text-xs font-bold uppercase border border-emerald-100 hover:bg-emerald-500 hover:text-white transition shadow-sm">
                                     Pesan Lagi
                                 </a>
                             @elseif($jadwal->status == 'selesai' && $isLunas)
-                                {{-- Menampilkan label "Selesai" jika jadwal selesai dan lunas --}}
                                 <span class="inline-flex px-4 py-2.5 rounded-xl bg-slate-50 text-slate-500 text-xs font-bold uppercase border border-slate-200 shadow-sm cursor-default">
                                     Selesai
                                 </span>

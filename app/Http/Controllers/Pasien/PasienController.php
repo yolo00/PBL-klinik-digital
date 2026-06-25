@@ -208,7 +208,7 @@ class PasienController extends Controller
         // Validasi jadwal sistem klinik
         $jadwalSistemKhusus  = JadwalSistem::where('tgl_khusus', $tanggal)->first();
         $jadwalSistemReguler = JadwalSistem::where('hari', $hariIndo)->first();
-        $jadwalKlinik        = $jadwalSistemKhusus ?? $jadwalSistemReguler;
+        $jadwalKlinik       = $jadwalSistemKhusus ?? $jadwalSistemReguler;
 
         if ($jadwalKlinik && $jadwalKlinik->is_libur) {
             return response()->json(['status' => 'not_available', 'data' => []]);
@@ -396,8 +396,8 @@ class PasienController extends Controller
         $user = auth()->user();
 
         $request->validate([
-            'nama'             => 'required|string|max:100',
-            'no_hp'            => 'nullable|string|max:15',
+            'nama'            => 'required|string|max:100',
+            'no_hp'           => 'nullable|string|max:15',
             'jenis_kelamin'    => 'nullable|in:L,P',
             'tgl_lahir'        => 'nullable|date',
             'gol_darah'        => 'nullable|in:A,B,AB,O',
@@ -443,13 +443,12 @@ class PasienController extends Controller
     // =======================================================
     public function storeJadwal(Request $request)
     {
-        // 1. Validasi dasar dengan menambahkan array pesan kustom Bahasa Indonesia di parameter kedua
-
+        // 1. Validasi dasar
         $request->validate([
             'id_dokter' => 'required|exists:dokter,id',
             'tanggal'   => 'required|date|after_or_equal:today',
             'jam'       => 'required|integer',
-
+            'metode'    => 'required|in:cash,qris', // Validasi metode ditambahkan di sini
         ], [
             // Pesan error kustom bahasa indonesia
             'id_dokter.required'     => 'Silakan pilih dokter terlebih dahulu.',
@@ -459,8 +458,8 @@ class PasienController extends Controller
             'tanggal.after_or_equal' => 'Tanggal kunjungan tidak boleh hari yang sudah lewat.',
             'jam.required'           => 'Waktu jam kunjungan wajib diisi.',
             'jam.integer'            => 'Format jam tidak valid.',
-
-            'metode'    => 'required|in:cash,qris',
+            'metode.required'        => 'Pilih metode pembayaran.',
+            'metode.in'              => 'Metode pembayaran tidak valid.',
         ]);
 
         // Cek jam hari ini tidak lewat
