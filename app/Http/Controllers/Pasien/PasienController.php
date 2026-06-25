@@ -128,18 +128,28 @@ class PasienController extends Controller
     public function getDokterBySpesialisasi($id_spesialisasi)
     {
         if ($id_spesialisasi === 'all') {
-            $dokters = Dokter::with(['user', 'spesialisasi'])->get();
+            $dokters = Dokter::with(['user', 'spesialisasi', 'jadwalDokters'])->get();
         } else {
-            $dokters = Dokter::with(['user', 'spesialisasi'])
+            $dokters = Dokter::with(['user', 'spesialisasi', 'jadwalDokters'])
                 ->where('id_spesialisasi', $id_spesialisasi)
                 ->get();
         }
 
-        $data = $dokters->map(fn($d) => [
-            'id'         => $d->id,
-            'nama'       => $d->user->nama ?? ($d->user->name ?? 'Dokter Tanpa Nama'),
-            'base_price' => $d->spesialisasi->base_price ?? 75000,
-        ]);
+        $data = $dokters->map(function($d) {
+            $hariAktif = $d->jadwalDokters->where('is_aktif', 1)->pluck('hari')->toArray();
+            $hariAktifStr = !empty($hariAktif) ? implode(', ', $hariAktif) : 'Tidak ada jadwal aktif';
+
+            return [
+                'id'            => $d->id,
+                'nama'          => $d->user->nama ?? ($d->user->name ?? 'Dokter Tanpa Nama'),
+                'base_price'    => $d->spesialisasi->base_price ?? 75000,
+                'spesialisasi'  => $d->spesialisasi->nama ?? 'Spesialis Umum',
+                'foto_profil'   => $d->user->foto_profil ? asset('storage/' . $d->user->foto_profil) : 'https://placehold.co/150x150/059669/ffffff?text=U',
+                'no_hp'         => $d->user->no_hp ?? '-',
+                'jenis_kelamin' => $d->user->jenis_kelamin == 'L' ? 'Laki-laki' : ($d->user->jenis_kelamin == 'P' ? 'Perempuan' : '-'),
+                'hari_aktif'    => $hariAktifStr,
+            ];
+        });
 
         return response()->json($data);
     }
@@ -166,7 +176,7 @@ class PasienController extends Controller
     public function getJamDokter(Request $request)
     {
         $id_dokter = $request->id_dokter;
-        $tanggal = $request->tanggal;
+        $tanggal   = $request->tanggal;
 
         if (!$id_dokter || !$tanggal) {
             return response()->json(['status' => 'empty', 'data' => []]);
@@ -187,33 +197,149 @@ class PasienController extends Controller
 
         // 2. Ambil jadwal dokter yang aktif di hari tersebut
         $jadwal = JadwalDokter::where('id_dokter', $id_dokter)
-                              ->where('hari', $hariIndo)
-                              ->where('is_aktif', true)
-                              ->first();
+                            ->where('hari', $hariIndo)
+                            ->where('is_aktif', true)
+                            ->first();
 
         if (!$jadwal) {
             return response()->json(['status' => 'not_available', 'data' => []]);
         }
 
-        // 3. Generate slot jam berdasarkan jam_mulai sampai jam_selesai (integer)
-        $listJam = [];
-        for ($jam = $jadwal->jam_mulai; $jam < $jadwal->jam_selesai; $jam++) {
-            
-            // Cek jika jam ini masuk dalam range jam istirahat dokter
-            if ($jadwal->override_istirahat_mulai && $jadwal->override_istirahat_selesai) {
-                if ($jam >= $jadwal->override_istirahat_mulai && $jam < $jadwal->override_istirahat_selesai) {
-                    continue; // Lewati jam istirahat
-                }
-            }
-            
-            // Format jam agar mudah dibaca di frontend, value tetap integer karena storeJadwal butuh integer
-            $listJam[] = [
-                'value' => $jam,
-                'label' => sprintf('%02d:00 WIB', $jam)
-            ];
+        // Validasi jadwal sistem klinik
+        $jadwalSistemKhusus  = JadwalSistem::where('tgl_khusus', $tanggal)->first();
+        $jadwalSistemReguler = JadwalSistem::where('hari', $hariIndo)->first();
+        $jadwalKlinik        = $jadwalSistemKhusus ?? $jadwalSistemReguler;
+
+        if ($jadwalKlinik && $jadwalKlinik->is_libur) {
+            return response()->json(['status' => 'not_available', 'data' => []]);
         }
 
+        // ── NEWs: Ambil jam yang sudah terisi untuk dokter + tanggal ini ──
+        // Status 'dibatalkan' tidak dihitung sebagai terisi
+        $jamTerisi = Jadwal::where('id_dokter', $id_dokter)
+            ->where('tanggal', $tanggal)
+            ->whereNotIn('status', ['dibatalkan'])
+            ->pluck('jam')
+            ->toArray();
+        // ──────────────────────────────────────────────────────────────────
+
+        // 3. Generate slot jam berdasarkan jam_mulai sampai jam_selesai
+        $listJam = [];
+        for ($jam = $jadwal->jam_mulai; $jam < $jadwal->jam_selesai; $jam++) {
+
+            // Lewati jam istirahat dokter
+            if ($jadwal->override_istirahat_mulai && $jadwal->override_istirahat_selesai) {
+                if ($jam >= $jadwal->override_istirahat_mulai && $jam < $jadwal->override_istirahat_selesai) {
+                    continue;
+                }
+            }
+
+            // Lewati jam di luar operasional atau jam istirahat klinik
+            if ($jadwalKlinik) {
+                if ($jadwalKlinik->jam_buka && $jam < $jadwalKlinik->jam_buka) continue;
+                if ($jadwalKlinik->jam_tutup && $jam >= $jadwalKlinik->jam_tutup) continue;
+
+                if ($jadwalKlinik->jam_istirahat_mulai && $jadwalKlinik->jam_istirahat_selesai) {
+                    if ($jam >= $jadwalKlinik->jam_istirahat_mulai && $jam < $jadwalKlinik->jam_istirahat_selesai) {
+                        continue;
+                    }
+                }
+            }
+
+            // ── NEW: Tandai slot yang sudah terisi ──
+            $sudahTerisi = in_array($jam, $jamTerisi);
+
+            $listJam[] = [
+                'value'        => $jam,
+                'label'        => sprintf('%02d:00 WIB', $jam),
+                'sudah_terisi' => $sudahTerisi,   // true = sudah ada janji di jam ini
+            ];
+            // ────────────────────────────────────────
+        }
+
+        // ── NEW: Cek apakah semua slot sudah terisi ──
+        $semuaTerisi = !empty($listJam) && collect($listJam)->every(fn($s) => $s['sudah_terisi']);
+        if ($semuaTerisi) {
+            return response()->json(['status' => 'full', 'data' => [], 'message' => 'Jadwal hari ini sudah penuh']);
+        }
+        // ─────────────────────────────────────────────
+
         return response()->json(['status' => 'success', 'data' => $listJam]);
+    }
+
+    // =======================================================
+    // API — ambil jadwal tersedia flatpickr (disabled dates & allowed days) (JSON)
+    // =======================================================
+    public function getJadwalTersedia($id_dokter)
+    {
+        // 1. Ambil hari aktif dokter (0-6 di Javascript, 0=Minggu, 1=Senin, dst)
+        $hariAktifMap = [
+            'Minggu' => 0,
+            'Senin' => 1,
+            'Selasa' => 2,
+            'Rabu' => 3,
+            'Kamis' => 4,
+            'Jumat' => 5,
+            'Sabtu' => 6
+        ];
+        
+        $jadwalDokter = JadwalDokter::where('id_dokter', $id_dokter)
+            ->where('is_aktif', 1)
+            ->pluck('hari')
+            ->toArray();
+            
+        $allowedDays = array_map(function($h) use ($hariAktifMap) {
+            return $hariAktifMap[$h] ?? -1;
+        }, $jadwalDokter);
+
+        // 2. Ambil tanggal cuti dokter (status disetujui)
+        $cutiDokter = \App\Models\CutiDokter::where('id_dokter', $id_dokter)
+            ->where('status', 'disetujui')
+            ->where('sampai_tanggal', '>=', date('Y-m-d')) // Ambil cuti dari hari ini ke depan
+            ->get();
+            
+        $disabledDates = [];
+        
+        foreach ($cutiDokter as $cuti) {
+            $start = Carbon::parse($cuti->dari_tanggal);
+            $end = Carbon::parse($cuti->sampai_tanggal);
+            while ($start->lte($end)) {
+                $disabledDates[] = $start->format('Y-m-d');
+                $start->addDay();
+            }
+        }
+
+        // 3. Ambil tanggal libur klinik dari jadwal_sistem (khusus atau hari biasa)
+        // Libur khusus (berdasarkan tgl_khusus)
+        $liburKhusus = JadwalSistem::where('is_libur', 1)
+            ->whereNotNull('tgl_khusus')
+            ->where('tgl_khusus', '>=', date('Y-m-d'))
+            ->pluck('tgl_khusus')
+            ->toArray();
+            
+        foreach ($liburKhusus as $tgl) {
+            $disabledDates[] = Carbon::parse($tgl)->format('Y-m-d');
+        }
+
+        // Libur mingguan (contoh Minggu selalu libur, tapi ini akan dihandle dengan allowedDays jika dokter tidak aktif di hari Minggu)
+        // Kita bisa ambil is_libur untuk hari biasa
+        $liburReguler = JadwalSistem::where('is_libur', 1)
+            ->whereNull('tgl_khusus')
+            ->pluck('hari')
+            ->toArray();
+            
+        $disabledDays = array_map(function($h) use ($hariAktifMap) {
+            return $hariAktifMap[$h] ?? -1;
+        }, $liburReguler);
+
+        // Hapus duplikat disabled dates
+        $disabledDates = array_values(array_unique($disabledDates));
+
+        return response()->json([
+            'allowedDays' => $allowedDays,
+            'disabledDates' => $disabledDates,
+            'disabledDays' => $disabledDays // Jika klinik ada hari libur reguler, hari itu tak bisa dipilih
+        ]);
     }
 
     // =======================================================
@@ -377,11 +503,10 @@ class PasienController extends Controller
             ]);
         });
 
-        // Jika memilih QRIS → langsung ke halaman bayar
+        // Jika memilih QRIS → langsung ke riwayat dengan pesan qris
         if ($request->metode === 'qris' && $jadwal) {
-            $pembayaran = Pembayaran::where('id_jadwal', $jadwal->id)->first();
-            return redirect()->route('pasien.pembayaran.qris', $pembayaran->id)
-                ->with('success', 'Jadwal dibuat! Silakan selesaikan pembayaran QRIS.');
+            return redirect()->route('pasien.riwayat')
+                ->with('success', 'Jadwal berhasil dibuat! Silakan selesaikan pembayaran QRIS di menu riwayat jadwal.');
         }
 
         return redirect()->route('pasien.riwayat')

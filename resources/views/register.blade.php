@@ -10,9 +10,11 @@
     <style>
         body { font-family: 'Outfit', sans-serif; }
     </style>
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 </head>
 <body class="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-emerald-100 flex items-center justify-center p-6 py-12 bg-fixed">
-    <div class="w-full max-w-[650px] rounded-[40px] bg-white/90 backdrop-blur-xl p-10 px-12 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white relative">
+    <div class="w-full max-w-[600px] rounded-[40px] bg-white/90 backdrop-blur-xl p-10 px-12 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white relative">
         <!-- Back Button -->
         <a href="/" class="absolute top-8 left-8 flex items-center justify-center w-10 h-10 rounded-full bg-slate-50 text-slate-500 hover:bg-emerald-50 hover:text-emerald-600 transition-all border border-slate-200 hover:border-emerald-200 shadow-sm group" title="Kembali ke Beranda">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="group-hover:-translate-x-0.5 transition-transform"><path d="m15 18-6-6 6-6"/></svg>
@@ -39,106 +41,85 @@
                 </div>
             @endif
             
-            {{-- Nama & Email --}}
-            <div class="grid grid-cols-2 gap-5">
-                <div class="col-span-2 md:col-span-1">
-                    <label class="mb-1.5 block text-[15px] font-semibold text-slate-700">Nama Lengkap</label>
-                    <input type="text" name="nama" id="nama" value="{{ old('nama') }}" required placeholder="Masukkan nama lengkap"
-                        class="w-full rounded-[20px] border border-slate-200 bg-slate-50 px-5 py-3.5 text-[15px] text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:bg-white transition-all shadow-sm focus:shadow-md focus:shadow-emerald-500/30" />
-                </div>
-
-                <div class="col-span-2 md:col-span-1">
-                    <label class="mb-1.5 block text-[15px] font-semibold text-slate-700">Email</label>
-                    <input type="email" name="email" id="email" value="{{ old('email') }}" required placeholder="Masukkan alamat email"
-                        class="w-full rounded-[20px] border border-slate-200 bg-slate-50 px-5 py-3.5 text-[15px] text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:bg-white transition-all shadow-sm focus:shadow-md focus:shadow-emerald-500/30" />
-                </div>
+            {{-- Nama --}}
+            <div class="col-span-2 md:col-span-1">
+                <label class="mb-1.5 block text-[15px] font-semibold text-slate-700">Nama Lengkap</label>
+                <input type="text" name="nama" id="nama" value="{{ old('nama') }}" maxlength="100" pattern="[A-Za-zÀ-ÿ\s]+" title="Nama hanya boleh berisi huruf, spasi, titik, apostrof, dan tanda hubung" required placeholder="Masukkan nama lengkap"
+                    class="w-full rounded-[20px] border border-slate-200 bg-slate-50 px-5 py-3.5 text-[15px] text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:bg-white transition-all shadow-sm focus:shadow-md focus:shadow-emerald-500/30" />
             </div>
 
-            {{-- Tanggal Lahir (full width) --}}
+            {{-- Email --}}
+            <div class="col-span-2 md:col-span-1">
+                <label class="mb-1.5 block text-[15px] font-semibold text-slate-700">Email</label>
+                <input type="email" name="email" id="email" value="{{ old('email') }}" maxlength="100" required placeholder="Masukkan alamat email"
+                    class="w-full rounded-[20px] border border-slate-200 bg-slate-50 px-5 py-3.5 text-[15px] text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:bg-white transition-all shadow-sm focus:shadow-md focus:shadow-emerald-500/30" />
+            </div>
+
+
+            {{-- Tanggal Lahir --}}
             <div>
                 <label class="mb-1.5 block text-[15px] font-semibold text-slate-700">Tanggal Lahir</label>
-                <input type="date" name="tgl_lahir" id="tgl_lahir" value="{{ old('tgl_lahir') }}" required
-                    class="w-full rounded-[20px] border border-slate-200 bg-slate-50 px-5 py-3.5 text-[15px] text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:bg-white transition-all shadow-sm focus:shadow-md focus:shadow-emerald-500/30 cursor-pointer" style="color-scheme: light;" />
+                <input type="text" name="tgl_lahir" id="tgl_lahir" value="{{ old('tgl_lahir') }}" required placeholder="Pilih tanggal lahir"
+                    class="w-full rounded-[20px] border border-slate-200 bg-slate-50 px-5 py-3.5 text-[15px] text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:bg-white transition-all shadow-sm focus:shadow-md focus:shadow-emerald-500/30 cursor-pointer" />
             </div>
 
             {{-- Jenis Kelamin & No HP --}}
             <div class="grid grid-cols-2 gap-5">
                 <div class="col-span-2 md:col-span-1">
                     <label class="mb-1.5 block text-[15px] font-semibold text-slate-700">Jenis Kelamin</label>
-                    <div class="flex gap-6 items-center px-4 py-[11px] bg-slate-50 rounded-[20px] border border-slate-200 shadow-sm">
+                    <div class="flex gap-6 items-center h-[54px] px-4 py-[11px] bg-slate-50 rounded-[20px] border border-slate-200 shadow-sm">
                         <label class="flex items-center gap-2 cursor-pointer relative">
                             <input type="radio" name="jenis_kelamin" value="L" class="peer sr-only" required {{ old('jenis_kelamin') == 'L' ? 'checked' : '' }}>
                             <div class="w-5 h-5 rounded-full border-2 border-slate-300 peer-checked:border-emerald-500 peer-checked:bg-emerald-500 bg-white transition-colors flex items-center justify-center">
                                 <div class="w-2 h-2 rounded-full bg-white opacity-0 peer-checked:opacity-100 transition-opacity"></div>
                             </div>
-                            <span class="text-[14px] font-medium text-slate-700">Laki-Laki</span>
+                            <span class="text-[13px] font-medium text-slate-700">Laki-Laki</span>
                         </label>
                         <label class="flex items-center gap-2 cursor-pointer relative">
                             <input type="radio" name="jenis_kelamin" value="P" class="peer sr-only" {{ old('jenis_kelamin') == 'P' ? 'checked' : '' }}>
                             <div class="w-5 h-5 rounded-full border-2 border-slate-300 peer-checked:border-emerald-500 peer-checked:bg-emerald-500 bg-white transition-colors flex items-center justify-center">
                                 <div class="w-2 h-2 rounded-full bg-white opacity-0 peer-checked:opacity-100 transition-opacity"></div>
                             </div>
-                            <span class="text-[14px] font-medium text-slate-600">Perempuan</span>
+                            <span class="text-[13px] font-medium text-slate-600">Perempuan</span>
                         </label>
                     </div>
                 </div>
 
                 <div class="col-span-2 md:col-span-1">
                     <label class="mb-1.5 block text-[15px] font-semibold text-slate-700">Nomor Kontak</label>
-                    <input type="text" name="no_hp" id="no_hp" value="{{ old('no_hp') }}" required placeholder="Masukkan nomor telepon"
+                    <input type="text" name="no_hp" id="no_hp" value="{{ old('no_hp') }}" maxlength="15" inputmode="numeric" pattern="[0-9]+" title="Nomor telepon hanya boleh berisi angka" required placeholder="Masukkan nomor telepon"
                         class="w-full rounded-[20px] border border-slate-200 bg-slate-50 px-5 py-3.5 text-[15px] text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:bg-white transition-all shadow-sm focus:shadow-md focus:shadow-emerald-500/30" />
                 </div>
             </div>
 
-            {{-- Golongan Darah (field baru dari SQL revisi) --}}
-            <div>
-                <label class="mb-1.5 block text-[15px] font-semibold text-slate-700">Golongan Darah <span class="text-slate-400 font-normal text-[13px]">(opsional untuk data medis)</span></label>
-                <div class="flex gap-3 flex-wrap">
-                    @foreach(['A','B','AB','O'] as $gol)
-                    <label class="flex-1 min-w-[60px] cursor-pointer">
-                        <input type="radio" name="gol_darah" value="{{ $gol }}" class="peer sr-only" {{ old('gol_darah') == $gol ? 'checked' : '' }}>
-                        <div class="text-center py-3 rounded-[16px] border-2 border-slate-200 bg-slate-50 text-[15px] font-bold text-slate-600
-                                    peer-checked:border-emerald-500 peer-checked:bg-emerald-50 peer-checked:text-emerald-700
-                                    hover:border-emerald-300 transition-all">
-                            {{ $gol }}
-                        </div>
-                    </label>
-                    @endforeach
-                    <label class="flex-1 min-w-[60px] cursor-pointer">
-                        <input type="radio" name="gol_darah" value="" class="peer sr-only" {{ old('gol_darah') === null || old('gol_darah') === '' ? 'checked' : '' }}>
-                        <div class="text-center py-3 rounded-[16px] border-2 border-slate-200 bg-slate-50 text-[14px] font-medium text-slate-400
-                                    peer-checked:border-slate-400 peer-checked:bg-slate-100 peer-checked:text-slate-600
-                                    hover:border-slate-300 transition-all">
-                            Tidak tahu
-                        </div>
-                    </label>
-                </div>
-            </div>
-
             {{-- Password --}}
-            <div class="grid grid-cols-2 gap-5">
-                <div class="col-span-2 md:col-span-1">
-                    <label class="mb-1.5 block text-[15px] font-semibold text-slate-700">Kata Sandi</label>
-                    <div class="relative">
-                        <input type="password" name="password" id="password" required placeholder="Buat kata sandi Anda"
-                            class="w-full rounded-[20px] border border-slate-200 bg-slate-50 px-5 py-3.5 text-[15px] text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:bg-white transition-all shadow-sm focus:shadow-md focus:shadow-emerald-500/30" />
-                        <button type="button" class="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-emerald-600 transition-colors" onclick="const p=this.previousElementSibling; p.type=p.type==='password'?'text':'password';">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
-                        </button>
-                    </div>
+            
+            <div class="col-span-2 md:col-span-1">
+                <label class="mb-1.5 block text-[15px] font-semibold text-slate-700">Kata Sandi</label>
+                <div class="relative">
+                    <input type="password" name="password" id="password" required placeholder="Buat kata sandi Anda" maxlength="100" oncopy="return false" oncut="return false" onpaste="return false"
+                        class="w-full rounded-[20px] border border-slate-200 bg-slate-50 px-5 py-3.5 text-[15px] text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:bg-white transition-all shadow-sm focus:shadow-md focus:shadow-emerald-500/30" />
+                    <button type="button" class="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-emerald-600 transition-colors" onclick="const p=this.previousElementSibling; p.type=p.type==='password'?'text':'password';">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                    </button>
                 </div>
+                <p class="mt-1 text-xs text-slate-600">
+                    Kata sandi harus berisi minimal 6 karakter.
+                </p>
+            </div>
+            
 
-                <div class="col-span-2 md:col-span-1">
-                    <label class="mb-1.5 block text-[15px] font-semibold text-slate-700">Konfirmasi Sandi</label>
-                    <div class="relative">
-                        <input type="password" name="password_confirmation" id="password_confirmation" required placeholder="Masukkan ulang kata sandi"
-                            class="w-full rounded-[20px] border border-slate-200 bg-slate-50 px-5 py-3.5 text-[15px] text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:bg-white transition-all shadow-sm focus:shadow-md focus:shadow-emerald-500/30" />
-                        <button type="button" class="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-emerald-600 transition-colors" onclick="const p=this.previousElementSibling; p.type=p.type==='password'?'text':'password';">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
-                        </button>
-                    </div>
+            <div class="col-span-2 md:col-span-1">
+                <label class="mb-1.5 block text-[15px] font-semibold text-slate-700">Konfirmasi Sandi</label>
+                <div class="relative">
+                    <input type="password" name="password_confirmation" id="password_confirmation" required placeholder="Masukkan ulang kata sandi" maxlength="100" oncopy="return false" oncut="return false" onpaste="return false"
+                        class="w-full rounded-[20px] border border-slate-200 bg-slate-50 px-5 py-3.5 text-[15px] text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:bg-white transition-all shadow-sm focus:shadow-md focus:shadow-emerald-500/30" />
+                    <button type="button" class="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-emerald-600 transition-colors" onclick="const p=this.previousElementSibling; p.type=p.type==='password'?'text':'password';">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                    </button>
                 </div>
             </div>
+            
 
             <div class="pt-6">
                 <button type="submit" id="btn-daftar"
@@ -153,5 +134,19 @@
             </div>
         </form>
     </div>
+
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            flatpickr("#tgl_lahir", {
+                dateFormat: "Y-m-d",
+                altInput: true,
+                altFormat: "d/m/Y",
+                maxDate: "today",
+                disableMobile: "true"
+            });
+        });
+    </script>
 </body>
 </html>

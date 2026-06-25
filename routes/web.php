@@ -135,8 +135,9 @@ Route::middleware('auth')->group(function () {
        Route::get('/riwayat-rekam-medis/detail/{id}', [PasienController::class, 'detailRekamMedis'])->name('rekam-medis.detail');
        Route::get('/riwayat-rekam-medis/pdf/{id}', [PasienController::class, 'exportPdf'])->name('rekam-medis.pdf');
 
-       // Letakkan di dalam grup middleware pasien Anda
+        // Letakkan di dalam grup middleware pasien Anda
         Route::get('/get-jam-dokter', [PasienController::class, 'getJamDokter'])->name('pasien.getJamDokter');
+        Route::get('/get-jadwal-tersedia/{id_dokter}', [PasienController::class, 'getJadwalTersedia'])->name('get-jadwal-tersedia');
     });
 
     

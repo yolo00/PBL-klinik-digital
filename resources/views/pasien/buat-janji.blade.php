@@ -1,7 +1,8 @@
 @extends('pasien.layouts.app')
 @section('title', 'Buat Janji Temu')
 @section('content')
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    
     <section class="mb-10">
         <h1 class="text-4xl font-black text-gray-900 mb-2 tracking-tight">Buat Janji Temu</h1>
         <p class="text-gray-500 text-lg">Silakan pilih dokter, tanggal, waktu, dan metode pembayaran.</p>
@@ -37,6 +38,7 @@
         <div class="space-y-4">
             <label class="block text-lg font-bold text-gray-800">👤 Pilih Dokter</label>
             <select name="id_dokter" id="id_dokter" class="w-full p-5 bg-gray-50 border border-gray-200 rounded-2xl outline-none" required>
+                <option value="">Pilih dokter...</option>
                 @foreach($dokters as $dokter)
                     <option value="{{ $dokter->id }}"
                             data-price="{{ $dokter->spesialisasi->base_price > 0 ? $dokter->spesialisasi->base_price : 75000 }}">
@@ -44,9 +46,37 @@
                     </option>
                 @endforeach
             </select>
+            
+            {{-- BIODATA DOKTER --}}
+            <div id="biodata-dokter-container" class="hidden mt-4 p-5 bg-emerald-50/50 border border-emerald-100 rounded-2xl">
+                <div class="grid grid-cols-[2fr_8fr] gap-6 items-center">
+                    <div>
+                        <img id="biodata-foto" src="" alt="Foto Dokter" class="w-full aspect-square object-cover rounded-2xl shadow-sm border border-emerald-200">
+                    </div>
+                    <div class="space-y-2">
+                        <h4 id="biodata-nama" class="text-xl font-bold text-slate-800">Nama Dokter</h4>
+                        <p id="biodata-spesialisasi" class="inline-block px-3 py-1 bg-emerald-100 text-emerald-700 text-xs font-bold rounded-full uppercase tracking-wider">Spesialisasi</p>
+                        
+                        <div class="grid grid-cols-2 gap-4 mt-3 pt-3 border-t border-emerald-200/50">
+                            <div>
+                                <span class="block text-xs font-semibold text-slate-400">Jenis Kelamin</span>
+                                <span id="biodata-jk" class="text-sm font-medium text-slate-700">-</span>
+                            </div>
+                            <div>
+                                <span class="block text-xs font-semibold text-slate-400">No. Telepon</span>
+                                <span id="biodata-hp" class="text-sm font-medium text-slate-700">-</span>
+                            </div>
+                            <div class="col-span-2">
+                                <span class="block text-xs font-semibold text-slate-400">Hari Praktik Aktif</span>
+                                <span id="biodata-hari" class="text-sm font-medium text-slate-700">-</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        {{-- BAGIAN BARU: Informasi Riwayat Kesehatan Pasien (Sinkronisasi Profil) --}}
+        {{-- Informasi Riwayat Kesehatan Pasien (Sinkronisasi Profil) --}}
         <div class="space-y-4 p-6 bg-gray-50 rounded-2xl border border-gray-200">
             <label class="block text-lg font-bold text-gray-800">📋 Informasi Medis Pasien</label>
             
@@ -107,13 +137,12 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
             <div class="space-y-4">
                 <label class="block text-lg font-bold text-gray-800">📅 Pilih Tanggal</label>
-                <input type="date" name="tanggal" id="tanggal" required
-                       min="{{ date('Y-m-d') }}"
-                       class="w-full p-5 bg-gray-50 border border-gray-200 rounded-2xl outline-none">
+                <input type="text" name="tanggal" id="tanggal" required placeholder="Pilih dokter terlebih dahulu"
+                       class="w-full p-5 bg-white border border-gray-200 rounded-2xl outline-none transition-all duration-200 cursor-pointer hover:border-emerald-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 disabled:bg-gray-50 disabled:cursor-not-allowed disabled:hover:border-gray-200 disabled:focus:ring-0" disabled>
             </div>
             <div class="space-y-4">
                 <label class="block text-lg font-bold text-gray-800">⏰ Pilih Waktu</label>
-                <select name="jam" id="jam" class="w-full p-5 bg-gray-50 border border-gray-200 rounded-2xl outline-none" required>
+                <select name="jam" id="jam" class="w-full p-5 bg-white border border-gray-200 rounded-2xl outline-none transition-all duration-200 cursor-pointer hover:border-emerald-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 disabled:bg-gray-50 disabled:cursor-not-allowed disabled:hover:border-gray-200 disabled:focus:ring-0" required>
                     <option value="">Pilih dokter dan tanggal terlebih dahulu</option>
                 </select>
             </div>
@@ -170,7 +199,62 @@
     </form>
 
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
+    let doktersDataMap = {};
+    let fpTanggal = null;
+
+    // ─── INIT FLATPICKR ──────────────────────────────────────
+    function initFlatpickr(allowedDays = [], disabledDates = [], disabledDays = []) {
+        const inputTanggal = document.getElementById('tanggal');
+        inputTanggal.disabled = false;
+        inputTanggal.placeholder = "Pilih tanggal konsultasi";
+
+        if (fpTanggal) {
+            fpTanggal.destroy();
+        }
+        
+        fpTanggal = flatpickr("#tanggal", {
+            dateFormat: "Y-m-d",
+            altInput: true,
+            altFormat: "d-m-Y",
+            minDate: "today",
+            maxDate: new Date().fp_incr(21),
+            disableMobile: "true",
+            disable: [
+                function(date) {
+                    const day = date.getDay();
+                    if (!allowedDays.includes(day)) return true;
+                    if (disabledDays.includes(day)) return true;
+                    return false;
+                },
+                ...disabledDates
+            ],
+            onChange: function(selectedDates, dateStr, instance) {
+                fetchJamTersedia();
+            }
+        });
+    }
+
+    // ─── AMBIL JADWAL TERSEDIA (FLATPICKR) ────────────────────
+    function fetchJadwalTersedia(dokterId) {
+        if (!dokterId) {
+            if(fpTanggal) fpTanggal.destroy();
+            document.getElementById('tanggal').disabled = true;
+            document.getElementById('tanggal').value = '';
+            document.getElementById('tanggal').placeholder = "Pilih dokter terlebih dahulu";
+            return;
+        }
+
+        fetch(`/pasien/get-jadwal-tersedia/${dokterId}`)
+            .then(r => r.json())
+            .then(res => {
+                initFlatpickr(res.allowedDays, res.disabledDates, res.disabledDays);
+            })
+            .catch(err => console.error("Gagal mengambil jadwal tersedia:", err));
+    }
+
+
     // ─── Data harga awal dari dokter options ─────────────────
     function getSelectedPrice() {
         const opt = document.getElementById('id_dokter').selectedOptions[0];
@@ -187,7 +271,7 @@
         document.getElementById('harga-display').textContent = formatRupiah(harga);
         document.getElementById('metode-info').textContent  =
             metode === 'qris'
-                ? 'Anda akan diarahkan ke halaman QR setelah daftar'
+                ? 'Anda akan diarahkan ke riwayat jadwal untuk pembayaran QRIS'
                 : 'Bayar di klinik saat tiba';
     }
 
@@ -199,41 +283,88 @@
 
         if (!dokterId || !tanggalVal) {
             jamSelect.innerHTML = '<option value="">Pilih dokter dan tanggal terlebih dahulu</option>';
+            jamSelect.disabled = true;
             return;
         }
 
+        jamSelect.disabled = false;
         jamSelect.innerHTML = '<option value="">Memuat jam tersedia...</option>';
 
         fetch(`/pasien/get-jam-dokter?id_dokter=${dokterId}&tanggal=${tanggalVal}`)
-            .then(r => r.json())
-            .then(res => {
-                jamSelect.innerHTML = '';
-                if (res.status === 'success' && res.data.length > 0) {
-                    res.data.forEach(jamObj => {
+        .then(r => r.json())
+        .then(res => {
+            jamSelect.innerHTML = '';
+
+            if (res.status === 'full') {
+                // Semua slot terisi
+                jamSelect.innerHTML = '<option value="">Jadwal hari ini sudah penuh</option>';
+                jamSelect.disabled = true;
+
+            } else if (res.status === 'success' && res.data.length > 0) {
+                // Filter hanya slot yang belum terisi
+                const slotTersedia = res.data.filter(j => !j.sudah_terisi);
+
+                if (slotTersedia.length === 0) {
+                    // Semua slot ternyata terisi (fallback, seharusnya sudah caught di backend)
+                    jamSelect.innerHTML = '<option value="">Jadwal hari ini sudah penuh</option>';
+                    jamSelect.disabled = true;
+                } else {
+                    jamSelect.disabled = false;
+                    jamSelect.innerHTML = '<option value="">Pilih jam konsultasi...</option>';
+                    slotTersedia.forEach(jamObj => {
                         const opt = document.createElement('option');
                         opt.value = jamObj.value;
                         opt.textContent = jamObj.label;
                         jamSelect.appendChild(opt);
                     });
-                } else if (res.status === 'not_available') {
-                    jamSelect.innerHTML = '<option value="">Dokter tidak praktik di hari ini</option>';
-                } else {
-                    jamSelect.innerHTML = '<option value="">Tidak ada slot jam tersedia</option>';
                 }
-            })
-            .catch(() => {
-                jamSelect.innerHTML = '<option value="">Gagal mengambil data jadwal</option>';
-            });
+
+            } else if (res.status === 'not_available') {
+                jamSelect.innerHTML = '<option value="">Dokter tidak praktik di hari ini</option>';
+                jamSelect.disabled = true;
+
+            } else {
+                jamSelect.innerHTML = '<option value="">Tidak ada slot jam tersedia</option>';
+                jamSelect.disabled = true;
+            }
+        })
+        .catch(() => {
+            jamSelect.innerHTML = '<option value="">Gagal mengambil data jadwal</option>';
+            jamSelect.disabled = true;
+        });
+    }
+
+    function updateBiodataUI(dokterId) {
+        const container = document.getElementById('biodata-dokter-container');
+        if (!dokterId || !doktersDataMap[dokterId]) {
+            container.classList.add('hidden');
+            return;
+        }
+        
+        const d = doktersDataMap[dokterId];
+        document.getElementById('biodata-nama').textContent = d.nama;
+        document.getElementById('biodata-spesialisasi').textContent = d.spesialisasi;
+        document.getElementById('biodata-jk').textContent = d.jenis_kelamin;
+        document.getElementById('biodata-hp').textContent = d.no_hp;
+        document.getElementById('biodata-hari').textContent = d.hari_aktif;
+        
+        // Handle photo error fallback
+        const img = document.getElementById('biodata-foto');
+        img.src = d.foto_profil;
+        img.onerror = function() {
+            this.src = 'https://placehold.co/150x150/059669/ffffff?text=U';
+        };
+
+        container.classList.remove('hidden');
     }
 
     // ─── Update UI saat dokter berganti ─────────────────────
     document.getElementById('id_dokter').addEventListener('change', function() {
         updateHargaDisplay();
+        updateBiodataUI(this.value);
+        fetchJadwalTersedia(this.value);
         fetchJamTersedia();
     });
-
-    // ─── Update UI saat tanggal berganti ────────────────────
-    document.getElementById('tanggal').addEventListener('change', fetchJamTersedia);
 
     // ─── Pilih metode ────────────────────────────────────────
     const metodeOptions = document.querySelectorAll('.metode-option');
@@ -270,39 +401,66 @@
     document.getElementById('label-cash').classList.remove('border-slate-200');
     document.getElementById('label-cash').querySelector('.check-dot').classList.remove('hidden');
 
-    // ─── Filter dokter by spesialisasi (AJAX) ────────────────
-    document.getElementById('id_spesialisasi').addEventListener('change', function () {
-        const spesialisasiId = this.value;
-        const dokterSelect   = document.getElementById('id_dokter');
-        dokterSelect.innerHTML = '<option value="">Memuat daftar dokter...</option>';
-
+    // ─── Load daftar dokter pertama kali untuk map data biodata
+    function loadDokterData(spesialisasiId = 'all') {
         fetch(`/pasien/get-dokter/${spesialisasiId}`)
             .then(r => r.json())
             .then(data => {
-                dokterSelect.innerHTML = '';
+                const dokterSelect = document.getElementById('id_dokter');
+                const currentValue = dokterSelect.value;
+                
+                dokterSelect.innerHTML = '<option value="">Pilih dokter...</option>';
+                doktersDataMap = {};
+
                 if (!data.length) {
-                    dokterSelect.innerHTML = '<option value="">Tidak ada dokter</option>';
+                    updateBiodataUI(null);
+                    fetchJadwalTersedia(null);
                     fetchJamTersedia();
                     return;
                 }
+                
                 data.forEach(d => {
+                    doktersDataMap[d.id] = d;
                     const opt       = document.createElement('option');
                     opt.value       = d.id;
                     opt.dataset.price = d.base_price || 75000;
                     opt.textContent = d.nama;
                     dokterSelect.appendChild(opt);
                 });
+
+                // Restore selected value if still valid
+                if (currentValue && doktersDataMap[currentValue]) {
+                    dokterSelect.value = currentValue;
+                    updateBiodataUI(currentValue);
+                    fetchJadwalTersedia(currentValue);
+                } else {
+                    updateBiodataUI(null);
+                    fetchJadwalTersedia(null);
+                }
+                
                 updateHargaDisplay();
                 fetchJamTersedia();
             })
             .catch(() => {
-                dokterSelect.innerHTML = '<option value="">Gagal mengambil data</option>';
+                document.getElementById('id_dokter').innerHTML = '<option value="">Gagal mengambil data</option>';
             });
+    }
+
+    // ─── Filter dokter by spesialisasi (AJAX) ────────────────
+    document.getElementById('id_spesialisasi').addEventListener('change', function () {
+        loadDokterData(this.value);
     });
 
     // ─── Init awal data saat halaman dimuat ──────────────────
-    updateHargaDisplay();
-    fetchJamTersedia();
+    loadDokterData('all');
+    document.getElementById('jam').disabled = true; // disable jam di awal
+
+    // Tutup flatpickr saat discroll agar popup tidak melayang terpisah
+    window.addEventListener('scroll', function() {
+        if (fpTanggal && fpTanggal.isOpen) {
+            fpTanggal.close();
+        }
+    }, { passive: true });
 </script>
 @endpush
 @endsection

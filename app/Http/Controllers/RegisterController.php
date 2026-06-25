@@ -21,11 +21,10 @@ class RegisterController extends Controller
 
         $request->validate([
             'nama'          => 'required|string|max:100',
-            'email'         => 'required|email|unique:akun_user,email',
+            'email'         => 'required|email|unique:akun_user,email|max:100',
             'tgl_lahir'     => 'required|date',
             'jenis_kelamin' => 'required|in:L,P',
             'no_hp'         => 'required|string|max:15',
-            'gol_darah'     => 'nullable|in:A,B,AB,O',
             'password'      => 'required|min:6|confirmed',
         ], [
             'nama.required'          => 'Nama lengkap wajib diisi.',
@@ -49,12 +48,6 @@ class RegisterController extends Controller
                 'tgl_lahir'     => $request->tgl_lahir,
                 'role'          => 'P',
                 'created_at'    => now(),
-            ]);
-
-            // Insert ke pasien dengan field baru (gol_darah)
-            DB::table('pasien')->insert([
-                'id_user'   => $userId,
-                'gol_darah' => $request->gol_darah,
             ]);
         });
 
