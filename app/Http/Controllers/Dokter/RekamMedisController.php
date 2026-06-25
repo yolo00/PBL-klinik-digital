@@ -111,8 +111,11 @@ class RekamMedisController extends Controller
             abort(403, 'Anda tidak memiliki akses untuk mengekspor rekam medis ini.');
         }
 
+        // Catatan requirement: saat PDF diekspor, gunakan tanggal & jam ketika rekam medis diisi.
+        // Saat ini menggunakan timestamp rekam_medis.created_at.
         $pdf = Pdf::loadView('dokter.pdf.rekam-medis-pdf', compact('rekamMedis'))
                   ->setPaper('a4', 'portrait');
+
 
         $namaPasien = str_replace(' ', '_', $rekamMedis->jadwal->pasien->user->nama ?? 'pasien');
         $tanggal    = now()->format('Ymd');

@@ -24,10 +24,10 @@ class RekamMedis extends Model
         'id_jadwal',
         'keluhan',
         'diagnosa',
-        'tindakan',
         'catatan',
         'created_by',
         'updated_by',
+        'is_final',
     ];
 
     // ─── Relasi ───────────────────────────────────────────────

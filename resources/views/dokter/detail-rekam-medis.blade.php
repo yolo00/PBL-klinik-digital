@@ -11,7 +11,7 @@
             <h1 class="text-2xl font-bold text-slate-800">Rekam Medis #{{ $rekamMedis->id }}</h1>
             <p class="text-slate-400 text-sm mt-1">
                 <i class="fa-regular fa-clock mr-1"></i>
-                Dibuat: {{ $rekamMedis->created_at->format('d F Y, H:i') }} WIB
+                Diisi: {{ $rekamMedis->created_at->format('d F Y, H:i') }} WIB
             </p>
         </div>
         <div class="flex items-center gap-2">
@@ -88,13 +88,7 @@
         </div>
     </div>
 
-    {{-- Tindakan --}}
-    @if($rekamMedis->tindakan)
-    <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 mb-5">
-        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Tindakan Medis</p>
-        <p class="text-slate-700 leading-relaxed">{{ $rekamMedis->tindakan }}</p>
-    </div>
-    @endif
+
 
     {{-- Catatan --}}
     @if($rekamMedis->catatan)

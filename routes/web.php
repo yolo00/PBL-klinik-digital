@@ -90,12 +90,14 @@ Route::middleware('auth')->group(function () {
     Route::prefix('dokter')->middleware('role:D')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dokter.dashboard');
         Route::get('/profil', [ProfilController::class, 'index'])->name('dokter.profil');
-        Route::get('/pengaturan-jadwal', function () {
-            return view('dokter.pengaturan-jadwal');
-        })->name('dokter.pengaturan');
+        Route::get('/pengaturan-jadwal', [\App\Http\Controllers\Dokter\IzinDokterController::class, 'index'])->name('dokter.pengaturan');
+        Route::post('/pengaturan-jadwal', [\App\Http\Controllers\Dokter\IzinDokterController::class, 'store'])->name('dokter.pengaturan.store');
+
         Route::get('/jadwal', [JadwalController::class, 'index'])->name('dokter.jadwal');
         Route::get('/jadwal/{id}/buat-rekam', [DokterPasienController::class, 'buatRekam'])->name('dokter.jadwal.buat-rekam');
         Route::post('/jadwal/{id}/simpan-rekam', [DokterPasienController::class, 'storeRekamMedis'])->name('dokter.rekam-medis.store');
+        Route::post('/jadwal/{id}/konfirmasi-rekam-medis', [\App\Http\Controllers\Dokter\KonfirmasiRekamMedisController::class, 'konfirmasi'])->name('dokter.rekam-medis.konfirmasi');
+        Route::get('/jadwal/{id}/konfirmasi-rekam-medis-preview', [\App\Http\Controllers\Dokter\KonfirmasiRekamMedisController::class, 'preview'])->name('dokter.rekam-medis.konfirmasi-preview');
         Route::get('/pasien', [DokterPasienController::class, 'index'])->name('dokter.pasien');
         Route::get('/rekam-medis', [RekamMedisController::class, 'index'])->name('dokter.rekam-medis');
         Route::get('/rekam-medis/{id}', [RekamMedisController::class, 'show'])->name('dokter.rekam.show');

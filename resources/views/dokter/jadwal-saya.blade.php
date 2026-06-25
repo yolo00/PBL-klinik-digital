@@ -72,30 +72,53 @@
                         @endif
                     </td>
                     <td class="text-center">
+                        @php
+                            $isDateAllowed = false;
+                            $today = \Carbon\Carbon::today();
+
+                            if (!empty($jadwal->tanggal)) {
+                                $jadwalTanggal = \Carbon\Carbon::parse($jadwal->tanggal)->startOfDay();
+                                // Allowed: hari ini atau kemarin atau jadwal yang sudah lewat
+                                $isDateAllowed = $jadwalTanggal->isSameDay($today) || $jadwalTanggal->isSameDay($today->copy()->subDay()) || $jadwalTanggal->lt($today);
+                            }
+
+                            $showInfoNotAllowed = (!$isDateAllowed);
+                        @endphp
+
                         @if(in_array($jadwal->status, ['menunggu', 'dikonfirmasi']))
                             {{-- Belum ada rekam medis → buat baru --}}
                             @if(!$jadwal->rekamMedis)
-                            <a href="{{ route('dokter.jadwal.buat-rekam', $jadwal->id) }}"
-                               class="inline-flex items-center gap-1.5 px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-semibold hover:bg-blue-700 transition-all shadow-sm">
-                                <i class="fa-solid fa-pen-to-square text-[10px]"></i> Buat Rekam Medis
-                            </a>
+                                @if($isDateAllowed)
+                                    <a href="{{ route('dokter.jadwal.buat-rekam', $jadwal->id) }}"
+                                       class="inline-flex items-center gap-1.5 px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-semibold hover:bg-blue-700 transition-all shadow-sm">
+                                        <i class="fa-solid fa-pen-to-square text-[10px]"></i> Buat Rekam Medis
+                                    </a>
+                                @else
+                                    <span class="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-50 text-slate-300 rounded-lg text-xs border border-slate-100 cursor-not-allowed"
+                                          title="Rekam medis hanya bisa diisi pada hari ini, kemarin, atau jadwal yang sudah berlalu.">
+                                        <i class="fa-solid fa-lock text-[10px]"></i> Buat Rekam Medis
+                                    </span>
+                                        <div class="mt-1 text-[10px] text-amber-600 font-semibold">
+                                            Rekam medis hanya bisa diisi pada jadwal hari ini, kemarin, atau yang sudah lewat.
+                                        </div>
+                                @endif
                             @else
-                            {{-- Sudah ada rekam medis --}}
-                            <a href="{{ route('dokter.rekam.show', $jadwal->rekamMedis->id) }}"
-                               class="inline-flex items-center gap-1.5 px-4 py-2 bg-emerald-50 text-emerald-600 rounded-lg text-xs font-semibold hover:bg-emerald-100 transition-all">
-                                <i class="fa-solid fa-eye text-[10px]"></i> Lihat Rekam
-                            </a>
+                                {{-- Sudah ada rekam medis --}}
+                                <a href="{{ route('dokter.rekam.show', $jadwal->rekamMedis->id) }}"
+                                   class="inline-flex items-center gap-1.5 px-4 py-2 bg-emerald-50 text-emerald-600 rounded-lg text-xs font-semibold hover:bg-emerald-100 transition-all">
+                                    <i class="fa-solid fa-eye text-[10px]"></i> Lihat Rekam
+                                </a>
                             @endif
                         @elseif($jadwal->status === 'selesai')
                             @if($jadwal->rekamMedis)
-                            <a href="{{ route('dokter.rekam.show', $jadwal->rekamMedis->id) }}"
-                               class="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-100 text-slate-600 rounded-lg text-xs font-semibold hover:bg-slate-200 transition-all">
-                                <i class="fa-solid fa-eye text-[10px]"></i> Lihat Rekam
-                            </a>
+                                <a href="{{ route('dokter.rekam.show', $jadwal->rekamMedis->id) }}"
+                                   class="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-100 text-slate-600 rounded-lg text-xs font-semibold hover:bg-slate-200 transition-all">
+                                    <i class="fa-solid fa-eye text-[10px]"></i> Lihat Rekam
+                                </a>
                             @else
-                            <span class="text-slate-300 text-xs bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100">
-                                Selesai
-                            </span>
+                                <span class="text-slate-300 text-xs bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100">
+                                    Selesai
+                                </span>
                             @endif
                         @else
                             <span class="text-slate-300 text-xs">—</span>

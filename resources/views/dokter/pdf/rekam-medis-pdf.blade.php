@@ -155,7 +155,8 @@
         </div>
         <div class="header-meta">
             <p>No. Rekam: <strong>#{{ $rekamMedis->id }}</strong></p>
-            <p>Dicetak: {{ now()->format('d F Y, H:i') }} WIB</p>
+            {{-- Requirement: Tampilkan tanggal & jam rekam medis diisi --}}
+            <p>Diupload: {{ $rekamMedis->created_at ? \Carbon\Carbon::parse($rekamMedis->created_at)->format('d F Y, H:i') : '-' }} WIB</p>
         </div>
     </div>
 
@@ -212,13 +213,7 @@
         </div>
     </div>
 
-    {{-- Tindakan --}}
-    @if($rekamMedis->tindakan)
-    <div class="section">
-        <div class="section-header">Tindakan Medis</div>
-        <div class="section-body">{{ $rekamMedis->tindakan }}</div>
-    </div>
-    @endif
+
 
     {{-- Catatan --}}
     @if($rekamMedis->catatan)
@@ -273,7 +268,7 @@
     <div class="footer">
         Dokumen ini digenerate otomatis oleh sistem UniHealth Clinic &bull;
         Rekam Medis #{{ $rekamMedis->id }} &bull;
-        {{ now()->format('d/m/Y H:i') }}
+        {{ $rekamMedis->created_at ? \Carbon\Carbon::parse($rekamMedis->created_at)->format('d/m/Y H:i') : now()->format('d/m/Y H:i') }}
     </div>
 
 </body>
