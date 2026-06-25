@@ -300,13 +300,30 @@
                 jamSelect.innerHTML = '<option value="">Jadwal hari ini sudah penuh</option>';
                 jamSelect.disabled = true;
 
-            } else if (res.status === 'success' && res.data.length > 0) {
-                // Filter hanya slot yang belum terisi
-                const slotTersedia = res.data.filter(j => !j.sudah_terisi);
+            }  else if (res.status === 'success' && res.data.length > 0) {
+                // Cek apakah tanggal yang dipilih adalah hari ini
+                const today = new Date();
+                const todayStr = today.getFullYear() + '-'
+                    + String(today.getMonth() + 1).padStart(2, '0') + '-'
+                    + String(today.getDate()).padStart(2, '0');
+                const isToday = (tanggalVal === todayStr);
+                const jamSekarang = today.getHours(); // integer, misal jam 14 = 14
+
+                // Filter: belum terisi DAN (bukan hari ini ATAU jamnya masih akan datang)
+                const slotTersedia = res.data.filter(j => {
+                    if (j.sudah_terisi) return false;
+                    if (isToday && j.value <= jamSekarang) return false;
+                    return true;
+                });
 
                 if (slotTersedia.length === 0) {
-                    // Semua slot ternyata terisi (fallback, seharusnya sudah caught di backend)
-                    jamSelect.innerHTML = '<option value="">Jadwal hari ini sudah penuh</option>';
+                    // Tentukan pesan yang tepat: sudah tutup atau memang penuh
+                    const adaSlotBelumLewat = res.data.some(j => !isToday || j.value > jamSekarang);
+                    if (isToday && !adaSlotBelumLewat) {
+                        jamSelect.innerHTML = '<option value="">Klinik sudah tutup untuk hari ini</option>';
+                    } else {
+                        jamSelect.innerHTML = '<option value="">Jadwal hari ini sudah penuh</option>';
+                    }
                     jamSelect.disabled = true;
                 } else {
                     jamSelect.disabled = false;

@@ -49,7 +49,7 @@
                 <p class="mt-5 text-[36px] font-bold text-slate-800 tracking-tight">Layanan Kesehatan Terpercaya Untuk Masyarakat</p>
             </div>
             
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                 <div class="bg-white rounded-[28px] p-8 flex flex-col items-center justify-center text-center shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-slate-100 hover:border-emerald-200 hover:shadow-[0_8px_30px_rgb(16,185,129,0.12)] group transition-all duration-300 transform hover:-translate-y-2">
                     <img src="https://placehold.co/100x100/ecfdf5/059669?text=KU" alt="Konsultasi Umum" class="w-20 h-20 rounded-[20px] mb-6 group-hover:scale-110 transition-transform shadow-sm">
                     <span class="font-bold text-[18px] text-slate-800 group-hover:text-emerald-700 transition-colors">Konsultasi Umum</span>
@@ -64,11 +64,6 @@
                     <img src="https://placehold.co/100x100/ecfdf5/059669?text=SK" alt="Surat Sakit" class="w-20 h-20 rounded-[20px] mb-6 group-hover:scale-110 transition-transform shadow-sm">
                     <span class="font-bold text-[18px] text-slate-800 group-hover:text-emerald-700 transition-colors">Menyediakan Surat Sakit</span>
                     <p class="text-[14px] text-slate-500 mt-3 font-medium leading-relaxed">Penerbitan surat keterangan sah dokter.</p>
-                </div>
-                <div class="bg-white rounded-[28px] p-8 flex flex-col items-center justify-center text-center shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-slate-100 hover:border-emerald-200 hover:shadow-[0_8px_30px_rgb(16,185,129,0.12)] group transition-all duration-300 transform hover:-translate-y-2">
-                    <img src="https://placehold.co/100x100/ecfdf5/059669?text=OV" alt="Obat" class="w-20 h-20 rounded-[20px] mb-6 group-hover:scale-110 transition-transform shadow-sm">
-                    <span class="font-bold text-[18px] text-slate-800 group-hover:text-emerald-700 transition-colors">Stok Obat & Vitamin</span>
-                    <p class="text-[14px] text-slate-500 mt-3 font-medium leading-relaxed">Informasi dan pengelolaan obat sesuai kebutuhan pasien.</p>
                 </div>
             </div>
         </div>

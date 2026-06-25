@@ -109,13 +109,22 @@
                                 </div>
 
                                 @if($isQris && $isPending)
-                                    <a href="{{ route('pasien.pembayaran.qris', $p->id) }}"
-                                       class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-500 text-white text-[11px] font-bold uppercase hover:bg-emerald-600 transition shadow-sm">
-                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v1m6.364 1.636l-.707.707M20 12h-1M17.657 17.657l-.707-.707M12 20v-1m-5.657-1.636l.707-.707M4 12H3m2.343-5.657l.707.707"/>
-                                        </svg>
-                                        Bayar QRIS
-                                    </a>
+                                    @if($jadwal->status === 'selesai')
+                                        {{-- Jadwal selesai → tombol bayar aktif --}}
+                                        <a href="{{ route('pasien.pembayaran.qris', $p->id) }}"
+                                        class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-500 text-white text-[11px] font-bold uppercase hover:bg-emerald-600 transition shadow-sm">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v1m6.364 1.636l-.707.707M20 12h-1M17.657 17.657l-.707-.707M12 20v-1m-5.657-1.636l.707.707M4 12H3m2.343-5.657l.707.707"/>
+                                            </svg>
+                                            Bayar QRIS
+                                        </a>
+                                    @else
+                                        {{-- Jadwal belum selesai → informasi menunggu --}}
+                                        <span class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 text-slate-400 text-[11px] font-bold uppercase cursor-not-allowed"
+                                            title="Pembayaran QRIS tersedia setelah jadwal pemeriksaan selesai">
+                                            Menunggu Selesai
+                                        </span>
+                                    @endif
                                 @elseif($isQris && $isLunas)
                                     <a href="{{ route('pasien.pembayaran.struk', $p->id) }}"
                                        class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-50 text-emerald-700 text-[11px] font-bold uppercase border border-emerald-200 hover:bg-emerald-500 hover:text-white transition shadow-sm">
@@ -142,7 +151,7 @@
                             @endif
                         </td>
 
-{{-- Aksi --}}
+                        {{-- Aksi --}}
                         <td class="px-8 py-6 text-center">
                             @if($jadwal->status == 'menunggu')
                                 {{-- Logika H-1: Tombol muncul hanya jika tanggal jadwal > besok --}}

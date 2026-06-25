@@ -46,6 +46,13 @@ class XenditController extends Controller
             return redirect()->route('pasien.pembayaran.struk', $pembayaran->id);
         }
 
+        // ── NEW: QRIS hanya bisa dibayar setelah jadwal selesai ──
+        if ($pembayaran->jadwal->status !== 'selesai') {
+            return redirect()->route('pasien.riwayat')
+                ->with('error', 'Pembayaran QRIS hanya dapat dilakukan setelah jadwal pemeriksaan selesai.');
+        }
+        // ─────────────────────────────────────────────────────────
+
         // Jika QR belum dibuat atau sudah expired → buat baru
         $buatQrBaru = !$pembayaran->xendit_qr_id
             || !$pembayaran->payment_expired_at

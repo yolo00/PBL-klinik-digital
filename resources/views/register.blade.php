@@ -51,7 +51,9 @@
             {{-- Email --}}
             <div class="col-span-2 md:col-span-1">
                 <label class="mb-1.5 block text-[15px] font-semibold text-slate-700">Email</label>
-                <input type="email" name="email" id="email" value="{{ old('email') }}" maxlength="100" required placeholder="Masukkan alamat email"
+                <input type="email" name="email" id="email" value="{{ old('email') }}" maxlength="100" required 
+                    pattern="[^@\s]+@[^@\s]+\.[^@\s]+" title="Format email tidak valid. Harus mengandung domain (contoh: user@example.com)" 
+                    placeholder="Masukkan alamat email"
                     class="w-full rounded-[20px] border border-slate-200 bg-slate-50 px-5 py-3.5 text-[15px] text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:bg-white transition-all shadow-sm focus:shadow-md focus:shadow-emerald-500/30" />
             </div>
 

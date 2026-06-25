@@ -40,6 +40,18 @@
             <div class="mb-5 rounded-[16px] bg-rose-50 border border-rose-200 px-5 py-3">
                 <p class="text-[14px] text-rose-600">{{ $errors->first('login') }}</p>
             </div>
+        @elseif ($errors->has('email') || $errors->has('password'))
+            <div class="mb-5 rounded-[16px] bg-rose-50 border border-rose-200 px-5 py-3">
+                <p class="text-[14px] text-rose-600">
+                    @if ($errors->has('email') && $errors->has('password'))
+                        Tolong isi email dan kata sandi anda.
+                    @elseif ($errors->has('email'))
+                        Tolong isi email anda terlebih dahulu.
+                    @elseif ($errors->has('password'))
+                        Tolong isi kata sandi anda.
+                    @endif
+                </p>
+            </div>
         @endif
 
         @if (session('success'))
