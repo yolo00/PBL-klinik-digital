@@ -157,7 +157,7 @@
                                     </form>
                                 @else
                                     <span class="inline-flex px-4 py-2.5 rounded-xl bg-slate-100 text-slate-400 text-xs font-bold uppercase cursor-not-allowed">
-                                        Tidak dapat batal
+                                        Tidak dapat dibatalkan
                                     </span>
                                 @endif
 
