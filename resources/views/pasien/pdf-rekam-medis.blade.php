@@ -67,7 +67,7 @@
         </div>
         <div class="header-meta">
             <p>No. Rekam: <strong>#{{ $rekamMedis->id }}</strong></p>
-            <p>Dicetak: {{ now()->format('d F Y, H:i') }} WIB</p>
+            <p>Dicetak: {{ now()->translatedFormat('d F Y, H:i') }} WIB</p>
         </div>
     </div>
 
@@ -86,10 +86,14 @@
                     <td class="value">: {{ $rekamMedis->jadwal->dokter->user->nama ?? '-' }}</td>
                 </tr>
                 <tr>
-                    <td class="label">Tanggal</td>
-                    <td class="value">: {{ $rekamMedis->created_at->format('d F Y') }}</td>
+                    <td class="label">Tanggal Kunjungan</td>
+                    <td class="value">: {{ \Carbon\Carbon::parse($rekamMedis->jadwal->tanggal)->translatedFormat('d F Y') }}</td>
                     <td class="label">Spesialis</td>
                     <td class="value">: {{ $rekamMedis->jadwal->dokter->spesialisasi->nama ?? '-' }}</td>
+                </tr>
+                <tr>
+                    <td class="label">Waktu Pengisian</td>
+                    <td class="value" colspan="3">: {{ $rekamMedis->created_at->translatedFormat('l, d F Y') }} | Pukul {{ $rekamMedis->created_at->format('H:i') }} WIB</td>
                 </tr>
             </table>
         </div>
@@ -152,7 +156,7 @@
     </div>
 
     <div class="footer">
-        Dokumen resmi UniHealth Clinic &bull; Dicetak pada {{ now()->format('d/m/Y H:i') }}
+        Dokumen resmi UniHealth Clinic &bull; Dicetak pada {{ now()->translatedFormat('l, d F Y - H:i') }} WIB
     </div>
 
 </body>
