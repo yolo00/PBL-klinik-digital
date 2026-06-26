@@ -125,7 +125,7 @@
     @if($rekamMedis->hasPages())
     <div class="px-6 py-4 border-t border-slate-50 flex items-center justify-between">
         <p class="text-xs text-slate-400">
-            Menampilkan {{ $rekamMedis->firstItem() }}–{{ $rekamMedis->lastItem() }} dari {{ $rekamMedis->total() }} rekam medis
+            Menampilkan {{ $rekamMedis->firstItem() }} {{ $rekamMedis->lastItem() }} dari {{ $rekamMedis->total() }} rekam medis
         </p>
         <div class="flex items-center gap-1">
             @if($rekamMedis->onFirstPage())

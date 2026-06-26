@@ -93,20 +93,59 @@ class PasienController extends Controller
     }
 
     /**
-     * Skenario: Mengisi Rekam Medis — Simpan
-     * - Validasi: keluhan dan diagnosa WAJIB diisi
-     * - Jika diagnosa kosong → tampilkan validasi error
-     * - Simpan data + resep ke database
-     * - Update status jadwal menjadi selesai
+     * Skenario: Mengisi Rekam Medis — Simpan Draft & Redirect ke Preview
      */
     public function storeRekamMedis(Request $request, $id)
     {
-        // Saat ini, submission dari form edit-rekam-medis akan:
-        // 1) Validasi
-        // 2) Menampilkan halaman konfirmasi (draft dulu)
-        // Konfirmasi & simpan final dilakukan di KonfirmasiRekamMedisController
+        // 1. Validasi input form rekam medis & resep
+        $validated = $request->validate([
+            'keluhan'  => 'required|string|min:3',
+            'diagnosa' => 'required|string|min:3',
+            'catatan'  => 'nullable|string',
+            'resep'    => 'nullable|array',
+            'resep.*.obat'         => 'nullable|string|max:255',
+            'resep.*.dosis'        => 'nullable|string|max:100',
+            'resep.*.aturan_pakai' => 'nullable|string|max:255',
+        ], [
+            'keluhan.required'  => 'Keluhan pasien wajib diisi.',
+            'keluhan.min'       => 'Keluhan terlalu singkat, minimal 3 karakter.',
+            'diagnosa.required' => 'Diagnosis dokter wajib diisi.',
+            'diagnosa.min'      => 'Diagnosis terlalu singkat, minimal 3 karakter.',
+        ]);
 
-        return app(\App\Http\Controllers\Dokter\KonfirmasiRekamMedisController::class)
-            ->preview($request, $id);
+        $jadwal = Jadwal::findOrFail($id);
+
+        // 2. Simpan atau Update sebagai DRAFT (is_final = 0)
+        $rekam = RekamMedis::updateOrCreate(
+            ['id_jadwal' => $jadwal->id],
+            [
+                'keluhan'    => $validated['keluhan'],
+                'diagnosa'   => $validated['diagnosa'],
+                'catatan'    => $validated['catatan'] ?? null,
+                'is_final'   => false, // Masih berstatus draft/preview
+                'created_by' => auth()->id(),
+                'updated_by' => auth()->id(),
+            ]
+        );
+
+        // Simpan resep sementara (draft)
+        $rekam->resep()->delete();
+        $resepInput = $validated['resep'] ?? [];
+        if (is_array($resepInput)) {
+            foreach ($resepInput as $item) {
+                if (empty(trim($item['obat'] ?? ''))) {
+                    continue;
+                }
+                Resep::create([
+                    'id_rekam'     => $rekam->id,
+                    'obat'         => trim($item['obat']),
+                    'dosis'        => trim($item['dosis'] ?? ''),
+                    'aturan_pakai' => trim($item['aturan_pakai'] ?? ''),
+                ]);
+            }
+        }
+
+        // 3. KUNCI SOLUSI: Redirect menggunakan GET ke route preview
+        return redirect()->route('dokter.rekam-medis.konfirmasi-preview', ['id' => $jadwal->id]);
     }
 }
