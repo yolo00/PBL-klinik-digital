@@ -49,6 +49,11 @@ class RegisterController extends Controller
                 'role'          => 'P',
                 'created_at'    => now(),
             ]);
+
+            // Insert ke pasien
+            DB::table('pasien')->insert([
+                'id_user' => $userId,
+            ]);
         });
 
         return redirect()->route('login')
