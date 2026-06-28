@@ -28,12 +28,12 @@
             <label class="text-[14px] font-medium text-slate-700">
                 Tanggal <span class="text-rose-500">*</span>
             </label>
-            <input type="date" name="tgl_khusus"
+            <input type="text" id="tgl_khusus_picker" name="tgl_khusus"
                    value="{{ old('tgl_khusus', $jadwal?->tgl_khusus?->format('Y-m-d')) }}"
-                   required
+                   placeholder="Pilih tanggal" readonly
                    class="w-full px-4 py-3 rounded-[12px] border
                           {{ $errors->has('tgl_khusus') ? 'border-rose-400 bg-rose-50' : 'border-slate-200' }}
-                          focus:outline-none focus:ring-2 focus:ring-slate-500/20 focus:border-slate-500 text-[14px] transition-all text-slate-700">
+                          focus:outline-none focus:ring-2 focus:ring-slate-500/20 focus:border-slate-500 text-[14px] transition-all text-slate-700 cursor-pointer bg-white">
             @error('tgl_khusus')
             <p class="text-[12px] text-rose-500 mt-1">{{ $message }}</p>
             @enderror
@@ -148,7 +148,19 @@
 </x-admin.form>
 
 @push('scripts')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/id.js"></script>
 <script>
+document.addEventListener('DOMContentLoaded', function () {
+    flatpickr('#tgl_khusus_picker', {
+        locale: 'id',
+        dateFormat: 'Y-m-d',
+        defaultDate: document.getElementById('tgl_khusus_picker').value || null,
+        allowInput: false,
+    });
+});
+
 function toggleLibur(isLibur) {
     const fs = document.getElementById('fieldsetJam');
     fs.classList.toggle('opacity-40', isLibur);

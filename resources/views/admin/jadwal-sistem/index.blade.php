@@ -104,6 +104,24 @@
                 $startPad    = $firstDay->dayOfWeekIso - 1; // Senin = 0
                 $daysInMonth = $firstDay->daysInMonth;
                 $today       = now()->format('Y-m-d');
+
+                // Buat map: nama hari Indonesia → dayOfWeekIso (1=Senin ... 7=Minggu)
+                $namaHariMap = [
+                    'Senin'  => 1,
+                    'Selasa' => 2,
+                    'Rabu'   => 3,
+                    'Kamis'  => 4,
+                    'Jumat'  => 5,
+                    'Sabtu'  => 6,
+                    'Minggu' => 7,
+                ];
+                // Kumpulkan semua nomor dayOfWeekIso yang libur dari jadwal harian
+                $hariLiburMingguan = [];
+                foreach ($jadwalHarian as $jh) {
+                    if ($jh->is_libur && isset($namaHariMap[$jh->hari])) {
+                        $hariLiburMingguan[] = $namaHariMap[$jh->hari];
+                    }
+                }
             @endphp
 
             <div class="grid grid-cols-7 gap-[2px]">
@@ -113,14 +131,32 @@
 
                 @for($d = 1; $d <= $daysInMonth; $d++)
                     @php
-                        $dateStr = sprintf('%04d-%02d-%02d', $tahun, $bulan, $d);
-                        $jadwal  = $tanggalKhususBulan[$dateStr] ?? null;
-                        $isToday = ($dateStr === $today);
+                        $dateStr   = sprintf('%04d-%02d-%02d', $tahun, $bulan, $d);
+                        $jadwal    = $tanggalKhususBulan[$dateStr] ?? null;
+                        $isToday   = ($dateStr === $today);
+                        // Cek apakah tanggal ini jatuh pada hari yang libur mingguan
+                        $dayIso    = \Carbon\Carbon::create($tahun, $bulan, $d)->dayOfWeekIso; // 1=Senin ... 7=Minggu
+                        $isHariLiburMingguan = in_array($dayIso, $hariLiburMingguan);
+
+                        // Prioritas warna: tanggal khusus libur > mingguan libur > jam khusus > normal
+                        if ($jadwal?->is_libur) {
+                            $bgClass = 'bg-rose-100 text-rose-700 font-bold';
+                            $tooltip = $jadwal->keterangan ?: 'Libur';
+                        } elseif ($jadwal) {
+                            $bgClass = 'bg-blue-100 text-blue-700 font-bold';
+                            $tooltip = $jadwal->keterangan ?: (!$jadwal->is_libur && $jadwal->jam_buka !== null ? 'Buka ' . $jadwal->jam_buka_format . '–' . $jadwal->jam_tutup_format : 'Jam Khusus');
+                        } elseif ($isHariLiburMingguan) {
+                            $bgClass = 'bg-rose-50 text-rose-500 font-semibold';
+                            $tooltip = null;
+                        } else {
+                            $bgClass = 'hover:bg-slate-100 text-slate-700';
+                            $tooltip = null;
+                        }
                     @endphp
 
                     <div class="relative group aspect-square flex items-center justify-center rounded-lg text-[12px] font-medium cursor-default
                         {{ $isToday ? 'outline outline-2 outline-offset-[-2px] outline-slate-800' : '' }}
-                        {{ $jadwal?->is_libur ? 'bg-rose-100 text-rose-700 font-bold' : ($jadwal ? 'bg-blue-100 text-blue-700 font-bold' : 'hover:bg-slate-100 text-slate-700') }}
+                        {{ $bgClass }}
                     ">
                         {{ $d }}
 
@@ -128,13 +164,7 @@
                         @if($jadwal)
                         <div class="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 hidden group-hover:flex z-20">
                             <div class="bg-slate-800 text-white text-[11px] rounded-lg px-2.5 py-1.5 whitespace-nowrap shadow-lg">
-                                @if($jadwal->keterangan)
-                                    {{ $jadwal->keterangan }}
-                                @elseif(!$jadwal->is_libur && $jadwal->jam_buka !== null)
-                                    Buka {{ $jadwal->jam_buka_format }}–{{ $jadwal->jam_tutup_format }}
-                                @else
-                                    Libur
-                                @endif
+                                {{ $tooltip }}
                                 <div class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-800"></div>
                             </div>
                         </div>
@@ -144,9 +174,12 @@
             </div>
 
             {{-- Legenda --}}
-            <div class="mt-5 flex items-center gap-4 text-[12px] text-slate-500">
+            <div class="mt-5 flex flex-wrap items-center gap-3 text-[12px] text-slate-500">
                 <span class="flex items-center gap-1.5">
-                    <span class="w-3 h-3 rounded bg-rose-100 border border-rose-300"></span> Libur
+                    <span class="w-3 h-3 rounded bg-rose-100 border border-rose-300"></span> Libur (khusus)
+                </span>
+                <span class="flex items-center gap-1.5">
+                    <span class="w-3 h-3 rounded bg-rose-50 border border-rose-200"></span> Libur (mingguan)
                 </span>
                 <span class="flex items-center gap-1.5">
                     <span class="w-3 h-3 rounded bg-blue-100 border border-blue-300"></span> Jam khusus
@@ -189,8 +222,9 @@
                placeholder="Cari ID atau keterangan…"
                class="flex-1 min-w-[200px] max-w-[400px] px-5 py-3 bg-white border border-slate-200 rounded-[12px] text-[14px] focus:outline-none focus:ring-2 focus:ring-slate-500/20 focus:border-slate-500 transition-all shadow-[0_2px_10px_rgb(0,0,0,0.02)]">
 
-        <input type="date" name="filter_tanggal" value="{{ request('filter_tanggal') }}"
-               class="px-4 py-3 bg-white border border-slate-200 rounded-[12px] text-[14px] focus:outline-none focus:ring-2 focus:ring-slate-500/20 focus:border-slate-500 transition-all text-slate-700 shadow-[0_2px_10px_rgb(0,0,0,0.02)]">
+        <input type="text" id="filter_tanggal_picker" name="filter_tanggal" value="{{ request('filter_tanggal') }}"
+               placeholder="Filter tanggal…" readonly
+               class="px-4 py-3 bg-white border border-slate-200 rounded-[12px] text-[14px] focus:outline-none focus:ring-2 focus:ring-slate-500/20 focus:border-slate-500 transition-all text-slate-700 shadow-[0_2px_10px_rgb(0,0,0,0.02)] cursor-pointer w-[180px]">
 
         <select name="sort"
                 class="px-5 py-3 bg-gray-400 text-white font-medium border-0 rounded-[12px] text-[14px] focus:outline-none shadow-sm min-w-[180px] appearance-none cursor-pointer">
@@ -299,7 +333,19 @@
 </div>{{-- end space-y --}}
 
 @push('scripts')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/id.js"></script>
 <script>
+document.addEventListener('DOMContentLoaded', function () {
+    flatpickr('#filter_tanggal_picker', {
+        locale: 'id',
+        dateFormat: 'Y-m-d',
+        defaultDate: document.getElementById('filter_tanggal_picker').value || null,
+        allowInput: false,
+    });
+});
+
 function kalenderNav(delta) {
     let b = parseInt(document.getElementById('inputBulan').value);
     let t = parseInt(document.getElementById('inputTahun').value);

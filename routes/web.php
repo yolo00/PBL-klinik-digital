@@ -62,6 +62,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('dokter', AdminDokterController::class);
         Route::get('/dokter/jadwal/{jadwalDokter}/edit', [AdminJadwalDokterController::class, 'edit'])->name('dokter.jadwal.edit');
         Route::put('/dokter/jadwal/{jadwalDokter}', [AdminJadwalDokterController::class, 'update'])->name('dokter.jadwal.update');
+        Route::post('/dokter/{id}/generate-jadwal', [AdminDokterController::class, 'generateJadwal'])->name('dokter.jadwal.generate');
         Route::resource('jadwal', AdminJadwalController::class);
         Route::resource('rekam-medis', AdminRekamMedisController::class);
         Route::resource('pembayaran', AdminPembayaranController::class);

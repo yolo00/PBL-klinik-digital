@@ -43,8 +43,9 @@
         </div>
         <div class="space-y-2">
             <label class="text-[14px] font-medium text-slate-700">Tanggal Lahir <span class="text-rose-500">*</span></label>
-            <input type="date" name="tgl_lahir" value="{{ old('tgl_lahir') }}" required
-                class="w-full px-4 py-3 rounded-[12px] border {{ $errors->has('tgl_lahir') ? 'border-rose-400' : 'border-slate-200' }} focus:outline-none focus:ring-2 focus:ring-slate-500/20 focus:border-slate-500 text-[14px] transition-all text-slate-700">
+            <input type="text" id="tgl_lahir_picker" name="tgl_lahir" value="{{ old('tgl_lahir') }}" required
+                placeholder="Pilih tanggal lahir" readonly
+                class="w-full px-4 py-3 rounded-[12px] border {{ $errors->has('tgl_lahir') ? 'border-rose-400' : 'border-slate-200' }} focus:outline-none focus:ring-2 focus:ring-slate-500/20 focus:border-slate-500 text-[14px] transition-all text-slate-700 cursor-pointer bg-white">
         </div>
         <div class="space-y-2">
             <label class="text-[14px] font-medium text-slate-700">Golongan Darah <span class="text-slate-400 text-[12px]">(opsional)</span></label>
@@ -62,6 +63,96 @@
             <textarea name="riwayat_penyakit" rows="3" placeholder="Masukkan riwayat penyakit jika ada..."
                 class="w-full px-4 py-3 rounded-[12px] border border-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-500/20 focus:border-slate-500 text-[14px] transition-all text-slate-700">{{ old('riwayat_penyakit') }}</textarea>
         </div>
+
+        {{-- Alergi --}}
+        <div class="md:col-span-2 space-y-3">
+            <div class="flex items-center justify-between">
+                <label class="text-[14px] font-medium text-slate-700">
+                    Alergi <span class="text-slate-400 text-[12px]">(opsional)</span>
+                </label>
+                <button type="button" id="btn-tambah-alergi"
+                    class="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 font-medium rounded-[10px] text-[13px] transition-colors border border-emerald-200">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    </svg>
+                    Tambah Alergi
+                </button>
+            </div>
+
+            <div id="alergi-list" class="space-y-2">
+                {{-- Baris alergi dari old() jika ada validasi error --}}
+                @if(old('alergi'))
+                    @foreach(old('alergi') as $i => $val)
+                    <div class="alergi-row flex items-center gap-2">
+                        <input type="text" name="alergi[]" value="{{ $val }}" maxlength="100"
+                            placeholder="Contoh: Penisilin, Kacang, Seafood..."
+                            class="flex-1 px-4 py-3 rounded-[12px] border border-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-500/20 focus:border-slate-500 text-[14px] transition-all text-slate-700">
+                        <button type="button" onclick="hapusAlergi(this)"
+                            class="flex-shrink-0 w-9 h-9 flex items-center justify-center rounded-[10px] bg-rose-50 hover:bg-rose-100 text-rose-500 transition-colors border border-rose-200">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                        </button>
+                    </div>
+                    @endforeach
+                @endif
+            </div>
+
+            <p id="alergi-empty-hint" class="text-[13px] text-slate-400 italic {{ old('alergi') ? 'hidden' : '' }}">
+                Belum ada data alergi. Klik <span class="font-medium text-emerald-600">Tambah Alergi</span> untuk menambahkan.
+            </p>
+        </div>
     </div>
 </x-admin.form>
+
+@push('scripts')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/id.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    flatpickr('#tgl_lahir_picker', {
+        locale: 'id',
+        dateFormat: 'Y-m-d',
+        maxDate: 'today',
+        defaultDate: document.getElementById('tgl_lahir_picker').value || null,
+        allowInput: false,
+    });
+
+    document.getElementById('btn-tambah-alergi').addEventListener('click', function () {
+        tambahBariAlergi('');
+    });
+});
+
+function tambahBariAlergi(nilai) {
+    const list = document.getElementById('alergi-list');
+    const hint = document.getElementById('alergi-empty-hint');
+    hint.classList.add('hidden');
+
+    const row = document.createElement('div');
+    row.className = 'alergi-row flex items-center gap-2';
+    row.innerHTML = `
+        <input type="text" name="alergi[]" value="${nilai}" maxlength="100"
+            placeholder="Contoh: Penisilin, Kacang, Seafood..."
+            class="flex-1 px-4 py-3 rounded-[12px] border border-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-500/20 focus:border-slate-500 text-[14px] transition-all text-slate-700">
+        <button type="button" onclick="hapusAlergi(this)"
+            class="flex-shrink-0 w-9 h-9 flex items-center justify-center rounded-[10px] bg-rose-50 hover:bg-rose-100 text-rose-500 transition-colors border border-rose-200">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+        </button>`;
+    list.appendChild(row);
+    row.querySelector('input').focus();
+}
+
+function hapusAlergi(btn) {
+    const row  = btn.closest('.alergi-row');
+    const list = document.getElementById('alergi-list');
+    row.remove();
+    if (!list.querySelector('.alergi-row')) {
+        document.getElementById('alergi-empty-hint').classList.remove('hidden');
+    }
+}
+</script>
+@endpush
 @endsection

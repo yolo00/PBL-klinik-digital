@@ -73,13 +73,14 @@
 
         {{-- Tanggal --}}
         <div class="space-y-2">
-            <label for="tanggal" class="text-[14px] font-medium text-slate-700">
+            <label for="tanggal_picker" class="text-[14px] font-medium text-slate-700">
                 Tanggal <span class="text-rose-500">*</span>
             </label>
-            <input type="date" id="tanggal" name="tanggal"
+            <input type="text" id="tanggal_picker" name="tanggal"
                 value="{{ old('tanggal', $jadwal->tanggal->toDateString()) }}"
+                placeholder="Pilih tanggal jadwal" readonly
                 class="w-full px-4 py-3 rounded-[12px] border {{ $errors->has('tanggal') ? 'border-rose-400 bg-rose-50' : 'border-slate-200' }}
-                       focus:outline-none focus:ring-2 focus:ring-slate-500/20 focus:border-slate-500 text-[14px] transition-all text-slate-700">
+                       focus:outline-none focus:ring-2 focus:ring-slate-500/20 focus:border-slate-500 text-[14px] transition-all text-slate-700 cursor-pointer bg-white">
             @error('tanggal')
                 <p class="text-[12px] text-rose-600 mt-1">{{ $message }}</p>
             @enderror
@@ -126,5 +127,21 @@
 
     </div>
 </x-admin.form>
+
+@push('scripts')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/id.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    flatpickr('#tanggal_picker', {
+        locale: 'id',
+        dateFormat: 'Y-m-d',
+        defaultDate: document.getElementById('tanggal_picker').value || null,
+        allowInput: false,
+    });
+});
+</script>
+@endpush
 
 @endsection

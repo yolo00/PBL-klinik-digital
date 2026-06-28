@@ -15,7 +15,7 @@ class Dokter extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'id_user', 'id_spesialisasi', 'pendidikan', 'dokumen_sip', 'tanda_tangan',
+        'id_user', 'id_spesialisasi', 'pendidikan', 'dokumen_sip', 'foto_profil', 'tanda_tangan',
     ];
 
     // ─── Relasi ───────────────────────────────────────────────

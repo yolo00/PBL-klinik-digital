@@ -56,8 +56,52 @@
         </div>
         <div class="space-y-2">
             <label class="text-[14px] font-medium text-slate-700">Tanggal Lahir <span class="text-rose-500">*</span></label>
-            <input type="date" name="tgl_lahir" value="{{ old('tgl_lahir', $dokter->user->tgl_lahir ?? '') }}" required
-                class="w-full px-4 py-3 rounded-[12px] border {{ $errors->has('tgl_lahir') ? 'border-rose-400' : 'border-slate-200' }} focus:outline-none focus:ring-2 focus:ring-slate-500/20 focus:border-slate-500 text-[14px] transition-all text-slate-700">
+            <input type="text" id="tgl_lahir_picker" name="tgl_lahir"
+                value="{{ old('tgl_lahir', $dokter->user->tgl_lahir ?? '') }}" required
+                placeholder="Pilih tanggal lahir" readonly
+                class="w-full px-4 py-3 rounded-[12px] border {{ $errors->has('tgl_lahir') ? 'border-rose-400' : 'border-slate-200' }} focus:outline-none focus:ring-2 focus:ring-slate-500/20 focus:border-slate-500 text-[14px] transition-all text-slate-700 cursor-pointer bg-white">
+        </div>
+
+        {{-- Pendidikan --}}
+        <div class="space-y-2">
+            <label class="text-[14px] font-medium text-slate-700">Pendidikan <span class="text-slate-400 text-[12px]">(opsional)</span></label>
+            <input type="text" name="pendidikan" value="{{ old('pendidikan', $dokter->pendidikan ?? '') }}"
+                class="w-full px-4 py-3 rounded-[12px] border {{ $errors->has('pendidikan') ? 'border-rose-400' : 'border-slate-200' }} focus:outline-none focus:ring-2 focus:ring-slate-500/20 focus:border-slate-500 text-[14px] transition-all text-slate-700"
+                placeholder="Contoh: S1 Kedokteran Umum, Sp.PD">
+        </div>
+
+        {{-- Foto Profil --}}
+        <div class="space-y-2">
+            <label class="text-[14px] font-medium text-slate-700">Foto Profil <span class="text-slate-400 text-[12px]">(opsional — JPG, PNG maks. 2MB)</span></label>
+            @if($dokter->foto_profil)
+                <div class="mb-3 p-3 bg-slate-50 border border-slate-200 rounded-[12px] flex items-center gap-3">
+                    <img src="{{ asset($dokter->foto_profil) }}" alt="Foto Profil"
+                        class="w-12 h-12 rounded-full object-cover border border-slate-200">
+                    <span class="text-[13px] text-slate-600">Foto saat ini: <strong>{{ basename($dokter->foto_profil) }}</strong></span>
+                </div>
+            @endif
+            <input type="file" name="foto_profil" accept=".jpg,.jpeg,.png"
+                class="w-full px-4 py-3 rounded-[12px] border {{ $errors->has('foto_profil') ? 'border-rose-400' : 'border-slate-200' }} focus:outline-none focus:ring-2 focus:ring-slate-500/20 focus:border-slate-500 text-[14px] transition-all text-slate-700 file:mr-4 file:py-1 file:px-4 file:rounded-full file:border-0 file:text-[13px] file:font-medium file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200">
+            @if($dokter->foto_profil)
+                <p class="text-[12px] text-slate-400 mt-1">Unggah foto baru untuk menggantikan foto yang sudah ada.</p>
+            @endif
+        </div>
+
+        {{-- Tanda Tangan --}}
+        <div class="space-y-2">
+            <label class="text-[14px] font-medium text-slate-700">Tanda Tangan <span class="text-slate-400 text-[12px]">(opsional — PNG maks. 2MB)</span></label>
+            @if($dokter->tanda_tangan)
+                <div class="mb-3 p-3 bg-slate-50 border border-slate-200 rounded-[12px] flex items-center gap-3">
+                    <img src="{{ asset($dokter->tanda_tangan) }}" alt="Tanda Tangan"
+                        class="h-10 max-w-[120px] object-contain border border-slate-200 bg-white p-1 rounded">
+                    <span class="text-[13px] text-slate-600">File saat ini: <strong>{{ basename($dokter->tanda_tangan) }}</strong></span>
+                </div>
+            @endif
+            <input type="file" name="tanda_tangan" accept=".png"
+                class="w-full px-4 py-3 rounded-[12px] border {{ $errors->has('tanda_tangan') ? 'border-rose-400' : 'border-slate-200' }} focus:outline-none focus:ring-2 focus:ring-slate-500/20 focus:border-slate-500 text-[14px] transition-all text-slate-700 file:mr-4 file:py-1 file:px-4 file:rounded-full file:border-0 file:text-[13px] file:font-medium file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200">
+            @if($dokter->tanda_tangan)
+                <p class="text-[12px] text-slate-400 mt-1">Unggah file baru untuk menggantikan tanda tangan yang sudah ada.</p>
+            @endif
         </div>
 
         {{-- Dokumen SIP --}}
@@ -81,4 +125,21 @@
         </div>
     </div>
 </x-admin.form>
+
+@push('scripts')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/id.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    flatpickr('#tgl_lahir_picker', {
+        locale: 'id',
+        dateFormat: 'Y-m-d',
+        maxDate: 'today',
+        defaultDate: document.getElementById('tgl_lahir_picker').value || null,
+        allowInput: false,
+    });
+});
+</script>
+@endpush
 @endsection

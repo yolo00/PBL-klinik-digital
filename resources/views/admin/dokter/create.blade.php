@@ -62,9 +62,34 @@
         </div>
         <div class="space-y-2">
             <label class="text-[14px] font-medium text-slate-700">Tanggal Lahir <span class="text-rose-500">*</span></label>
-            <input type="date" name="tgl_lahir" value="{{ old('tgl_lahir') }}" required
-                class="w-full px-4 py-3 rounded-[12px] border {{ $errors->has('tgl_lahir') ? 'border-rose-400' : 'border-slate-200' }} focus:outline-none focus:ring-2 focus:ring-slate-500/20 focus:border-slate-500 text-[14px] transition-all text-slate-700">
+            <input type="text" id="tgl_lahir_picker" name="tgl_lahir" value="{{ old('tgl_lahir') }}" required
+                placeholder="Pilih tanggal lahir" readonly
+                class="w-full px-4 py-3 rounded-[12px] border {{ $errors->has('tgl_lahir') ? 'border-rose-400' : 'border-slate-200' }} focus:outline-none focus:ring-2 focus:ring-slate-500/20 focus:border-slate-500 text-[14px] transition-all text-slate-700 cursor-pointer bg-white">
         </div>
+
+        {{-- Pendidikan --}}
+        <div class="space-y-2">
+            <label class="text-[14px] font-medium text-slate-700">Pendidikan <span class="text-slate-400 text-[12px]">(opsional)</span></label>
+            <input type="text" name="pendidikan" value="{{ old('pendidikan') }}"
+                class="w-full px-4 py-3 rounded-[12px] border {{ $errors->has('pendidikan') ? 'border-rose-400' : 'border-slate-200' }} focus:outline-none focus:ring-2 focus:ring-slate-500/20 focus:border-slate-500 text-[14px] transition-all text-slate-700"
+                placeholder="Contoh: S1 Kedokteran Umum, Sp.PD">
+        </div>
+
+        {{-- Foto Profil --}}
+        <div class="space-y-2">
+            <label class="text-[14px] font-medium text-slate-700">Foto Profil <span class="text-slate-400 text-[12px]">(opsional — JPG, PNG maks. 2MB)</span></label>
+            <input type="file" name="foto_profil" accept=".jpg,.jpeg,.png"
+                class="w-full px-4 py-3 rounded-[12px] border {{ $errors->has('foto_profil') ? 'border-rose-400' : 'border-slate-200' }} focus:outline-none focus:ring-2 focus:ring-slate-500/20 focus:border-slate-500 text-[14px] transition-all text-slate-700 file:mr-4 file:py-1 file:px-4 file:rounded-full file:border-0 file:text-[13px] file:font-medium file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200">
+        </div>
+
+        {{-- Tanda Tangan --}}
+        <div class="space-y-2">
+            <label class="text-[14px] font-medium text-slate-700">Tanda Tangan <span class="text-slate-400 text-[12px]">(opsional — PNG maks. 2MB)</span></label>
+            <input type="file" name="tanda_tangan" accept=".png"
+                class="w-full px-4 py-3 rounded-[12px] border {{ $errors->has('tanda_tangan') ? 'border-rose-400' : 'border-slate-200' }} focus:outline-none focus:ring-2 focus:ring-slate-500/20 focus:border-slate-500 text-[14px] transition-all text-slate-700 file:mr-4 file:py-1 file:px-4 file:rounded-full file:border-0 file:text-[13px] file:font-medium file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200">
+        </div>
+
+        {{-- Dokumen SIP --}}
         <div class="space-y-2 md:col-span-2">
             <label class="text-[14px] font-medium text-slate-700">Dokumen SIP <span class="text-slate-400 text-[12px]">(opsional — PDF, JPG, PNG maks. 2MB)</span></label>
             <input type="file" name="dokumen_sip" accept=".pdf,.jpg,.jpeg,.png"
@@ -72,4 +97,21 @@
         </div>
     </div>
 </x-admin.form>
+
+@push('scripts')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/id.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    flatpickr('#tgl_lahir_picker', {
+        locale: 'id',
+        dateFormat: 'Y-m-d',
+        maxDate: 'today',
+        defaultDate: document.getElementById('tgl_lahir_picker').value || null,
+        allowInput: false,
+    });
+});
+</script>
+@endpush
 @endsection

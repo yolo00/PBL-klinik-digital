@@ -49,14 +49,16 @@ class AdminPasienController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama'          => 'required|string|max:100',
-            'email'         => 'required|email|unique:akun_user,email',
-            'password'      => 'required|string|min:6',
-            'no_hp'         => 'required|string|max:15',
-            'jenis_kelamin' => 'required|in:L,P',
-            'tgl_lahir'     => 'required|date',
-            'gol_darah'     => 'nullable|in:A,B,AB,O',
+            'nama'             => 'required|string|max:100',
+            'email'            => 'required|email|unique:akun_user,email',
+            'password'         => 'required|string|min:6',
+            'no_hp'            => 'required|string|max:15',
+            'jenis_kelamin'    => 'required|in:L,P',
+            'tgl_lahir'        => 'required|date',
+            'gol_darah'        => 'nullable|in:A,B,AB,O',
             'riwayat_penyakit' => 'nullable|string',
+            'alergi'           => 'nullable|array',
+            'alergi.*'         => 'nullable|string|max:100',
         ], [
             'nama.required'          => 'Nama wajib diisi.',
             'email.required'         => 'Email wajib diisi.',
@@ -66,6 +68,7 @@ class AdminPasienController extends Controller
             'no_hp.required'         => 'Nomor HP wajib diisi.',
             'jenis_kelamin.required' => 'Jenis kelamin wajib dipilih.',
             'tgl_lahir.required'     => 'Tanggal lahir wajib diisi.',
+            'alergi.*.max'           => 'Nama alergi maksimal 100 karakter.',
         ]);
 
         DB::transaction(function () use ($request) {
@@ -80,11 +83,24 @@ class AdminPasienController extends Controller
                 'created_at'    => now(),
             ]);
 
-            DB::table('pasien')->insert([
+            $pasienId = DB::table('pasien')->insertGetId([
                 'id_user'          => $userId,
                 'gol_darah'        => $request->gol_darah,
                 'riwayat_penyakit' => $request->riwayat_penyakit,
             ]);
+
+            // Simpan data alergi (skip entri kosong)
+            $alergiList = collect($request->input('alergi', []))
+                ->map(fn($a) => trim($a))
+                ->filter()
+                ->values();
+
+            foreach ($alergiList as $namaAlergi) {
+                DB::table('alergi')->insert([
+                    'id_pasien'   => $pasienId,
+                    'nama_alergi' => $namaAlergi,
+                ]);
+            }
         });
 
         return redirect()->route('admin.pasien.index')
@@ -105,24 +121,30 @@ class AdminPasienController extends Controller
 
     public function edit($id)
     {
-        $pasien = Pasien::with('user')->findOrFail($id);
+        $pasien = Pasien::with(['user', 'alergi'])->findOrFail($id);
 
-        return view('admin.pasien.edit', compact('pasien'));
+        $alergiTampil = old('alergi') !== null
+            ? old('alergi')
+            : $pasien->alergi->pluck('nama_alergi')->toArray();
+
+        return view('admin.pasien.edit', compact('pasien', 'alergiTampil'));
     }
 
     public function update(Request $request, $id)
     {
-        $pasien = Pasien::with('user')->findOrFail($id);
+        $pasien = Pasien::with(['user', 'alergi'])->findOrFail($id);
 
         $request->validate([
-            'nama'          => 'required|string|max:100',
-            'email'         => 'required|email|unique:akun_user,email,' . $pasien->id_user,
-            'password'      => 'nullable|string|min:6',
-            'no_hp'         => 'required|string|max:15',
-            'jenis_kelamin' => 'required|in:L,P',
-            'tgl_lahir'     => 'required|date',
-            'gol_darah'     => 'nullable|in:A,B,AB,O',
+            'nama'             => 'required|string|max:100',
+            'email'            => 'required|email|unique:akun_user,email,' . $pasien->id_user,
+            'password'         => 'nullable|string|min:6',
+            'no_hp'            => 'required|string|max:15',
+            'jenis_kelamin'    => 'required|in:L,P',
+            'tgl_lahir'        => 'required|date',
+            'gol_darah'        => 'nullable|in:A,B,AB,O',
             'riwayat_penyakit' => 'nullable|string',
+            'alergi'           => 'nullable|array',
+            'alergi.*'         => 'nullable|string|max:100',
         ], [
             'nama.required'          => 'Nama wajib diisi.',
             'email.required'         => 'Email wajib diisi.',
@@ -131,6 +153,7 @@ class AdminPasienController extends Controller
             'no_hp.required'         => 'Nomor HP wajib diisi.',
             'jenis_kelamin.required' => 'Jenis kelamin wajib dipilih.',
             'tgl_lahir.required'     => 'Tanggal lahir wajib diisi.',
+            'alergi.*.max'           => 'Nama alergi maksimal 100 karakter.',
         ]);
 
         DB::transaction(function () use ($request, $pasien) {
@@ -157,6 +180,21 @@ class AdminPasienController extends Controller
                     'gol_darah'        => $request->gol_darah,
                     'riwayat_penyakit' => $request->riwayat_penyakit,
                 ]);
+
+            // Strategi replace: hapus semua alergi lama, masukkan yang baru
+            DB::table('alergi')->where('id_pasien', $pasien->id)->delete();
+
+            $alergiList = collect($request->input('alergi', []))
+                ->map(fn($a) => trim($a))
+                ->filter()
+                ->values();
+
+            foreach ($alergiList as $namaAlergi) {
+                DB::table('alergi')->insert([
+                    'id_pasien'   => $pasien->id,
+                    'nama_alergi' => $namaAlergi,
+                ]);
+            }
         });
 
         return redirect()->route('admin.pasien.index')
