@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Dokter;
 
 use App\Http\Controllers\Controller;
 use App\Models\CutiDokter;
+use App\Models\Notifikasi;
+use App\Models\AkunUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
@@ -52,13 +54,33 @@ class IzinDokterController extends Controller
             $sampai = $dari;
         }
 
-        CutiDokter::create([
+        $cutiModel = CutiDokter::create([
             'id_dokter'      => $dokterId,
             'dari_tanggal'  => $dari,
             'sampai_tanggal'=> $sampai,
             'alasan'         => $validated['alasan'] ?? null,
             'status'         => 'pending',
         ]);
+
+        $adminIds = AkunUser::where('role', 'A')
+            ->whereNull('deleted_at')
+            ->pluck('id')
+            ->toArray();
+
+        if (!empty($adminIds)) {
+            $namaDokter = auth()->user()->nama ?? 'Seorang dokter';
+            $dariStr    = \Carbon\Carbon::parse($dari)->translatedFormat('d F Y');
+            $sampaiStr  = \Carbon\Carbon::parse($sampai)->translatedFormat('d F Y');
+
+            Notifikasi::kirim([
+                'type'      => 'Pengajuan Cuti Dokter',
+                'message'   => "{$namaDokter} mengajukan cuti dari {$dariStr} s/d {$sampaiStr}. Mohon ditinjau.",
+                'ref_tabel' => 'cuti_dokter',
+                'ref_id'    => $cutiModel->id,   // simpan hasil CutiDokter::create ke $cutiModel
+                'is_urgent' => 0,
+                'created_by'=> auth()->id(),
+            ], $adminIds);
+        }
 
         return redirect()
             ->route('dokter.pengaturan')

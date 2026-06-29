@@ -6,6 +6,9 @@ use Barryvdh\DomPDF\Facade\Pdf;
 // Home
 use App\Http\Controllers\HomeController;
 
+// Notifikasi
+use App\Http\Controllers\NotifikasiController;
+
 // Admin
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminPasienController;
@@ -144,10 +147,17 @@ Route::middleware('auth')->group(function () {
         Route::get('/get-jadwal-tersedia/{id_dokter}', [PasienController::class, 'getJadwalTersedia'])->name('get-jadwal-tersedia');
     });
 
-    
+    // --------------------------------------
+    // 4. NOTIFIKASI
+    // --------------------------------------
+    Route::prefix('notifikasi')->name('notifikasi.')->group(function () {
+        Route::get('/',               [NotifikasiController::class, 'index'])        ->name('index');
+        Route::post('/mark-all-seen', [NotifikasiController::class, 'markAllSeen']) ->name('mark-all-seen');
+        Route::get('/unseen-badge',   [NotifikasiController::class, 'unseenBadge']) ->name('unseen-badge');
+    });
 
     // --------------------------------------
-    // 4. LOGOUT
+    // 5. LOGOUT
     // --------------------------------------
     Route::post('/logout', function () {
         auth()->logout();

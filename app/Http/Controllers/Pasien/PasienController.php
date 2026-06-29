@@ -7,6 +7,8 @@ use App\Models\Jadwal;
 use App\Models\Pasien;
 use App\Models\Dokter;
 use App\Models\Alergi;
+use App\Models\Notifikasi;
+use App\Models\AkunUser;
 use App\Models\JadwalSistem;
 use App\Models\Pembayaran;
 use App\Models\RekamMedis;
@@ -16,6 +18,7 @@ use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
+
 
 class PasienController extends Controller
 {
@@ -500,6 +503,30 @@ class PasienController extends Controller
                 'metode'    => $request->metode,
                 'status'    => 'pending',
             ]);
+
+            // ── NOTIFIKASI: beritahu dokter ada jadwal baru ──────────
+            $dokter = \App\Models\Dokter::find($request->id_dokter);
+            if ($dokter) {
+                $namaPasien    = Auth::user()->nama ?? 'Pasien';
+                $tanggalJadwal = \Carbon\Carbon::parse($request->tanggal);
+                $isHariIni     = $tanggalJadwal->isToday();
+
+                $type    = $isHariIni ? 'Janji Temu Baru Hari Ini' : 'Janji Temu Baru';
+                $jamStr  = sprintf('%02d:00', $request->jam);
+                $tglStr  = $tanggalJadwal->translatedFormat('d F Y');
+                $message = $isHariIni
+                    ? "{$namaPasien} membuat janji temu pada {$jamStr} hari ini."
+                    : "{$namaPasien} membuat janji temu pada {$jamStr}, {$tglStr}.";
+
+                Notifikasi::kirim([
+                    'type'       => $type,
+                    'message'    => $message,
+                    'ref_tabel'  => 'jadwal',
+                    'ref_id'     => $jadwal->id,
+                    'is_urgent'  => $isHariIni ? 1 : 0,    // urgent kalau hari ini
+                    'created_by' => Auth::id(),
+                ], $dokter->id_user);                        // kirim ke akun dokter
+            }
         });
 
         // Jika memilih QRIS → langsung ke riwayat dengan pesan qris

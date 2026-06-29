@@ -79,10 +79,11 @@
     <div class="flex-1 flex flex-col h-screen overflow-hidden">
 
         <!-- ===== HEADER (sticky, hijau medis) ===== -->
-        <header class="h-[72px] bg-[#4ed28e] flex justify-between items-center px-10 shrink-0 sticky top-0 z-20">
-            <p class="text-[15px] font-bold text-white">@yield('page-title', '')</p>
-
+        <header class="h-[72px] bg-[#4ed28e] flex justify-between items-center px-10 shrink-0 sticky top-0 z-20 gap-4">
+            @include('components.notif-bell')
+            
             <div class="relative group">
+                
                 <div class="flex items-center gap-3 cursor-pointer">
                     <div class="text-right">
                         <p class="text-[14px] font-bold text-white group-hover:text-emerald-50 transition">{{ auth()->user()->nama }}</p>

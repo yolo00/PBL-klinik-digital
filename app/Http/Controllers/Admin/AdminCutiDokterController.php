@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\CutiDokter;
+use App\Models\Notifikasi;
+use App\Models\AkunUser;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Admin\Auth;
 
 class AdminCutiDokterController extends Controller
 {
@@ -44,7 +47,7 @@ class AdminCutiDokterController extends Controller
 
     public function approve($id)
     {
-        $cuti = CutiDokter::findOrFail($id);
+        $cuti = CutiDokter::with('dokter.user')->findOrFail($id);
 
         if ($cuti->status !== 'pending') {
             return redirect()->route('admin.cuti-dokter.show', $id)
@@ -53,13 +56,30 @@ class AdminCutiDokterController extends Controller
 
         $cuti->update(['status' => 'disetujui']);
 
+        // ── NOTIFIKASI: beritahu dokter bahwa cuti disetujui ────
+        if ($cuti->dokter && $cuti->dokter->id_user) {
+            $dari   = \Carbon\Carbon::parse($cuti->dari_tanggal)->translatedFormat('d F Y');
+            $sampai = \Carbon\Carbon::parse($cuti->sampai_tanggal)->translatedFormat('d F Y');
+
+            Notifikasi::kirim([
+                'type'      => 'Pengajuan Cuti Disetujui',
+                'message'   => "Pengajuan cuti Anda dari {$dari} s/d {$sampai} telah disetujui oleh admin.",
+                'ref_tabel' => 'cuti_dokter',
+                'ref_id'    => $cuti->id,
+                'is_urgent' => 0,
+                'created_by'=> Auth::id(),
+            ], $cuti->dokter->id_user);
+        }
+        // ────────────────────────────────────────────────────────
+
         return redirect()->route('admin.cuti-dokter.show', $id)
             ->with('success', 'Pengajuan cuti dokter telah disetujui.');
     }
 
+
     public function reject($id)
     {
-        $cuti = CutiDokter::findOrFail($id);
+        $cuti = CutiDokter::with('dokter.user')->findOrFail($id);
 
         if ($cuti->status !== 'pending') {
             return redirect()->route('admin.cuti-dokter.show', $id)
@@ -68,9 +88,25 @@ class AdminCutiDokterController extends Controller
 
         $cuti->update(['status' => 'ditolak']);
 
+        // ── NOTIFIKASI: beritahu dokter bahwa cuti ditolak ──────
+        if ($cuti->dokter && $cuti->dokter->id_user) {
+            $dari   = \Carbon\Carbon::parse($cuti->dari_tanggal)->translatedFormat('d F Y');
+            $sampai = \Carbon\Carbon::parse($cuti->sampai_tanggal)->translatedFormat('d F Y');
+
+            Notifikasi::kirim([
+                'type'      => 'Pengajuan Cuti Ditolak',
+                'message'   => "Pengajuan cuti Anda dari {$dari} s/d {$sampai} telah ditolak oleh admin.",
+                'ref_tabel' => 'cuti_dokter',
+                'ref_id'    => $cuti->id,
+                'is_urgent' => 0,
+                'created_by'=> Auth::id(),
+            ], $cuti->dokter->id_user);
+        }
+        // ────────────────────────────────────────────────────────
+
         return redirect()->route('admin.cuti-dokter.show', $id)
             ->with('success', 'Pengajuan cuti dokter telah ditolak.');
-    }
+}
 
     public function destroy($id)
     {

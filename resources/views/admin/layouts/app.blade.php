@@ -21,6 +21,7 @@
 ----\___________________________________________________/
     -->
     <meta charset="utf-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', 'Admin Dashboard') - UniHealth</title>
     <link rel="stylesheet" href="{{ asset('build/assets/app-T3EHGAm9.css') }}">
@@ -130,7 +131,8 @@
     <div class="flex-1 flex flex-col h-screen overflow-hidden relative">
 
         <!-- ===== HEADER (sticky, lighter slate) ===== -->
-        <header class="h-[72px] bg-slate-100 border-b border-slate-200 flex justify-end items-center px-10 shrink-0 sticky top-0 z-20">
+        <header class="h-[72px] bg-slate-600 border-b border-slate-200 flex justify-end items-center px-10 shrink-0 sticky top-0 z-20 gap-4">
+            @include('components.notif-bell')
             <div class="relative group">
                 <div class="flex items-center gap-3 cursor-pointer">
                     <div class="text-right">

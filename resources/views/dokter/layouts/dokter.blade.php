@@ -2,6 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="utf-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title') - UniHealth</title>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -62,7 +63,10 @@
             </div>
 
             <a href="{{ route('dokter.jadwal') }}" class="nav-item {{ request()->routeIs('dokter.jadwal') || request()->routeIs('dokter.jadwal.buat-rekam') ? 'active' : '' }}">
-                <span class="nav-icon"><i class="fa-solid fa-calendar-days"></i></span> Jadwal Konsultasi
+                <span class="nav-icon"><i class="fa-solid fa-calendar-days"></i></span>
+                <span class="flex-1">Jadwal Konsultasi</span>
+                {{-- Titik merah: muncul kalau ada jadwal baru hari ini (dikontrol JS) --}}
+                <span id="sidebar-jadwal-dot" class="hidden w-2 h-2 rounded-full bg-red-400 shrink-0"></span>
             </a>
 
             <a href="{{ route('dokter.pengaturan') }}" class="nav-item {{ request()->routeIs('dokter.pengaturan') ? 'active' : '' }}">
@@ -94,10 +98,7 @@
             <p class="text-white/70 text-xs font-medium">@yield('breadcrumb', 'UniHealth — Sistem Informasi Pelayanan Kesehatan')</p>
 
             <div class="flex items-center gap-4">
-                <button class="relative w-9 h-9 rounded-full bg-white/15 flex items-center justify-center text-white hover:bg-white/25 transition">
-                    <i class="fa-solid fa-bell text-sm"></i>
-                    <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-red-400 rounded-full border border-blue-700"></span>
-                </button>
+                @include('components.notif-bell')
 
                 <div class="relative group flex items-center gap-3 cursor-pointer">
                     <div class="text-right">
