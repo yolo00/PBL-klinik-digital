@@ -131,18 +131,18 @@
     <div class="flex-1 flex flex-col h-screen overflow-hidden relative">
 
         <!-- ===== HEADER (sticky, lighter slate) ===== -->
-        <header class="h-[72px] bg-slate-600 border-b border-slate-200 flex justify-end items-center px-10 shrink-0 sticky top-0 z-20 gap-4">
+        <header class="h-[72px] bg-slate-900 border-b border-slate-200 flex justify-end items-center px-10 shrink-0 sticky top-0 z-20 gap-4">
             @include('components.notif-bell')
             <div class="relative group">
                 <div class="flex items-center gap-3 cursor-pointer">
                     <div class="text-right">
-                        <p class="text-[14px] font-bold text-slate-800 group-hover:text-slate-600 transition">Michael Admin</p>
-                        <p class="text-[12px] text-slate-500 font-semibold uppercase tracking-wide">Admin</p>
+                        <p class="text-[14px] font-bold text-white group-hover:text-slate-200 transition">{{ auth()->user()->nama }}</p>
+                        <p class="text-[12px] text-slate-300 font-semibold uppercase tracking-wide">Admin</p>
                     </div>
-                    <div class="w-10 h-10 rounded-full bg-slate-300 flex items-center justify-center text-slate-600 shadow-sm group-hover:ring-2 ring-slate-400/40 transition">
+                    <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white shadow-sm group-hover:ring-2 ring-white/30 transition">
                         <i class="fa-solid fa-user text-[15px]"></i>
                     </div>
-                    <svg class="w-4 h-4 text-slate-500 ml-1 transition-transform duration-200 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-4 h-4 text-slate-200 ml-1 transition-transform duration-200 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                     </svg>
                 </div>

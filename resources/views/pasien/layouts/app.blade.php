@@ -79,7 +79,7 @@
     <div class="flex-1 flex flex-col h-screen overflow-hidden">
 
         <!-- ===== HEADER (sticky, hijau medis) ===== -->
-        <header class="h-[72px] bg-[#4ed28e] flex justify-between items-center px-10 shrink-0 sticky top-0 z-20 gap-4">
+        <header class="h-[72px] bg-[#4ed28e] flex items-center justify-end items-center px-10 shrink-0 sticky top-0 z-20 gap-4">
             @include('components.notif-bell')
             
             <div class="relative group">
