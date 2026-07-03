@@ -89,8 +89,13 @@ class PasienController extends Controller
         }
 
         return view('pasien.dashboard', compact(
-            'user', 'profilPasien', 'totalKunjungan', 'terakhirKunjungan',
-            'nextAppointment', 'pendingPayment', 'jadwalKlinik'
+            'user',
+            'profilPasien',
+            'totalKunjungan',
+            'terakhirKunjungan',
+            'nextAppointment',
+            'pendingPayment',
+            'jadwalKlinik'
         ));
     }
 
@@ -122,7 +127,16 @@ class PasienController extends Controller
         $dokters       = Dokter::with(['user', 'spesialisasi'])->get();
         $spesialisasis = \App\Models\Spesialisasi::all();
 
-        return view('pasien.buat-janji', compact('dokters', 'spesialisasis'));
+        $profilPasien = Auth::user()->pasien;
+        $pendingCount = 0;
+        
+        if ($profilPasien) {
+            $pendingCount = \App\Models\Pembayaran::whereHas('jadwal', function($q) use ($profilPasien) {
+                $q->where('id_pasien', $profilPasien->id);
+            })->where('status', 'pending')->count();
+        }
+
+        return view('pasien.buat-janji', compact('dokters', 'spesialisasis', 'pendingCount'));
     }
 
     // =======================================================
@@ -138,7 +152,7 @@ class PasienController extends Controller
                 ->get();
         }
 
-        $data = $dokters->map(function($d) {
+        $data = $dokters->map(function ($d) {
             $hariAktif = $d->jadwalDokters->where('is_aktif', 1)->pluck('hari')->toArray();
             $hariAktifStr = !empty($hariAktif) ? implode(', ', $hariAktif) : 'Tidak ada jadwal aktif';
 
@@ -200,9 +214,9 @@ class PasienController extends Controller
 
         // 2. Ambil jadwal dokter yang aktif di hari tersebut
         $jadwal = JadwalDokter::where('id_dokter', $id_dokter)
-                            ->where('hari', $hariIndo)
-                            ->where('is_aktif', true)
-                            ->first();
+            ->where('hari', $hariIndo)
+            ->where('is_aktif', true)
+            ->first();
 
         if (!$jadwal) {
             return response()->json(['status' => 'not_available', 'data' => []]);
@@ -285,13 +299,13 @@ class PasienController extends Controller
             'Jumat' => 5,
             'Sabtu' => 6
         ];
-        
+
         $jadwalDokter = JadwalDokter::where('id_dokter', $id_dokter)
             ->where('is_aktif', 1)
             ->pluck('hari')
             ->toArray();
-            
-        $allowedDays = array_map(function($h) use ($hariAktifMap) {
+
+        $allowedDays = array_map(function ($h) use ($hariAktifMap) {
             return $hariAktifMap[$h] ?? -1;
         }, $jadwalDokter);
 
@@ -300,9 +314,9 @@ class PasienController extends Controller
             ->where('status', 'disetujui')
             ->where('sampai_tanggal', '>=', date('Y-m-d')) // Ambil cuti dari hari ini ke depan
             ->get();
-            
+
         $disabledDates = [];
-        
+
         foreach ($cutiDokter as $cuti) {
             $start = Carbon::parse($cuti->dari_tanggal);
             $end = Carbon::parse($cuti->sampai_tanggal);
@@ -319,7 +333,7 @@ class PasienController extends Controller
             ->where('tgl_khusus', '>=', date('Y-m-d'))
             ->pluck('tgl_khusus')
             ->toArray();
-            
+
         foreach ($liburKhusus as $tgl) {
             $disabledDates[] = Carbon::parse($tgl)->format('Y-m-d');
         }
@@ -330,8 +344,8 @@ class PasienController extends Controller
             ->whereNull('tgl_khusus')
             ->pluck('hari')
             ->toArray();
-            
-        $disabledDays = array_map(function($h) use ($hariAktifMap) {
+
+        $disabledDays = array_map(function ($h) use ($hariAktifMap) {
             return $hariAktifMap[$h] ?? -1;
         }, $liburReguler);
 
@@ -357,7 +371,7 @@ class PasienController extends Controller
         } else {
             // Kita gunakan whereHas untuk memastikan rekam medis tersebut memiliki jadwal yang valid
             $rekamMedis = RekamMedis::with(['jadwal.dokter.user', 'jadwal.dokter.spesialisasi'])
-                ->whereHas('jadwal', function($query) use ($profilPasien) {
+                ->whereHas('jadwal', function ($query) use ($profilPasien) {
                     $query->where('id_pasien', $profilPasien->id);
                 })
                 ->get()
@@ -376,10 +390,10 @@ class PasienController extends Controller
 
         // Tambahkan 'resep' di dalam array with()
         $rekamMedis = RekamMedis::with(['jadwal.dokter.user', 'jadwal.dokter.spesialisasi', 'resep']) // Pastikan 'resep' di sini
-        ->whereHas('jadwal', function($query) use ($profilPasien) {
-            $query->where('id_pasien', $profilPasien->id);
-        })
-        ->findOrFail($id);
+            ->whereHas('jadwal', function ($query) use ($profilPasien) {
+                $query->where('id_pasien', $profilPasien->id);
+            })
+            ->findOrFail($id);
 
         return view('pasien.lihat', compact('rekamMedis'));
     }
@@ -481,6 +495,14 @@ class PasienController extends Controller
             return redirect()->back()->with('error', 'Profil pasien tidak ditemukan.');
         }
 
+        $pendingCount = \App\Models\Pembayaran::whereHas('jadwal', function($q) use ($profilPasien) {
+            $q->where('id_pasien', $profilPasien->id);
+        })->where('status', 'pending')->count();
+
+        if ($pendingCount >= 5) {
+            return redirect()->back()->with('error', 'Tolong laksanakan konsultsi jadwal janji temu/lunasi pembayaran yang telah dibuat terlebih dahulu');
+        }
+
         // Ambil harga dari spesialisasi dokter
         $dokter = Dokter::with('spesialisasi')->find($request->id_dokter);
         $harga  = ($dokter && $dokter->spesialisasi && $dokter->spesialisasi->base_price > 0)
@@ -538,7 +560,7 @@ class PasienController extends Controller
         return redirect()->route('pasien.riwayat')
             ->with('success', 'Jadwal berhasil dibuat! Silakan lakukan pembayaran di klinik.');
     }
-    
+
     // =======================================================
     // CREATE PDF Rekam Medis
     // =======================================================
@@ -548,16 +570,16 @@ class PasienController extends Controller
 
         // Mengambil data rekam medis yang dimiliki oleh pasien yang sedang login
         $rekamMedis = RekamMedis::with(['jadwal.dokter.user', 'jadwal.dokter.spesialisasi', 'resep'])
-            ->whereHas('jadwal', function($query) use ($profilPasien) {
+            ->whereHas('jadwal', function ($query) use ($profilPasien) {
                 $query->where('id_pasien', $profilPasien->id);
             })
             ->findOrFail($id);
 
         // Mengubah data menjadi PDF menggunakan view 'pasien.pdf-rekam-medis'
         $pdf = Pdf::loadView('pasien.pdf-rekam-medis', compact('rekamMedis'));
-        
+
         // Memberikan nama file download
-        return $pdf->download('Rekam-Medis-'.$rekamMedis->id.'.pdf');
+        return $pdf->download('Rekam-Medis-' . $rekamMedis->id . '.pdf');
     }
 
     // =======================================================
@@ -569,8 +591,8 @@ class PasienController extends Controller
         $profilPasien = Auth::user()->pasien;
 
         if ($profilPasien && $jadwal->id_pasien == $profilPasien->id) {
-            Pembayaran::where('id_jadwal', $jadwal->id)->delete();
-            $jadwal->delete();
+            $jadwal->update(['status' => 'dibatalkan']);
+            Pembayaran::where('id_jadwal', $jadwal->id)->update(['status' => 'batal']);
             return redirect()->route('pasien.riwayat')
                 ->with('success', 'Jadwal temu berhasil dibatalkan.');
         }

@@ -13,6 +13,9 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         // $schedule->command('inspire')->hourly();
+        
+        // Pengecekan status jadwal otomatis setiap menit
+        $schedule->call([new \App\Http\Controllers\AutoStatusController, 'updateStatus'])->everyMinute();
     }
 
     /**

@@ -181,6 +181,12 @@ class AdminJadwalController extends Controller
             'status'    => $validated['status'],
         ]);
 
+        if ($validated['status'] === 'dibatalkan') {
+            \App\Models\Pembayaran::where('id_jadwal', $jadwal->id)
+                ->where('status', 'pending')
+                ->update(['status' => 'batal']);
+        }
+
         return redirect()->route('admin.jadwal.show', $id)
             ->with('success', 'Jadwal berhasil diperbarui.');
     }

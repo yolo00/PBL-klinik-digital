@@ -167,3 +167,8 @@ Route::middleware('auth')->group(function () {
     })->name('logout');
 
 });
+
+use App\Http\Controllers\AutoStatusController;
+
+Route::get('/auto-status', [AutoStatusController::class, 'updateStatus'])->name('auto-status');
+
