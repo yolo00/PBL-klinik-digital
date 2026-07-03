@@ -1,6 +1,17 @@
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
+    const BASE_URL = '{{ url("/") }}';
+    const CSRF_TOKEN = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+    const FETCH_OPTIONS = {
+        credentials: 'same-origin',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRF-TOKEN': CSRF_TOKEN,
+            'Accept': 'application/json',
+        }
+    };
+
     let doktersDataMap = {};
     let fpTanggal = null;
 
@@ -46,7 +57,7 @@
             return;
         }
 
-        fetch(`/pasien/get-jadwal-tersedia/${dokterId}`)
+        fetch(`${BASE_URL}/pasien/get-jadwal-tersedia/${dokterId}`, FETCH_OPTIONS)
             .then(r => r.json())
             .then(res => {
                 initFlatpickr(res.allowedDays, res.disabledDates, res.disabledDays);
@@ -90,7 +101,7 @@
         jamSelect.disabled = false;
         jamSelect.innerHTML = '<option value="">Memuat jam tersedia...</option>';
 
-        fetch(`/pasien/get-jam-dokter?id_dokter=${dokterId}&tanggal=${tanggalVal}`)
+        fetch(`${BASE_URL}/pasien/get-jam-dokter?id_dokter=${dokterId}&tanggal=${tanggalVal}`, FETCH_OPTIONS)
         .then(r => r.json())
         .then(res => {
             jamSelect.innerHTML = '';
@@ -220,7 +231,7 @@
 
     // ─── Load daftar dokter pertama kali untuk map data biodata
     function loadDokterData(spesialisasiId = 'all') {
-        fetch(`/pasien/get-dokter/${spesialisasiId}`)
+        fetch(`${BASE_URL}/pasien/get-dokter/${spesialisasiId}`, FETCH_OPTIONS)
             .then(r => r.json())
             .then(data => {
                 const dokterSelect = document.getElementById('id_dokter');
