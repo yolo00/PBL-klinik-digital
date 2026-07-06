@@ -2,6 +2,9 @@
 @section('title', 'Profil Dokter')
 
 @section('content')
+@php
+    \Carbon\Carbon::setLocale('id');
+@endphp
 <div class="max-w-3xl mx-auto">
 
     {{-- Header Card Profil --}}
@@ -49,7 +52,9 @@
             <div>
                 <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest block mb-2">Tanggal Lahir</label>
                 <div class="px-4 py-3 bg-slate-50 rounded-xl border border-slate-100 text-slate-800 font-medium text-sm">
-                    {{ $user->tgl_lahir ? \Carbon\Carbon::parse($user->tgl_lahir)->format('d F Y') : '-' }}
+                {{ $user->tgl_lahir
+                    ? \Carbon\Carbon::parse($user->tgl_lahir)->translatedFormat('d F Y')
+                    : '-' }}
                 </div>
             </div>
             <div>

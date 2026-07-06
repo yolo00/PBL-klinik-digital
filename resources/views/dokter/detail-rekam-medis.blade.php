@@ -3,6 +3,9 @@
 
 @section('content')
 <div class="max-w-4xl mx-auto">
+@php
+    \Carbon\Carbon::setLocale('id');
+@endphp
 
     {{-- Header --}}
     <div class="flex justify-between items-start mb-6">
@@ -10,7 +13,7 @@
             <h1 class="text-2xl font-bold text-slate-800">Rekam Medis #{{ $rekamMedis->id }}</h1>
             <p class="text-slate-400 text-sm mt-1">
                 <i class="fa-regular fa-clock mr-1"></i>
-                Diisi: {{ $rekamMedis->created_at->format('d F Y, H:i') }} WIB
+                Diisi: {{ $rekamMedis->created_at->translatedFormat('d F Y, H:i') }} WIB
             </p>
         </div>
         <div class="flex items-center gap-2">
@@ -45,9 +48,9 @@
             <div>
                 <p class="text-[10px] text-slate-400 uppercase tracking-wider font-semibold mb-1">Tanggal Konsultasi</p>
                 <p class="font-bold text-slate-800">
-                    {{ $rekamMedis->jadwal->tanggal
-                        ? \Carbon\Carbon::parse($rekamMedis->jadwal->tanggal)->format('d F Y')
-                        : '-' }}
+                {{ $rekamMedis->jadwal->tanggal
+                    ? \Carbon\Carbon::parse($rekamMedis->jadwal->tanggal)->translatedFormat('d F Y')
+                    : '-' }}
                 </p>
             </div>
             <div>

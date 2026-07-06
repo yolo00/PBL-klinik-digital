@@ -3,6 +3,9 @@
 @section('title', 'Dashboard')
 
 @section('content')
+@php
+    \Carbon\Carbon::setLocale('id');
+@endphp
 
 {{-- Greeting --}}
 <div class="mb-7">
@@ -181,17 +184,26 @@
 
     {{-- Mini Calendar --}}
     <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
-        @php
-            $bulan = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
-            $hariIni = (int) date('j');
-            $bulanIni = (int) date('n');
-            $tahunIni = (int) date('Y');
-            $totalHari = (int) date('t');
-            $hariPertama = (int) date('N', mktime(0,0,0,$bulanIni,1,$tahunIni));
-        @endphp
+    @php
+        use Carbon\Carbon;
+
+        $today = Carbon::now()->locale('id');
+
+        $bulanIni = $today->month;
+        $tahunIni = $today->year;
+        $hariIni = $today->day;
+
+        $totalHari = $today->daysInMonth;
+
+        $hariPertama = Carbon::create($tahunIni, $bulanIni, 1)
+            ->startOfDay()
+            ->dayOfWeekIso;
+
+        $namaBulan = $today->translatedFormat('F');
+    @endphp
 
         <h2 class="font-bold text-slate-700 text-sm uppercase tracking-wider mb-5">
-            {{ $bulan[$bulanIni - 1] }} {{ $tahunIni }}
+        {{ $namaBulan }} {{ $tahunIni }}
         </h2>
 
         <div class="grid grid-cols-7 gap-1 text-center mb-3">
@@ -216,7 +228,7 @@
         <div class="mt-5 pt-4 border-t border-slate-50">
             <p class="text-xs text-slate-400 font-medium">Hari ini</p>
             <p class="text-sm font-bold text-slate-700 mt-0.5">
-                {{ date('l, d') }} {{ $bulan[$bulanIni - 1] }} {{ $tahunIni }}
+            {{ $today->translatedFormat('l, d F Y') }}
             </p>
         </div>
     </div>

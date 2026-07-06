@@ -3,12 +3,17 @@
 
 @section('content')
 <div class="max-w-4xl mx-auto">
+@php
+    \Carbon\Carbon::setLocale('id');
+@endphp
 
     <div class="flex justify-between items-start mb-6">
         <div>
             <h1 class="text-2xl font-bold text-slate-800">Konfirmasi Rekam Medis</h1>
             <p class="text-slate-400 text-sm mt-1">
-                Jadwal #{{ $jadwal->id }} — {{ $jadwal->tanggal ? \Carbon\Carbon::parse($jadwal->tanggal)->format('d F Y') : '-' }}
+                Jadwal #{{ $jadwal->id }} — {{ $jadwal->tanggal
+                                                ? \Carbon\Carbon::parse($jadwal->tanggal)->translatedFormat('d F Y')
+                                                : '-' }}
                 , {{ $jadwal->jam_format ?? sprintf('%02d', $jadwal->jam).':00' }} WIB
             </p>
         </div>

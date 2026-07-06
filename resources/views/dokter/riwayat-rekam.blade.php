@@ -2,6 +2,11 @@
 @section('title', 'Rekam Medis')
 
 @section('content')
+
+@php
+    \Carbon\Carbon::setLocale('id');
+@endphp
+
 <div class="mb-7 flex flex-col md:flex-row md:items-center justify-between gap-4">
     <div>
         <h1 class="text-2xl font-bold text-slate-800">Rekam Medis</h1>
@@ -63,7 +68,9 @@
                         </div>
                     </td>
                     <td class="text-slate-500 text-sm">
-                        {{ $rm->created_at ? $rm->created_at->format('d F Y') : '-' }}
+                    {{ $rm->jadwal && $rm->jadwal->tanggal
+                        ? \Carbon\Carbon::parse($rm->jadwal->tanggal)->translatedFormat('d F Y')
+                        : '-' }}
                     </td>
                     <td class="text-slate-600 max-w-xs">
                         {{ \Illuminate\Support\Str::limit($rm->diagnosa ?? '-', 50) }}

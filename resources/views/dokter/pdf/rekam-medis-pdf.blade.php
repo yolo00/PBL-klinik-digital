@@ -146,6 +146,9 @@
     </style>
 </head>
 <body>
+@php
+    \Carbon\Carbon::setLocale('id');
+@endphp
 
     {{-- Header Klinik --}}
     <div class="header clearfix">
@@ -156,7 +159,7 @@
         <div class="header-meta">
             <p>No. Rekam: <strong>#{{ $rekamMedis->id }}</strong></p>
             {{-- Requirement: Tampilkan tanggal & jam rekam medis diisi --}}
-            <p>Diupload: {{ $rekamMedis->created_at ? \Carbon\Carbon::parse($rekamMedis->created_at)->format('d F Y, H:i') : '-' }} WIB</p>
+            <p>Diupload: {{ $rekamMedis->created_at ? \Carbon\Carbon::parse($rekamMedis->created_at)->translatedFormat('d F Y, H:i') : '-' }} WIB</p>
         </div>
     </div>
 
@@ -185,7 +188,7 @@
                 </tr>
                 <tr>
                     <td class="label">Tanggal Kunjungan</td>
-                    <td class="value">: {{ $rekamMedis->jadwal->tanggal ? \Carbon\Carbon::parse($rekamMedis->jadwal->tanggal)->format('d F Y') : '-' }}</td>
+                    <td class="value">: {{ $rekamMedis->jadwal->tanggal ? \Carbon\Carbon::parse($rekamMedis->jadwal->tanggal)->translatedFormat('d F Y') : '-' }}</td>
                     <td class="label">Jam</td>
                     <td class="value">: {{ $rekamMedis->jadwal->jam_format ?? '-' }} WIB</td>
                 </tr>
@@ -256,7 +259,7 @@
     <div class="ttd-section">
         <div class="ttd-box">
             <p style="font-size: 11px; color: #64748b;">
-                {{ $rekamMedis->jadwal->tanggal ? \Carbon\Carbon::parse($rekamMedis->jadwal->tanggal)->format('d F Y') : now()->format('d F Y') }}
+            {{ $rekamMedis->jadwal->tanggal ? \Carbon\Carbon::parse($rekamMedis->jadwal->tanggal)->translatedFormat('d F Y'): now()->translatedFormat('d F Y') }}
             </p>
             <div class="ttd-space"></div>
             <p class="ttd-name">{{ $rekamMedis->jadwal->dokter->user->nama ?? '-' }}</p>

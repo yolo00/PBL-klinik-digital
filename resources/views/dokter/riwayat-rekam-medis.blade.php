@@ -2,6 +2,9 @@
 @section('title', 'Riwayat Rekam Medis')
 
 @section('content')
+@php
+    \Carbon\Carbon::setLocale('id');
+@endphp
 {{-- Back + Title --}}
 <div class="flex items-center gap-4 mb-7">
     <a href="{{ route('dokter.pasien') }}"
@@ -86,7 +89,9 @@
                 <tr>
                     <td class="text-slate-400 font-medium">#{{ $rm->id }}</td>
                     <td class="font-semibold text-slate-700">
-                        {{ $rm->created_at ? $rm->created_at->format('d F Y') : '-' }}
+                    {{ $rm->jadwal && $rm->jadwal->tanggal
+                        ? \Carbon\Carbon::parse($rm->jadwal->tanggal)->translatedFormat('d F Y')
+                        : '-' }}
                     </td>
                     <td class="text-slate-600 max-w-xs">
                         {{ \Illuminate\Support\Str::limit($rm->diagnosa ?? '-', 50) }}

@@ -8,6 +8,10 @@
         <p class="text-slate-500 text-sm mt-1">Daftar seluruh jadwal konsultasi pasien yang terdaftar pada Anda.</p>
     </div>
 
+@php
+    \Carbon\Carbon::setLocale('id');
+@endphp
+
     {{-- Filter Tab --}}
     <div class="flex items-center gap-2 bg-slate-100 p-1 rounded-xl">
         <a href="{{ route('dokter.jadwal', ['filter' => 'semua']) }}"
@@ -44,7 +48,9 @@
                         {{ sprintf('%02d', $jadwal->jam) }}:00 WIB
                     </td>
                     <td class="text-slate-500 text-sm">
-                        {{ $jadwal->tanggal ? \Carbon\Carbon::parse($jadwal->tanggal)->format('d F Y') : '-' }}
+                    {{ $jadwal->tanggal
+                        ? \Carbon\Carbon::parse($jadwal->tanggal)->translatedFormat('d F Y')
+                        : '-' }}
                     </td>
                     <td>
                         <div class="flex items-center gap-3">

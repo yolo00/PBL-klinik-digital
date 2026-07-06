@@ -2,6 +2,9 @@
 @section('title', 'Pengaturan Jadwal')
 
 @section('content')
+@php
+    \Carbon\Carbon::setLocale('id');
+@endphp
 <div class="mb-7">
     <h1 class="text-2xl font-bold text-slate-800">Pengaturan Jadwal</h1>
     <p class="text-slate-500 text-sm mt-1">Atur jadwal operasional dan pengajuan cuti Anda.</p>
@@ -67,10 +70,10 @@
                 @forelse($cutis ?? [] as $cuti)
                     <tr>
                         <td class="font-semibold text-slate-700">
-                            {{ \Carbon\Carbon::parse($cuti->dari_tanggal)->format('d F Y') }}
+                        {{ \Carbon\Carbon::parse($cuti->dari_tanggal)->translatedFormat('d F Y') }}
                         </td>
                         <td class="font-semibold text-slate-700">
-                            {{ \Carbon\Carbon::parse($cuti->sampai_tanggal)->format('d F Y') }}
+                            {{ \Carbon\Carbon::parse($cuti->sampai_tanggal)->translatedFormat('d F Y') }}
                         </td>
                         <td class="text-slate-500">{{ $cuti->alasan ?? '-' }}</td>
                         <td class="text-center">

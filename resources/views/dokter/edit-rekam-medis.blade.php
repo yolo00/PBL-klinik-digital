@@ -3,6 +3,9 @@
 
 @section('content')
 <div class="bg-white p-8 rounded-2xl border border-slate-100 shadow-sm max-w-4xl mx-auto">
+@php
+    \Carbon\Carbon::setLocale('id');
+@endphp
 
     {{-- Header --}}
     <div class="flex justify-between items-start mb-8">
@@ -10,7 +13,9 @@
             <h2 class="text-2xl font-bold text-slate-800">Input Rekam Medis</h2>
             <p class="text-slate-400 text-sm mt-1">
                 Jadwal #{{ $jadwal->id }} &mdash;
-                {{ $jadwal->tanggal ? \Carbon\Carbon::parse($jadwal->tanggal)->format('d F Y') : '-' }},
+                {{ $jadwal->tanggal
+                    ? \Carbon\Carbon::parse($jadwal->tanggal)->translatedFormat('d F Y')
+                    : '-' }}
                 {{ $jadwal->jam_format ?? sprintf('%02d', $jadwal->jam).':00' }} WIB
             </p>
         </div>
@@ -47,7 +52,9 @@
             <div>
                 <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Tanggal Konsultasi</label>
                 <p class="mt-1 font-bold text-slate-800">
-                    {{ $jadwal->tanggal ? \Carbon\Carbon::parse($jadwal->tanggal)->format('d F Y') : '-' }}
+                {{ $jadwal->tanggal
+                    ? \Carbon\Carbon::parse($jadwal->tanggal)->translatedFormat('d F Y')
+                    : '-' }}
                 </p>
             </div>
             <div>
