@@ -2,80 +2,88 @@
 @section('title', 'Input Rekam Medis')
 
 @section('content')
-<div class="bg-white p-8 rounded-2xl border border-slate-100 shadow-sm max-w-4xl mx-auto">
-@php
-    \Carbon\Carbon::setLocale('id');
-@endphp
+<div class="max-w-4xl mx-auto">
+    <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 md:p-8 hover:shadow-lg transition-all duration-300">
+        @php
+            \Carbon\Carbon::setLocale('id');
+        @endphp
 
-    {{-- Header --}}
-    <div class="flex justify-between items-start mb-8">
-        <div>
-            <h2 class="text-2xl font-bold text-slate-800">Input Rekam Medis</h2>
-            <p class="text-slate-400 text-sm mt-1">
-                Jadwal #{{ $jadwal->id }} &mdash;
-                {{ $jadwal->tanggal
-                    ? \Carbon\Carbon::parse($jadwal->tanggal)->translatedFormat('d F Y')
-                    : '-' }}
-                {{ $jadwal->jam_format ?? sprintf('%02d', $jadwal->jam).':00' }} WIB
-            </p>
-        </div>
-        <a href="{{ route('dokter.jadwal') }}"
-           class="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-100 text-slate-600 rounded-xl text-xs font-semibold hover:bg-slate-200 transition-all">
-            <i class="fa-solid fa-arrow-left"></i> Kembali
-        </a>
-    </div>
-
-    {{-- Validation Errors --}}
-    @if($errors->any())
-    <div class="mb-6 p-4 bg-red-50 rounded-xl border border-red-100">
-        <ul class="text-sm text-red-600 list-disc list-inside space-y-1">
-            @foreach($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-    @endif
-
-    <form action="{{ route('dokter.rekam-medis.store', $jadwal->id) }}" method="POST">
-        @csrf
-
-        {{-- Info Pasien & Dokter --}}
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-7 p-6 bg-slate-50 rounded-2xl border border-slate-100">
+        {{-- Header (judul + deskripsi) --}}
+        <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-8">
             <div>
-                <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Nama Pasien</label>
-                <p class="mt-1 font-bold text-slate-800">{{ $jadwal->pasien->user->nama ?? '-' }}</p>
-            </div>
-            <div>
-                <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Dokter Pemeriksa</label>
-                <p class="mt-1 font-bold text-slate-800">{{ $jadwal->dokter->user->nama ?? '-' }}</p>
-            </div>
-            <div>
-                <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Tanggal Konsultasi</label>
-                <p class="mt-1 font-bold text-slate-800">
-                {{ $jadwal->tanggal
-                    ? \Carbon\Carbon::parse($jadwal->tanggal)->translatedFormat('d F Y')
-                    : '-' }}
-                </p>
-            </div>
-            <div>
-                <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Jam</label>
-                <p class="mt-1 font-bold text-slate-800">
+                <h2 class="text-2xl md:text-3xl font-bold text-slate-800">Input Rekam Medis</h2>
+                <p class="text-slate-500 text-sm mt-1">
+                    Jadwal #{{ $jadwal->id }} &mdash;
+                    {{ $jadwal->tanggal
+                        ? \Carbon\Carbon::parse($jadwal->tanggal)->translatedFormat('d F Y')
+                        : '-' }}
                     {{ $jadwal->jam_format ?? sprintf('%02d', $jadwal->jam).':00' }} WIB
                 </p>
             </div>
 
-            {{-- Riwayat Alergi --}}
-            @if($jadwal->pasien && $jadwal->pasien->alergi && $jadwal->pasien->alergi->count())
-            <div class="md:col-span-2 pt-3 border-t border-slate-200">
-                <label class="text-[10px] font-bold text-red-400 uppercase tracking-widest">
-                    <i class="fa-solid fa-triangle-exclamation mr-1"></i> Riwayat Alergi Pasien
-                </label>
-                <p class="mt-1 font-semibold text-red-600 text-sm">
-                    {{ $jadwal->pasien->alergi->pluck('nama_alergi')->join(', ') }}
-                </p>
-            </div>
-            @endif
+            <a href="{{ route('dokter.jadwal') }}"
+               class="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-100 text-slate-600 rounded-xl text-sm font-semibold hover:bg-slate-200 transition-all duration-300 shadow-sm">
+                <i class="fa-solid fa-arrow-left"></i> Kembali
+            </a>
         </div>
+
+        {{-- Validation Errors --}}
+        @if($errors->any())
+        <div class="mb-6 p-4 bg-red-50 rounded-xl border border-red-100">
+            <div class="flex items-start gap-2">
+                <i class="fa-solid fa-triangle-exclamation text-red-500 mt-0.5"></i>
+                <div>
+                    <p class="text-sm font-semibold text-red-700">Periksa kembali input Anda</p>
+                    <ul class="mt-2 text-sm text-red-600 list-disc list-inside space-y-1">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        </div>
+        @endif
+
+        <form action="{{ route('dokter.rekam-medis.store', $jadwal->id) }}" method="POST">
+            @csrf
+
+            {{-- Info Pasien & Dokter --}}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-7 p-6 bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-lg transition-all duration-300">
+                <div>
+                    <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Nama Pasien</label>
+                    <p class="mt-1 font-bold text-slate-800">{{ $jadwal->pasien->user->nama ?? '-' }}</p>
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Dokter Pemeriksa</label>
+                    <p class="mt-1 font-bold text-slate-800">{{ $jadwal->dokter->user->nama ?? '-' }}</p>
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Tanggal Konsultasi</label>
+                    <p class="mt-1 font-bold text-slate-800">
+                    {{ $jadwal->tanggal
+                        ? \Carbon\Carbon::parse($jadwal->tanggal)->translatedFormat('d F Y')
+                        : '-' }}
+                    </p>
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Jam</label>
+                    <p class="mt-1 font-bold text-slate-800">
+                        {{ $jadwal->jam_format ?? sprintf('%02d', $jadwal->jam).':00' }} WIB
+                    </p>
+                </div>
+
+                {{-- Riwayat Alergi --}}
+                @if($jadwal->pasien && $jadwal->pasien->alergi && $jadwal->pasien->alergi->count())
+                <div class="md:col-span-2 pt-3 border-t border-slate-200">
+                    <label class="text-[10px] font-bold text-red-400 uppercase tracking-widest">
+                        <i class="fa-solid fa-triangle-exclamation mr-1"></i> Riwayat Alergi Pasien
+                    </label>
+                    <p class="mt-1 font-semibold text-red-600 text-sm">
+                        {{ $jadwal->pasien->alergi->pluck('nama_alergi')->join(', ') }}
+                    </p>
+                </div>
+                @endif
+            </div>
 
         {{-- Keluhan & Diagnosa --}}
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
@@ -110,69 +118,77 @@
             </div>
         </div>
 
-        {{-- Resep Obat --}}
-        <div class="mb-7">
-            <div class="flex items-center justify-between mb-4">
-                <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                    <i class="fa-solid fa-pills text-blue-400 mr-1"></i> Resep Obat <span class="text-red-400">Opsional</span>
-                </label>
-                <button type="button" id="btn-tambah-resep"
-                    class="flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-600 rounded-xl text-xs font-semibold hover:bg-blue-100 transition-all border border-blue-200">
-                    <i class="fa-solid fa-plus"></i> Tambah Obat
+            {{-- Resep Obat --}}
+            <div class="mb-7">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+                    <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                        <i class="fa-solid fa-pills text-blue-400 mr-1"></i> Resep Obat <span class="text-red-400">Opsional</span>
+                    </label>
+
+                    <button type="button" id="btn-tambah-resep"
+                        class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-blue-50 text-blue-600 rounded-xl text-xs font-semibold hover:bg-blue-100 transition-all duration-300 border border-blue-200 shadow-sm">
+                        <i class="fa-solid fa-plus"></i> Tambah Obat
+                    </button>
+                </div>
+
+                <div class="overflow-x-auto rounded-2xl border border-slate-100 bg-white shadow-sm">
+                    <table class="w-full text-sm" id="tabel-resep">
+                        <thead class="bg-slate-50 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                            <tr>
+                                <th class="px-5 py-4 text-left">Nama Obat</th>
+                                <th class="px-5 py-4 text-left">Dosis</th>
+                                <th class="px-5 py-4 text-left">Aturan Pakai</th>
+                                <th class="px-5 py-4 text-center w-12"></th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="resep-body" class="divide-y divide-slate-50">
+                            <tr class="resep-row">
+                                <td class="px-4 py-3">
+                                    <input type="text" name="resep[0][obat]" value="{{ old('resep.0.obat') }}"
+                                        placeholder="Nama obat…"
+                                        class="w-full bg-slate-50 rounded-xl px-3 py-2.5 text-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 border border-transparent focus:border-blue-400 transition">
+                                </td>
+
+                                <td class="px-4 py-3">
+                                    <input type="text" name="resep[0][dosis]" value="{{ old('resep.0.dosis') }}"
+                                        placeholder="cth: 500 mg"
+                                        class="w-full bg-slate-50 rounded-xl px-3 py-2.5 text-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 border border-transparent focus:border-blue-400 transition">
+                                </td>
+
+                                <td class="px-4 py-3">
+                                    <input type="text" name="resep[0][aturan_pakai]" value="{{ old('resep.0.aturan_pakai') }}"
+                                        placeholder="cth: 3×1 sesudah makan"
+                                        class="w-full bg-slate-50 rounded-xl px-3 py-2.5 text-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 border border-transparent focus:border-blue-400 transition">
+                                </td>
+
+                                <td class="px-4 py-3 text-center">
+                                    <button type="button" class="btn-hapus-resep text-slate-300 hover:text-red-400 transition-colors hidden">
+                                        <i class="fa-solid fa-trash-can text-sm"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <p class="text-xs text-slate-400 mt-2 ml-1">Biarkan kosong jika tidak ada resep obat (Opsional).</p>
+            </div>
+
+            {{-- Action Buttons --}}
+            <div class="flex flex-col sm:flex-row sm:justify-end gap-3 pt-5 border-t border-slate-100 mt-7">
+                <a href="{{ route('dokter.jadwal') }}"
+                   class="inline-flex items-center justify-center px-6 py-2.5 bg-slate-100 text-slate-600 rounded-xl text-sm font-semibold hover:bg-slate-200 transition-all duration-300 shadow-sm">
+                    Batal
+                </a>
+
+                <button type="submit"
+                    class="inline-flex items-center justify-center px-8 py-2.5 bg-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-700 shadow-sm transition-all duration-300 flex items-center gap-2 w-full sm:w-auto">
+                    <i class="fa-solid fa-circle-check"></i> Konfirmasi Rekam Medis
                 </button>
             </div>
-
-            <div class="overflow-x-auto rounded-2xl border border-slate-100">
-                <table class="w-full text-sm" id="tabel-resep">
-                    <thead class="bg-slate-50 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                        <tr>
-                            <th class="px-5 py-4 text-left">Nama Obat</th>
-                            <th class="px-5 py-4 text-left">Dosis</th>
-                            <th class="px-5 py-4 text-left">Aturan Pakai</th>
-                            <th class="px-5 py-4 text-center w-12"></th>
-                        </tr>
-                    </thead>
-                    <tbody id="resep-body" class="divide-y divide-slate-50">
-                        <tr class="resep-row">
-                            <td class="px-4 py-3">
-                                <input type="text" name="resep[0][obat]" value="{{ old('resep.0.obat') }}"
-                                    placeholder="Nama obat…"
-                                    class="w-full bg-slate-50 rounded-xl px-3 py-2.5 text-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 border border-transparent focus:border-blue-400 transition">
-                            </td>
-                            <td class="px-4 py-3">
-                                <input type="text" name="resep[0][dosis]" value="{{ old('resep.0.dosis') }}"
-                                    placeholder="cth: 500 mg"
-                                    class="w-full bg-slate-50 rounded-xl px-3 py-2.5 text-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 border border-transparent focus:border-blue-400 transition">
-                            </td>
-                            <td class="px-4 py-3">
-                                <input type="text" name="resep[0][aturan_pakai]" value="{{ old('resep.0.aturan_pakai') }}"
-                                    placeholder="cth: 3×1 sesudah makan"
-                                    class="w-full bg-slate-50 rounded-xl px-3 py-2.5 text-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 border border-transparent focus:border-blue-400 transition">
-                            </td>
-                            <td class="px-4 py-3 text-center">
-                                <button type="button" class="btn-hapus-resep text-slate-300 hover:text-red-400 transition-colors hidden">
-                                    <i class="fa-solid fa-trash-can text-sm"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <p class="text-xs text-slate-400 mt-2 ml-1">Biarkan kosong jika tidak ada resep obat (Opsional).</p>
-        </div>
-
-        {{-- Action Buttons --}}
-        <div class="flex justify-end gap-3 pt-5 border-t border-slate-100">
-            <a href="{{ route('dokter.jadwal') }}"
-               class="px-6 py-2.5 bg-slate-100 text-slate-600 rounded-xl text-sm font-semibold hover:bg-slate-200 transition-all">
-                Batal
-            </a>
-            <button type="submit"
-                class="px-8 py-2.5 bg-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-700 shadow-sm transition-all flex items-center gap-2">
-                <i class="fa-solid fa-circle-check"></i> Konfirmasi Rekam Medis
-            </button>
-        </div>
-    </form>
+        </form>
+    </div>
 </div>
 
 <script>

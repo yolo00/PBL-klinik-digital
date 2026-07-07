@@ -53,11 +53,90 @@
         }
     </style>
 </head>
-<body class="h-screen bg-slate-50 text-slate-800 flex overflow-hidden">
+<body class="h-screen bg-slate-50 text-slate-800 flex overflow-hidden overflow-x-hidden">
+    {{-- Mobile drawer toggle --}}
+    <input type="checkbox" id="admin-drawer-toggle" class="hidden peer" />
 
-    <!-- Sidebar -->
-    <aside class="w-[280px] bg-slate-950 text-slate-50 h-screen sticky top-0 flex flex-col shrink-0 z-50">
+    {{-- Mobile drawer + overlay --}}
+    <div class="fixed inset-0 z-40 md:hidden">
+        {{-- overlay --}}
+        <label for="admin-drawer-toggle" class="absolute inset-0 bg-black/45 hidden peer-checked:block"></label>
 
+        {{-- drawer panel --}}
+        <div id="admin-drawer-panel" class="absolute left-0 top-0 h-screen w-[280px] bg-slate-950 text-slate-50 transform -translate-x-full transition-transform duration-300 ease-in-out peer-checked:translate-x-0">
+            {{-- Drawer uses the same sidebar markup as desktop --}}
+            {{-- Logo --}}
+            <a href="{{ route('admin.dashboard') }}" class="px-8 py-8 flex items-center gap-4 border-b border-slate-900/50 hover:bg-slate-900/30 transition-all duration-300">
+                <img src="{{ asset('images/logo.png') }}" alt="UniHealth Logo" class="w-11 h-11 md:w-[52px] md:h-[52px] rounded-xl shadow-sm border border-slate-600 transition-transform duration-300 hover:scale-105 hover:-rotate-3">
+                <span class="font-bold text-[24px] text-white">UniHealth</span>
+            </a>
+
+            <div class="py-8 flex-1 overflow-y-auto w-full">
+                <nav class="space-y-1 w-full flex flex-col px-4">
+                    {{-- Dashboard --}}
+                    <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-4 px-4 py-4 rounded-xl {{ request()->routeIs('admin.dashboard') ? 'sidebar-active' : 'sidebar-link' }}">
+                        <i class="fa-solid w-5 shrink-0 text-center"></i>
+                        Dashboard
+                    </a>
+
+                    {{-- Manajemen --}}
+                    <div class="pt-5 pb-2 px-2 flex items-center justify-between text-slate-500/70">
+                        <span class="text-[11px] font-bold uppercase tracking-widest">Manajemen</span>
+                    </div>
+
+                    <a href="{{ route('admin.pasien.index') }}" onclick="document.getElementById('admin-drawer-toggle').checked=false;" class="flex items-center gap-4 px-4 py-4 rounded-xl {{ request()->routeIs('admin.pasien*') ? 'sidebar-active' : 'sidebar-link' }}">
+                        <i class="fa-solid fa-user-injured w-5 text-center"></i>
+                        Data Pasien
+                    </a>
+                    <a href="{{ route('admin.dokter.index') }}" onclick="document.getElementById('admin-drawer-toggle').checked=false;" class="flex items-center gap-4 px-4 py-4 rounded-xl {{ request()->routeIs('admin.dokter*') ? 'sidebar-active' : 'sidebar-link' }}">
+                        <i class="fa-solid fa-user-doctor w-5 text-center"></i>
+                        Data Dokter
+                    </a>
+                    <a href="{{ route('admin.jadwal.index') }}" onclick="document.getElementById('admin-drawer-toggle').checked=false;" class="flex items-center gap-4 px-4 py-4 rounded-xl {{ request()->routeIs('admin.jadwal.index') || request()->routeIs('admin.jadwal.create') || request()->routeIs('admin.jadwal.show') || request()->routeIs('admin.jadwal.edit') ? 'sidebar-active' : 'sidebar-link' }}">
+                        <i class="fa-solid fa-calendar-day w-5 text-center"></i>
+                        Data Jadwal
+                    </a>
+                    <a href="{{ route('admin.rekam-medis.index') }}" onclick="document.getElementById('admin-drawer-toggle').checked=false;" class="flex items-center gap-4 px-4 py-4 rounded-xl {{ request()->routeIs('admin.rekam-medis*') ? 'sidebar-active' : 'sidebar-link' }}">
+                        <i class="fa-solid fa-file-waveform w-5 text-center"></i>
+                        Data Rekam Medis
+                    </a>
+                    <a href="{{ route('admin.pembayaran.index') }}" onclick="document.getElementById('admin-drawer-toggle').checked=false;" class="flex items-center gap-4 px-4 py-4 rounded-xl {{ request()->routeIs('admin.pembayaran*') ? 'sidebar-active' : 'sidebar-link' }}">
+                        <i class="fa-solid fa-money-bill-wave w-5 text-center"></i>
+                        Data Pembayaran
+                    </a>
+                    <a href="{{ route('admin.cuti-dokter.index') }}" onclick="document.getElementById('admin-drawer-toggle').checked=false;" class="flex items-center gap-4 px-4 py-4 rounded-xl {{ request()->routeIs('admin.cuti-dokter*') ? 'sidebar-active' : 'sidebar-link' }}">
+                        <i class="fa-solid fa-calendar-xmark w-5 text-center"></i>
+                        Cuti Dokter
+                    </a>
+
+                    {{-- Pengaturan System Dropdown --}}
+                    <div class="pt-5 pb-2 px-2 flex items-center justify-between text-slate-500/70">
+                        <span class="text-[11px] font-bold uppercase tracking-widest">Pengaturan</span>
+                    </div>
+
+                    <button onclick="document.getElementById('pengaturan-menu').classList.toggle('hidden'); document.getElementById('pengaturan-icon').classList.toggle('rotate-180');" class="flex items-center justify-between px-4 py-4 rounded-xl w-full {{ request()->routeIs('admin.jadwal-sistem*') || request()->routeIs('admin.spesialisasi*') ? 'sidebar-active' : 'sidebar-link' }}">
+                        <div class="flex items-center gap-4">
+                            <i class="fa-solid fa-gear w-5 shrink-0 text-center"></i>
+                            <span>Pengaturan Sistem</span>
+                        </div>
+                        <i id="pengaturan-icon" class="fa-solid fa-chevron-down text-xs transition-transform duration-200 {{ request()->routeIs('admin.jadwal-sistem*') || request()->routeIs('admin.spesialisasi*') ? 'rotate-180' : '' }}"></i>
+                    </button>
+
+                    <div id="pengaturan-menu" class="flex flex-col gap-1 pl-12 pr-4 pt-2 {{ request()->routeIs('admin.jadwal-sistem*') || request()->routeIs('admin.spesialisasi*') ? '' : 'hidden' }}">
+                        <a href="{{ route('admin.jadwal-sistem') }}" class="py-2 text-sm {{ request()->routeIs('admin.jadwal-sistem*') ? 'text-white font-bold' : 'text-slate-400 hover:text-white' }}">
+                            Jadwal Sistem
+                        </a>
+                        <a href="{{ route('admin.spesialisasi.index') }}" class="py-2 text-sm {{ request()->routeIs('admin.spesialisasi*') ? 'text-white font-bold' : 'text-slate-400 hover:text-white' }}">
+                            Spesialisasi Klinik
+                        </a>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    {{-- Sidebar (Desktop) --}}
+    <aside class="hidden md:flex w-[280px] bg-slate-950 text-slate-50 h-screen sticky top-0 flex-col shrink-0 z-50">
         {{-- Logo --}}
         <a href="{{ route('admin.dashboard') }}" class="px-8 py-8 flex items-center gap-4 border-b border-slate-900/50 hover:bg-slate-900/30 transition-all duration-300">
             <img src="{{ asset('images/logo.png') }}" alt="UniHealth Logo" class="w-11 h-11 md:w-[52px] md:h-[52px] rounded-xl shadow-sm border border-slate-600 transition-transform duration-300 hover:scale-105 hover:-rotate-3">
@@ -131,7 +210,19 @@
     <div class="flex-1 flex flex-col h-screen overflow-hidden relative">
 
         <!-- ===== HEADER (sticky, lighter slate) ===== -->
-        <header class="h-[72px] bg-slate-900 border-b border-slate-200 flex justify-end items-center px-10 shrink-0 sticky top-0 z-20 gap-4">
+<header class="h-[72px] bg-slate-900 border-b border-slate-200 flex justify-end items-center px-10 shrink-0 sticky top-0 z-20 gap-4">
+            {{-- Mobile hamburger --}}
+            <button
+                type="button"
+                id="admin-hamburger-btn"
+                aria-label="Buka sidebar"
+                aria-controls="admin-drawer-panel"
+                aria-expanded="false"
+                class="md:hidden absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-xl bg-white/10 hover:bg-white/15 flex items-center justify-center cursor-pointer"
+                onclick="(function(){var t=document.getElementById('admin-drawer-toggle'); if(!t)return; if(!t.checked){ t.checked=true; t.dispatchEvent(new Event('change',{bubbles:true})); } })();"
+            >
+                <i class="fa-solid fa-bars text-white"></i>
+            </button>
             @include('components.notif-bell')
             <div class="relative group">
                 <div class="flex items-center gap-3 cursor-pointer">
@@ -184,5 +275,12 @@
         </main>
     </div>
     @stack('scripts')
+
+    @include('components.layouts.drawer-controller', [
+        'toggleId' => 'admin-drawer-toggle',
+        'hamburgerBtnId' => 'admin-hamburger-btn',
+        'panelId' => 'admin-drawer-panel',
+        'lockClass' => 'overflow-hidden',
+    ])
 </body>
 </html>

@@ -16,7 +16,9 @@
         <i class="fa-solid fa-calendar-week text-blue-500 text-sm"></i>
         <h2 class="font-bold text-slate-700 text-sm uppercase tracking-wider">Jadwal Praktik Rutin</h2>
     </div>
-    <div class="overflow-x-auto">
+
+    {{-- Desktop/Table --}}
+    <div class="hidden lg:block overflow-x-auto">
         <table class="w-full data-table">
             <thead>
                 <tr>
@@ -48,6 +50,72 @@
             </tbody>
         </table>
     </div>
+
+    {{-- Mobile Card List --}}
+    <div class="lg:hidden p-4">
+        <div class="bg-white border border-slate-100 rounded-2xl shadow-sm p-4 mb-3 hover:shadow-lg transition-all duration-300">
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Hari</p>
+            <p class="text-slate-700 font-semibold mt-1">Senin – Kamis</p>
+
+            <div class="mt-3 grid grid-cols-2 gap-4">
+                <div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Jam Mulai</p>
+                    <p class="text-blue-600 font-bold mt-1">08.00</p>
+                </div>
+                <div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Jam Selesai</p>
+                    <p class="text-slate-700 font-semibold mt-1">17.00</p>
+                </div>
+            </div>
+
+            <div class="mt-3">
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Istirahat</p>
+                <p class="text-center text-slate-400 mt-1">12.00 – 13.00</p>
+            </div>
+        </div>
+
+        <div class="bg-white border border-slate-100 rounded-2xl shadow-sm p-4 mb-3 hover:shadow-lg transition-all duration-300">
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Hari</p>
+            <p class="text-slate-700 font-semibold mt-1">Jumat</p>
+
+            <div class="mt-3 grid grid-cols-2 gap-4">
+                <div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Jam Mulai</p>
+                    <p class="text-blue-600 font-bold mt-1">08.00</p>
+                </div>
+                <div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Jam Selesai</p>
+                    <p class="text-slate-700 font-semibold mt-1">17.00</p>
+                </div>
+            </div>
+
+            <div class="mt-3">
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Istirahat</p>
+                <p class="text-center text-slate-400 mt-1">12.00 – 14.00</p>
+            </div>
+        </div>
+
+        <div class="bg-white border border-slate-100 rounded-2xl shadow-sm p-4 hover:shadow-lg transition-all duration-300">
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Hari</p>
+            <p class="text-slate-700 font-semibold mt-1">Sabtu</p>
+
+            <div class="mt-3 grid grid-cols-2 gap-4">
+                <div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Jam Mulai</p>
+                    <p class="text-blue-600 font-bold mt-1">10.00</p>
+                </div>
+                <div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Jam Selesai</p>
+                    <p class="text-slate-700 font-semibold mt-1">14.00</p>
+                </div>
+            </div>
+
+            <div class="mt-3">
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Istirahat</p>
+                <p class="text-center text-slate-400 mt-1">12.00 – 13.00</p>
+            </div>
+        </div>
+    </div>
 </div>
 
 {{-- Riwayat Pengajuan Cuti --}}
@@ -56,7 +124,9 @@
         <i class="fa-solid fa-clock-rotate-left text-blue-500 text-sm"></i>
         <h2 class="font-bold text-slate-700 text-sm uppercase tracking-wider">Riwayat Pengajuan Cuti</h2>
     </div>
-    <div class="overflow-x-auto">
+
+    {{-- Desktop/Table --}}
+    <div class="hidden lg:block overflow-x-auto">
         <table class="w-full data-table">
             <thead>
                 <tr>
@@ -70,7 +140,7 @@
                 @forelse($cutis ?? [] as $cuti)
                     <tr>
                         <td class="font-semibold text-slate-700">
-                        {{ \Carbon\Carbon::parse($cuti->dari_tanggal)->translatedFormat('d F Y') }}
+                            {{ \Carbon\Carbon::parse($cuti->dari_tanggal)->translatedFormat('d F Y') }}
                         </td>
                         <td class="font-semibold text-slate-700">
                             {{ \Carbon\Carbon::parse($cuti->sampai_tanggal)->translatedFormat('d F Y') }}
@@ -96,10 +166,57 @@
             </div>
         @endif
     </div>
+
+    {{-- Mobile Card List --}}
+    <div class="lg:hidden p-4">
+        @forelse($cutis ?? [] as $cuti)
+            <div class="bg-white border border-slate-100 rounded-2xl shadow-sm p-4 mb-3 hover:shadow-lg transition-all duration-300">
+                <div class="flex items-start justify-between gap-4">
+                    <div>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Dari Tanggal</p>
+                        <p class="text-slate-700 font-semibold mt-1">
+                            {{ \Carbon\Carbon::parse($cuti->dari_tanggal)->translatedFormat('d F Y') }}
+                        </p>
+
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-3">Sampai Tanggal</p>
+                        <p class="text-slate-700 font-semibold mt-1">
+                            {{ \Carbon\Carbon::parse($cuti->sampai_tanggal)->translatedFormat('d F Y') }}
+                        </p>
+                    </div>
+
+                    <span class="inline-flex items-center justify-center px-3 py-1 rounded-lg text-xs font-bold border border-slate-100 bg-slate-50 {{ $cuti->status_color }} shrink-0">
+                        {{ $cuti->status_label }}
+                    </span>
+                </div>
+
+                <div class="mt-3">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Alasan</p>
+                    <p class="text-slate-500 mt-1 break-words">
+                        {{ $cuti->alasan ?? '-' }}
+                    </p>
+                </div>
+            </div>
+        @empty
+            <div class="py-10">
+                <div class="flex flex-col items-center gap-2">
+                    <i class="fa-solid fa-folder-open text-4xl text-slate-200"></i>
+                    <p class="text-sm font-medium text-slate-400">
+                        Belum ada pengajuan cuti.
+                    </p>
+                </div>
+            </div>
+        @endforelse
+
+        @if(isset($cutis) && $cutis->hasPages())
+            <div class="pt-2">
+                {{ $cutis->links() }}
+            </div>
+        @endif
+    </div>
 </div>
 
 {{-- Form Pengajuan Cuti --}}
-<div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-8">
+<div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-8 transition-all duration-300 hover:shadow-lg">
     <div class="flex items-center gap-2 mb-6">
         <i class="fa-solid fa-paper-plane text-blue-500 text-sm"></i>
         <h2 class="font-bold text-slate-700 text-sm uppercase tracking-wider">Form Pengajuan Cuti</h2>
@@ -107,7 +224,6 @@
 
     <form action="{{ route('dokter.pengaturan.store') }}" method="POST" class="space-y-6">
         @csrf
-
 
         {{-- Tanggal --}}
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">

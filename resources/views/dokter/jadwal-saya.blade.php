@@ -30,7 +30,8 @@
 </div>
 
 <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
-    <div class="overflow-x-auto">
+    {{-- Desktop/Tablet: table --}}
+    <div class="overflow-x-auto hidden lg:block">
         <table class="w-full data-table">
             <thead>
                 <tr>
@@ -86,8 +87,6 @@
                                 // Allowed: hari ini atau kemarin atau jadwal yang sudah lewat
                                 $isDateAllowed = $jadwalTanggal->isSameDay($today) || $jadwalTanggal->isSameDay($today->copy()->subDay()) || $jadwalTanggal->lt($today);
                             }
-
-                            $showInfoNotAllowed = (!$isDateAllowed);
                         @endphp
 
                         @if(in_array($jadwal->status, ['menunggu', 'dikonfirmasi']))
@@ -103,9 +102,9 @@
                                           title="Rekam medis hanya bisa diisi pada hari ini, kemarin, atau jadwal yang sudah berlalu.">
                                         <i class="fa-solid fa-lock text-[10px]"></i> Buat Rekam Medis
                                     </span>
-                                        <div class="mt-1 text-[10px] text-amber-600 font-semibold">
-                                            Rekam medis hanya bisa diisi pada jadwal hari ini, kemarin, atau yang sudah lewat.
-                                        </div>
+                                    <div class="mt-1 text-[10px] text-amber-600 font-semibold">
+                                        Rekam medis hanya bisa diisi pada jadwal hari ini, kemarin, atau yang sudah lewat.
+                                    </div>
                                 @endif
                             @else
                                 {{-- Sudah ada rekam medis --}}
@@ -154,6 +153,134 @@
                 @endforelse
             </tbody>
         </table>
+    </div>
+
+    {{-- Mobile: card list (no table) --}}
+    <div class="lg:hidden p-4">
+        <div class="space-y-3">
+            @forelse($jadwals as $jadwal)
+                @php
+                    $isDateAllowed = false;
+                    $today = \Carbon\Carbon::today();
+
+                    if (!empty($jadwal->tanggal)) {
+                        $jadwalTanggal = \Carbon\Carbon::parse($jadwal->tanggal)->startOfDay();
+                        $isDateAllowed = $jadwalTanggal->isSameDay($today) || $jadwalTanggal->isSameDay($today->copy()->subDay()) || $jadwalTanggal->lt($today);
+                    }
+                @endphp
+
+                <div class="bg-white border border-slate-100 rounded-2xl shadow-sm p-4 transition-all duration-300 hover:shadow-md">
+                    <div class="flex items-start justify-between gap-4">
+                        <div class="min-w-0">
+                            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Jam</p>
+                            <p class="text-sm font-bold text-slate-800">
+                                {{ sprintf('%02d', $jadwal->jam) }}:00 WIB
+                            </p>
+
+                            <div class="mt-3">
+                                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Tanggal</p>
+                                <p class="text-sm text-slate-700">
+                                    {{ $jadwal->tanggal
+                                        ? \Carbon\Carbon::parse($jadwal->tanggal)->translatedFormat('d F Y')
+                                        : '-' }}
+                                </p>
+                            </div>
+
+                            <div class="mt-3 flex items-center gap-3">
+                                <div class="w-9 h-9 rounded-full bg-blue-50 flex items-center justify-center shrink-0 border border-blue-100">
+                                    <i class="fa-solid fa-user text-blue-400 text-xs"></i>
+                                </div>
+                                <div class="min-w-0">
+                                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Nama Pasien</p>
+                                    <p class="text-sm font-semibold text-slate-800 truncate">
+                                        {{ $jadwal->pasien->user->nama ?? 'Nama Tidak Ditemukan' }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="shrink-0">
+                            @if($jadwal->status === 'menunggu')
+                                <span class="badge-menunggu flex items-center gap-1.5 w-fit">
+                                    <span class="w-1.5 h-1.5 bg-amber-400 rounded-full animate-pulse inline-block"></span>
+                                    Menunggu
+                                </span>
+                            @elseif($jadwal->status === 'dikonfirmasi')
+                                <span class="badge-konfirmasi w-fit inline-block">Dikonfirmasi</span>
+                            @elseif($jadwal->status === 'selesai')
+                                <span class="badge-selesai w-fit inline-block">Selesai</span>
+                            @else
+                                <span class="badge-batal w-fit inline-block">Dibatalkan</span>
+                            @endif
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Aksi</p>
+
+                        @if(in_array($jadwal->status, ['menunggu', 'dikonfirmasi']))
+                            {{-- Belum ada rekam medis → buat baru --}}
+                            @if(!$jadwal->rekamMedis)
+                                @if($isDateAllowed)
+                                    <a href="{{ route('dokter.jadwal.buat-rekam', $jadwal->id) }}"
+                                       class="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-semibold hover:bg-blue-700 transition-all shadow-sm">
+                                        <i class="fa-solid fa-pen-to-square text-[10px]"></i> Buat Rekam Medis
+                                    </a>
+                                @else
+                                    <div class="space-y-1">
+                                        <span class="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2 bg-slate-50 text-slate-300 rounded-xl text-xs border border-slate-100 cursor-not-allowed">
+                                            <i class="fa-solid fa-lock text-[10px]"></i> Buat Rekam Medis
+                                        </span>
+                                        <div class="text-center text-[10px] text-amber-600 font-semibold">
+                                            Rekam medis hanya bisa diisi pada jadwal hari ini, kemarin, atau yang sudah lewat.
+                                        </div>
+                                    </div>
+                                @endif
+                            @else
+                                {{-- Sudah ada rekam medis --}}
+                                <a href="{{ route('dokter.rekam.show', $jadwal->rekamMedis->id) }}"
+                                   class="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2 bg-emerald-50 text-emerald-600 rounded-xl text-xs font-semibold hover:bg-emerald-100 transition-all">
+                                    <i class="fa-solid fa-eye text-[10px]"></i> Lihat Rekam
+                                </a>
+                            @endif
+                        @elseif($jadwal->status === 'selesai')
+                            @if($jadwal->rekamMedis)
+                                <a href="{{ route('dokter.rekam.show', $jadwal->rekamMedis->id) }}"
+                                   class="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2 bg-slate-100 text-slate-600 rounded-xl text-xs font-semibold hover:bg-slate-200 transition-all">
+                                    <i class="fa-solid fa-eye text-[10px]"></i> Lihat Rekam
+                                </a>
+                            @else
+                                <span class="block w-full text-center text-slate-300 text-xs bg-slate-50 px-3 py-2 rounded-xl border border-slate-100">
+                                    Selesai
+                                </span>
+                            @endif
+                        @else
+                            <span class="block w-full text-center text-slate-300 text-xs bg-slate-50 px-3 py-2 rounded-xl border border-slate-100">
+                                —
+                            </span>
+                        @endif
+                    </div>
+                </div>
+            @empty
+                <div class="bg-white border border-slate-100 rounded-2xl shadow-sm p-6">
+                    <div class="flex flex-col items-center gap-3 text-center">
+                        <div class="w-16 h-16 rounded-2xl bg-slate-50 flex items-center justify-center">
+                            <i class="fa-solid fa-calendar-xmark text-3xl text-slate-200"></i>
+                        </div>
+                        <p class="font-semibold text-slate-400">
+                            @if($filter === 'hari_ini')
+                                Tidak ada jadwal pemeriksaan untuk hari ini.
+                            @elseif($filter === 'menunggu')
+                                Tidak ada jadwal yang memerlukan tindakan.
+                            @else
+                                Belum ada jadwal praktik yang terdaftar.
+                            @endif
+                        </p>
+                        <p class="text-xs text-slate-300">Jadwal akan muncul otomatis ketika pasien mendaftar.</p>
+                    </div>
+                </div>
+            @endforelse
+        </div>
     </div>
 
     {{-- Pagination --}}

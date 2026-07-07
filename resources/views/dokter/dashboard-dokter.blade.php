@@ -18,19 +18,20 @@
 </div>
 
 {{-- Stat Cards --}}
-<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-7">
-
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-7">
     {{-- Pasien Hari Ini --}}
-    <div class="stat-card">
-        <div class="stat-icon bg-blue-50 text-blue-600">
-            <i class="fa-solid fa-user-group"></i>
+    <div class="stat-card min-h-[132px] flex flex-col justify-between transition-all duration-300 lg:hover:-translate-y-1 lg:hover:shadow-[0_10px_35px_rgba(21,101,192,0.12)]">
+        <div>
+            <div class="stat-icon bg-blue-50 text-blue-600">
+                <i class="fa-solid fa-user-group"></i>
+            </div>
+            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+                Pasien Hari Ini
+            </p>
+            <p class="text-3xl font-bold text-slate-800 leading-none">
+                {{ $jadwalHariIni }}
+            </p>
         </div>
-        <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">
-            Pasien Hari Ini
-        </p>
-        <p class="text-3xl font-bold text-slate-800">
-            {{ $jadwalHariIni }}
-        </p>
         <a href="{{ route('dokter.jadwal') }}"
             class="text-blue-600 text-xs font-semibold mt-2 inline-flex items-center gap-1 hover:gap-2 transition-all">
             Lihat detail
@@ -39,16 +40,18 @@
     </div>
 
     {{-- Semua Jadwal --}}
-    <div class="stat-card">
-        <div class="stat-icon bg-indigo-50 text-indigo-600">
-            <i class="fa-solid fa-calendar-check"></i>
+    <div class="stat-card min-h-[132px] flex flex-col justify-between transition-all duration-300 lg:hover:-translate-y-1 lg:hover:shadow-[0_10px_35px_rgba(99,102,241,0.12)]">
+        <div>
+            <div class="stat-icon bg-indigo-50 text-indigo-600">
+                <i class="fa-solid fa-calendar-check"></i>
+            </div>
+            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+                Seluruh Jadwal Pemeriksaan
+            </p>
+            <p class="text-3xl font-bold text-slate-800 leading-none">
+                {{ $semuaJadwal }}
+            </p>
         </div>
-        <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">
-            Seluruh Jadwal Pemeriksaan
-        </p>
-        <p class="text-3xl font-bold text-slate-800">
-            {{ $semuaJadwal }}
-        </p>
         <a href="{{ route('dokter.jadwal') }}"
             class="text-blue-600 text-xs font-semibold mt-2 inline-flex items-center gap-1 hover:gap-2 transition-all">
             Lihat semua
@@ -57,16 +60,18 @@
     </div>
 
     {{-- Rekam Belum Terisi --}}
-    <div class="stat-card">
-        <div class="stat-icon bg-amber-50 text-amber-500">
-            <i class="fa-solid fa-clipboard-list"></i>
+    <div class="stat-card min-h-[132px] flex flex-col justify-between transition-all duration-300 lg:hover:-translate-y-1 lg:hover:shadow-[0_10px_35px_rgba(245,158,11,0.12)]">
+        <div>
+            <div class="stat-icon bg-amber-50 text-amber-500">
+                <i class="fa-solid fa-clipboard-list"></i>
+            </div>
+            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+                Rekam Medis Menunggu Pengisian
+            </p>
+            <p class="text-3xl font-bold text-slate-800 leading-none">
+                {{ $rekamBelumTerisi }}
+            </p>
         </div>
-        <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">
-            Rekam Medis Menunggu Pengisian
-        </p>
-        <p class="text-3xl font-bold text-slate-800">
-            {{ $rekamBelumTerisi }}
-        </p>
         <a href="{{ route('dokter.rekam-medis') }}"
             class="text-amber-500 text-xs font-semibold mt-2 inline-flex items-center gap-1 hover:gap-2 transition-all">
             Perlu ditinjau
@@ -75,16 +80,18 @@
     </div>
 
     {{-- Status Praktik --}}
-    <div class="stat-card">
-        <div class="stat-icon bg-emerald-50 text-emerald-600">
-            <i class="fa-solid fa-stethoscope"></i>
+    <div class="stat-card min-h-[132px] flex flex-col justify-between transition-all duration-300 lg:hover:-translate-y-1 lg:hover:shadow-[0_10px_35px_rgba(16,185,129,0.12)]">
+        <div>
+            <div class="stat-icon bg-emerald-50 text-emerald-600">
+                <i class="fa-solid fa-stethoscope"></i>
+            </div>
+            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+                Status Pelayanan
+            </p>
+            <p class="text-2xl font-bold text-emerald-600 leading-none">
+                Aktif
+            </p>
         </div>
-        <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">
-            Status Pelayanan
-        </p>
-        <p class="text-2xl font-bold text-emerald-600">
-            Aktif
-        </p>
         <a href="{{ route('dokter.pengaturan') }}"
             class="text-emerald-600 text-xs font-semibold mt-2 inline-flex items-center gap-1 hover:gap-2 transition-all">
             Atur status

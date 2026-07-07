@@ -18,28 +18,28 @@
     </section>
 
     <div class="grid grid-cols-12 gap-6">
-        {{-- Ringkasan Statistik --}}
-        <div class="col-span-7 bg-white p-7 rounded-2xl shadow-sm border border-gray-100">
+{{-- Ringkasan Statistik --}}
+        <div class="col-span-7 bg-white p-7 rounded-2xl shadow-sm border border-gray-100 transition-all duration-300 hover:shadow-md">
             <div class="flex justify-between items-start mb-6">
                 <div>
                     <h2 class="text-xl font-bold text-gray-800">Ringkasan Statistik</h2>
                     <p class="text-sm text-gray-400">Catatan kunjungan terakhir Anda</p>
                 </div>
-                <span class="bg-blue-50 text-blue-500 p-3 rounded-xl text-xl">
+                <span class="bg-blue-50 text-blue-500 p-3 rounded-xl text-xl shadow-sm">
                     <i class="fa-solid fa-chart-line"></i>
                 </span>
             </div>
             
-            <div class="grid grid-cols-3 gap-4">
-                <div class="bg-blue-50/30 p-4 rounded-2xl border border-blue-50">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="bg-blue-50/30 p-4 rounded-2xl border border-blue-50 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md">
                     <span class="text-[11px] text-blue-400 block mb-1 uppercase font-bold tracking-wider">Terakhir</span>
                     <span class="font-bold text-gray-700 text-sm">{{ $terakhirKunjungan ? $terakhirKunjungan->tanggal->format('d M Y') : '-' }}</span>
                 </div>
-                <div class="bg-blue-50/30 p-4 rounded-2xl border border-blue-50 text-center">
+                <div class="bg-blue-50/30 p-4 rounded-2xl border border-blue-50 text-center shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md">
                     <span class="text-[11px] text-blue-400 block mb-1 uppercase font-bold tracking-wider">Total</span>
                     <span class="font-bold text-3xl text-blue-600">{{ $totalKunjungan }}</span>
                 </div>
-                <div class="bg-blue-50/30 p-4 rounded-2xl border border-blue-50 text-center">
+                <div class="bg-blue-50/30 p-4 rounded-2xl border border-blue-50 text-center shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md">
                     <span class="text-[11px] text-blue-400 block mb-1 uppercase font-bold tracking-wider">Status</span>
                     <span class="font-bold text-lg text-gray-700">{{ auth()->user()->status_akun ?? 'Aktif' }}</span>
                 </div>

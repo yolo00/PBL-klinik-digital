@@ -38,7 +38,8 @@
 @endif
 
 <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
-    <div class="overflow-x-auto">
+    {{-- Desktop/Tablet: table --}}
+    <div class="overflow-x-auto hidden lg:block">
         <table class="w-full data-table">
             <thead>
                 <tr>
@@ -97,6 +98,74 @@
                 @endforelse
             </tbody>
         </table>
+    </div>
+
+    {{-- Mobile: card list --}}
+    <div class="lg:hidden p-4">
+        <div class="space-y-3">
+            @forelse($pasiens as $pasien)
+                <div class="bg-white border border-slate-100 rounded-2xl shadow-sm p-4 transition-all duration-300 hover:shadow-md">
+                    <div class="flex items-start justify-between gap-4">
+                        <div class="flex items-center gap-3 min-w-0">
+                            <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center shrink-0 border border-blue-100">
+                                <i class="fa-solid fa-user text-blue-400 text-xs"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <p class="text-sm font-bold text-slate-800 truncate">
+                                    {{ $pasien->user->nama ?? '-' }}
+                                </p>
+                                <p class="text-xs text-slate-400 truncate">
+                                    {{ $pasien->user->email ?? '-' }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-3 space-y-2">
+                        <div>
+                            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Jenis Kelamin</p>
+                            <p class="text-sm font-semibold text-slate-700">
+                                {{ $pasien->user->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan' }}
+                            </p>
+                        </div>
+
+                        <div>
+                            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">No. Telepon</p>
+                            <p class="text-sm font-semibold text-slate-700">
+                                {{ $pasien->user->no_hp ?? '-' }}
+                            </p>
+                        </div>
+
+                        <div>
+                            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Gol. Darah</p>
+                            @if($pasien->gol_darah)
+                                <span class="inline-flex px-3 py-1.5 bg-red-50 text-red-500 rounded-xl text-xs font-bold border border-red-100">
+                                    {{ $pasien->gol_darah }}
+                                </span>
+                            @else
+                                <span class="text-slate-400 text-sm font-semibold">-</span>
+                            @endif
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <a href="{{ route('dokter.rekam.riwayat', $pasien->id) }}"
+                           class="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-semibold hover:bg-blue-700 transition-all shadow-sm">
+                            <i class="fa-solid fa-notes-medical text-[10px]"></i> Lihat Riwayat
+                        </a>
+                    </div>
+                </div>
+            @empty
+                <div class="bg-white border border-slate-100 rounded-2xl shadow-sm p-6">
+                    <div class="flex flex-col items-center gap-2 text-center">
+                        <i class="fa-solid fa-user-slash text-4xl text-slate-200"></i>
+                        <p class="text-sm font-medium text-slate-400">
+                            {{ $search ? 'Tidak ada pasien yang cocok dengan pencarian.' : 'Belum ada pasien terdaftar.' }}
+                        </p>
+                    </div>
+                </div>
+            @endforelse
+        </div>
     </div>
 
     {{-- Pagination --}}

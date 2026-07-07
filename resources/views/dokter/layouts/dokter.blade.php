@@ -44,10 +44,64 @@
     </style>
 </head>
 
-<body class="bg-[#f0f4f8] text-slate-800">
+<body class="bg-[#f0f4f8] text-slate-800 overflow-x-hidden">
 
-<div class="flex h-screen overflow-hidden">
-    <aside class="sidebar w-[280px] h-screen sticky top-0 flex flex-col shrink-0 z-50">
+    <div class="flex h-screen overflow-hidden">
+    {{-- Mobile drawer toggle --}}
+    <input type="checkbox" id="dokter-drawer-toggle" class="hidden peer" />
+
+    {{-- Mobile drawer + overlay --}}
+    <div class="fixed inset-0 z-40 md:hidden">
+        <label for="dokter-drawer-toggle" class="absolute inset-0 bg-black/45 hidden peer-checked:block"></label>
+
+        <div id="dokter-drawer-panel" class="absolute left-0 top-0 h-screen w-[280px] bg-[#0b2a57] text-slate-50 transform -translate-x-full transition-transform duration-300 ease-in-out peer-checked:translate-x-0">
+            {{-- Drawer logo --}}
+            <a href="{{ route('dokter.dashboard') }}" class="flex items-center gap-3 px-8 py-8 border-b border-white/10">
+                <img src="{{ asset('images/logo.png') }}" alt="Logo UniHealth" class="w-11 h-11 rounded-xl shadow-sm border border-blue-100">
+                <span class="text-white font-bold text-[24px]">UniHealth</span>
+            </a>
+
+            <nav class="flex-1 px-4 py-5 overflow-y-auto">
+                <a href="{{ route('dokter.dashboard') }}" onclick="document.getElementById('dokter-drawer-toggle').checked=false;" class="nav-item {{ request()->routeIs('dokter.dashboard') ? 'active' : '' }}">
+                    <span class="nav-icon"><i class="fa-solid fa-gauge-high"></i></span> Beranda
+                </a>
+
+                <div class="pt-4 pb-1.5 px-2">
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-white/30">Layanan Klinik</span>
+                </div>
+
+                <a href="{{ route('dokter.jadwal') }}" onclick="document.getElementById('dokter-drawer-toggle').checked=false;" class="nav-item {{ request()->routeIs('dokter.jadwal') || request()->routeIs('dokter.jadwal.buat-rekam') ? 'active' : '' }}">
+                    <span class="nav-icon"><i class="fa-solid fa-calendar-days"></i></span>
+                    <span class="flex-1">Jadwal Konsultasi</span>
+                    <span id="sidebar-jadwal-dot" class="hidden w-2 h-2 rounded-full bg-red-400 shrink-0"></span>
+                </a>
+
+                <a href="{{ route('dokter.pengaturan') }}" onclick="document.getElementById('dokter-drawer-toggle').checked=false;" class="nav-item {{ request()->routeIs('dokter.pengaturan') ? 'active' : '' }}">
+                    <span class="nav-icon"><i class="fa-solid fa-sliders"></i></span>
+                    <span class="flex-1">Pengaturan Jadwal</span>
+                    <span id="sidebar-pengaturan-dot" class="hidden w-2 h-2 rounded-full bg-red-400 shrink-0"></span>
+                </a>
+
+                <a href="{{ route('dokter.pasien') }}" onclick="document.getElementById('dokter-drawer-toggle').checked=false;" class="nav-item {{ request()->routeIs('dokter.pasien') || request()->routeIs('dokter.rekam.riwayat') ? 'active' : '' }}">
+                    <span class="nav-icon"><i class="fa-solid fa-user-injured"></i></span> Pasien
+                </a>
+
+                <a href="{{ route('dokter.rekam-medis') }}" onclick="document.getElementById('dokter-drawer-toggle').checked=false;" class="nav-item {{ request()->routeIs('dokter.rekam-medis') || request()->routeIs('dokter.rekam.show') ? 'active' : '' }}">
+                    <span class="nav-icon"><i class="fa-solid fa-notes-medical"></i></span> Rekam Medis
+                </a>
+
+                <a href="#" onclick="event.preventDefault(); document.getElementById('dokter-drawer-toggle').checked=false; document.getElementById('logout-form-dokter').submit();" class="nav-item text-red-300 hover:!bg-red-500/20 hover:!text-red-200">
+                    <span class="nav-icon"><i class="fa-solid fa-right-from-bracket"></i></span> Keluar
+                </a>
+
+                <form id="logout-form-dokter" action="{{ route('logout') }}" method="POST" class="hidden">
+                    @csrf
+                </form>
+            </nav>
+        </div>
+    </div>
+
+    <aside class="sidebar w-[280px] h-screen sticky top-0 hidden md:flex flex-col shrink-0 z-50">
         <a href="{{ route('dokter.dashboard') }}" class="flex items-center gap-3 px-8 py-8 border-b border-white/10">
             <img src="{{ asset('images/logo.png') }}" alt="Logo UniHealth" class="w-11 h-11 rounded-xl shadow-sm border border-blue-100">
             <span class="text-white font-bold text-[24px]">UniHealth</span>
@@ -97,6 +151,17 @@
 
     <div class="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
         <header class="top-header h-[72px] flex items-center justify-end px-10 shrink-0 sticky top-0 z-20 shadow-sm">
+            {{-- Hamburger (mobile) --}}
+            <button
+                type="button"
+                id="dokter-hamburger-btn"
+                aria-label="Buka sidebar"
+                aria-controls="dokter-drawer-panel"
+                aria-expanded="false"
+                class="md:hidden w-10 h-10 rounded-xl bg-white/10 hover:bg-white/15 flex items-center justify-center cursor-pointer mr-4"
+            >
+                <i class="fa-solid fa-bars text-white"></i>
+            </button>
 
             <div class="flex items-center gap-4">
                 @include('components.notif-bell')
@@ -143,5 +208,12 @@
         </main>
     </div>
 </div>
+
+    @include('components.layouts.drawer-controller', [
+        'toggleId' => 'dokter-drawer-toggle',
+        'hamburgerBtnId' => 'dokter-hamburger-btn',
+        'panelId' => 'dokter-drawer-panel',
+        'lockClass' => 'overflow-hidden',
+    ])
 </body>
 </html>
