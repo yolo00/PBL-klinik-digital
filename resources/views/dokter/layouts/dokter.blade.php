@@ -70,7 +70,9 @@
             </a>
 
             <a href="{{ route('dokter.pengaturan') }}" class="nav-item {{ request()->routeIs('dokter.pengaturan') ? 'active' : '' }}">
-                <span class="nav-icon"><i class="fa-solid fa-sliders"></i></span> Pengaturan Jadwal
+                <span class="nav-icon"><i class="fa-solid fa-sliders"></i></span>
+                <span class="flex-1">Pengaturan Jadwal</span>
+                <span id="sidebar-pengaturan-dot" class="hidden w-2 h-2 rounded-full bg-red-400 shrink-0"></span>
             </a>
 
             <a href="{{ route('dokter.pasien') }}" class="nav-item {{ request()->routeIs('dokter.pasien') || request()->routeIs('dokter.rekam.riwayat') ? 'active' : '' }}">
@@ -95,7 +97,6 @@
 
     <div class="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
         <header class="top-header h-[72px] flex items-center justify-between px-10 shrink-0 sticky top-0 z-20 shadow-sm">
-            <p class="text-white/70 text-xs font-medium">@yield('breadcrumb', 'UniHealth — Sistem Informasi Pelayanan Kesehatan')</p>
 
             <div class="flex items-center gap-4">
                 @include('components.notif-bell')
@@ -103,7 +104,7 @@
                 <div class="relative group flex items-center gap-3 cursor-pointer">
                     <div class="text-right">
                         <p class="text-white font-semibold text-sm leading-tight">{{ auth()->user()->nama ?? 'Dokter' }}</p>
-                        <p class="text-blue-200 text-[11px] font-medium uppercase tracking-wide">Dokter</p>
+                        <p class="text-blue-200 text-[11px] font-medium uppercase  tracking-wide">{{ optional(optional(auth()->user()->dokter)->spesialisasi)->nama ?? 'Dokter' }}</p>
                     </div>
 
                     <div class="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center text-white border-2 border-white/30">

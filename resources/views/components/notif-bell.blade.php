@@ -184,11 +184,22 @@
             const data = await res.json();
             updateBadge(data.unseen_count);
 
-            // Sidebar dot: "Jadwal Konsultasi"
-            const dot = document.getElementById('sidebar-jadwal-dot');
-            if (dot) {
-                dot.classList.toggle('hidden', !data.has_jadwal_baru);
-            }
+            // Sidebar dot: "Jadwal Konsultasi" (Dokter)
+            const dotJadwal = document.getElementById('sidebar-jadwal-dot');
+            if (dotJadwal) dotJadwal.classList.toggle('hidden', !data.has_jadwal_baru);
+
+            // Sidebar dot: "Pengaturan Jadwal" (Dokter)
+            const dotPengaturan = document.getElementById('sidebar-pengaturan-dot');
+            if (dotPengaturan) dotPengaturan.classList.toggle('hidden', !data.has_pengaturan_dot);
+
+            // Sidebar dot: "Riwayat Jadwal" (Pasien)
+            const dotJadwalPasien = document.getElementById('sidebar-jadwal-pasien-dot');
+            if (dotJadwalPasien) dotJadwalPasien.classList.toggle('hidden', !data.has_jadwal_pasien_dot);
+
+            // Sidebar dot: "Rekam Medis" (Pasien)
+            const dotRekamMedis = document.getElementById('sidebar-rekam-medis-dot');
+            if (dotRekamMedis) dotRekamMedis.classList.toggle('hidden', !data.has_rekam_medis_dot);
+            
         } catch (_) {}
     }
 

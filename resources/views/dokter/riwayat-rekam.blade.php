@@ -1,6 +1,5 @@
 @extends('dokter.layouts.dokter')
 @section('title', 'Rekam Medis')
-@section('breadcrumb', 'Rekam Medis — Semua Catatan')
 
 @section('content')
 <div class="mb-7 flex flex-col md:flex-row md:items-center justify-between gap-4">

@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\CutiDokter;
 use App\Models\Notifikasi;
 use App\Models\AkunUser;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Admin\Auth;
 
 class AdminCutiDokterController extends Controller
 {

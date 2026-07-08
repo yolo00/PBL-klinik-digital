@@ -67,11 +67,13 @@
             </a>
             <a href="{{ route('pasien.riwayat') }}" class="flex items-center gap-4 px-4 py-4 rounded-xl {{ request()->routeIs('pasien.riwayat') ? 'sidebar-active' : 'sidebar-link' }}">
                 <i class="fa-solid fa-clock-rotate-left w-5 text-center"></i>
-                Riwayat Jadwal
+                <span class="flex-1">Riwayat Jadwal</span>
+                <span id="sidebar-jadwal-pasien-dot" class="hidden w-2 h-2 rounded-full bg-red-400 shrink-0"></span>
             </a>
             <a href="{{ route('pasien.rekam-medis') }}" class="flex items-center gap-4 px-4 py-4 rounded-xl {{ request()->routeIs('pasien.rekam-medis') || request()->routeIs('pasien.rekam-medis.detail') ? 'sidebar-active' : 'sidebar-link' }}">
                 <i class="fa-solid fa-file-waveform w-5 text-center"></i>
-                Rekam Medis
+                <span class="flex-1">Rekam Medis</span>
+                <span id="sidebar-rekam-medis-dot" class="hidden w-2 h-2 rounded-full bg-red-400 shrink-0"></span>
             </a>
 
         </nav>

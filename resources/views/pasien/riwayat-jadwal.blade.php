@@ -21,21 +21,28 @@
 
     <div class="bg-white rounded-3xl shadow-md border border-slate-100 overflow-hidden">
 
-        <div class="p-8 border-b border-slate-50 flex flex-col md:flex-row justify-between items-center gap-6">
+        <form method="GET" action="{{ route('pasien.riwayat') }}" id="filterForm" class="p-8 border-b border-slate-50 flex flex-col md:flex-row justify-between items-center gap-6">
             <div class="relative w-full md:w-96">
                 <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-slate-400">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                 </span>
-                <input id="searchInput" type="text" placeholder="Cari dokter atau tanggal..."
+                <input id="searchInput" name="search" type="text" value="{{ request('search') }}" placeholder="Cari dokter atau tanggal..."
                     class="w-full pl-12 pr-4 py-3.5 bg-slate-50 border-none rounded-2xl text-base focus:ring-2 focus:ring-emerald-500 transition shadow-sm">
             </div>
-            <select id="filterStatus" class="w-full md:w-48 bg-slate-50 border-none rounded-2xl text-base text-slate-600 focus:ring-2 focus:ring-emerald-500 py-3.5 px-4 shadow-sm cursor-pointer">
-                <option value="">Semua Status</option>
-                <option value="menunggu">Mendatang</option>
-                <option value="selesai">Selesai</option>
-                <option value="dibatalkan">Dibatalkan</option>
-            </select>
-        </div>
+            <div class="flex items-center gap-4 w-full md:w-auto justify-between md:justify-end">
+                <select id="filterStatus" name="status" class="w-full md:w-48 bg-slate-50 border-none rounded-2xl text-base text-slate-600 focus:ring-2 focus:ring-emerald-500 py-3.5 px-4 shadow-sm cursor-pointer">
+                    <option value="">Semua Status</option>
+                    <option value="menunggu" {{ request('status') === 'menunggu' ? 'selected' : '' }}>Mendatang</option>
+                    <option value="selesai" {{ request('status') === 'selesai' ? 'selected' : '' }}>Selesai</option>
+                    <option value="dibatalkan" {{ request('status') === 'dibatalkan' ? 'selected' : '' }}>Dibatalkan</option>
+                </select>
+                @if(request('search') || request('status'))
+                    <a href="{{ route('pasien.riwayat') }}" class="px-4 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-medium rounded-2xl text-sm transition shadow-sm whitespace-nowrap">
+                        Reset
+                    </a>
+                @endif
+            </div>
+        </form>
 
         <div class="overflow-x-auto">
             <table class="w-full text-left" id="jadwalTable">
@@ -187,7 +194,11 @@
                     @empty
                     <tr>
                         <td colspan="5" class="px-8 py-12 text-center text-slate-400 font-medium">
-                            Belum ada riwayat jadwal janji temu yang terdaftar.
+                            @if(request('search') || request('status'))
+                                Tidak ditemukan riwayat jadwal yang sesuai dengan filter/pencarian Anda.
+                            @else
+                                Belum ada riwayat jadwal janji temu yang terdaftar.
+                            @endif
                         </td>
                     </tr>
                     @endforelse
@@ -195,46 +206,34 @@
             </table>
         </div>
 
-        <div class="p-8 bg-slate-50 border-t border-slate-100 flex justify-between items-center">
+        <div class="p-8 bg-slate-50 border-t border-slate-100 flex flex-col sm:flex-row justify-between items-center gap-4">
             <span class="text-sm font-medium text-slate-500">
-                Total: <span class="text-slate-900 font-bold" id="totalCount">{{ $riwayatJadwal->count() }}</span> Jadwal Terdaftar
+                @if(method_exists($riwayatJadwal, 'links'))
+                    Menampilkan {{ $riwayatJadwal->firstItem() ?? 0 }}–{{ $riwayatJadwal->lastItem() ?? 0 }} dari <span class="text-slate-900 font-bold" id="totalCount">{{ $riwayatJadwal->total() }}</span> Jadwal Terdaftar
+                @else
+                    Total: <span class="text-slate-900 font-bold" id="totalCount">{{ $riwayatJadwal->count() }}</span> Jadwal Terdaftar
+                @endif
             </span>
+            @if(method_exists($riwayatJadwal, 'links'))
+                <div class="flex items-center">
+                    {{ $riwayatJadwal->links() }}
+                </div>
+            @endif
         </div>
     </div>
 </div>
 
 @push('scripts')
 <script>
-    // ─── Client-side search + filter ─────────────────────────
-    const searchInput  = document.getElementById('searchInput');
+    // ─── Server-side search + filter ─────────────────────────
     const filterStatus = document.getElementById('filterStatus');
-    const rows         = document.querySelectorAll('#jadwalBody tr[data-status]');
-    const totalCount   = document.getElementById('totalCount');
+    const filterForm   = document.getElementById('filterForm');
 
-    function applyFilter() {
-        const q      = searchInput.value.toLowerCase();
-        const status = filterStatus.value;
-        let visible  = 0;
-
-        rows.forEach(row => {
-            const matchSearch = !q
-                || row.dataset.dokter.includes(q)
-                || row.dataset.tanggal.includes(q);
-            const matchStatus = !status || row.dataset.status === status;
-
-            if (matchSearch && matchStatus) {
-                row.style.display = '';
-                visible++;
-            } else {
-                row.style.display = 'none';
-            }
+    if (filterStatus && filterForm) {
+        filterStatus.addEventListener('change', function() {
+            filterForm.submit();
         });
-
-        totalCount.textContent = visible;
     }
-
-    searchInput.addEventListener('input', applyFilter);
-    filterStatus.addEventListener('change', applyFilter);
 </script>
 @endpush
 @endsection

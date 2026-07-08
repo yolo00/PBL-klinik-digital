@@ -1,6 +1,5 @@
 @extends('dokter.layouts.dokter')
 @section('title', 'Riwayat Rekam Medis')
-@section('breadcrumb', 'Pasien — Riwayat Rekam Medis')
 
 @section('content')
 {{-- Back + Title --}}

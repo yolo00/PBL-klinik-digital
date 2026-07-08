@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Pasien;
 use App\Http\Controllers\Controller;
 use App\Models\Pembayaran;
 use App\Models\Jadwal;
+use App\Models\Notifikasi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -150,7 +151,7 @@ class XenditController extends Controller
                 return response()->json(['error' => 'external_id tidak ditemukan'], 400);
             }
 
-            $pembayaran = Pembayaran::where('xendit_external_id', $externalId)->first();
+            $pembayaran = Pembayaran::with('jadwal.pasien.user')->where('xendit_external_id', $externalId)->first();
 
             if ($pembayaran && $pembayaran->status !== 'lunas') {
                 $nomorStruk = 'STR-' . now()->format('Ymd') . '-' . str_pad($pembayaran->id, 3, '0', STR_PAD_LEFT);
@@ -160,6 +161,21 @@ class XenditController extends Controller
                     'nomor_struk' => $nomorStruk,
                     'pesan'       => $data['payment_details']['source'] ?? null,
                 ]);
+
+                // ── NOTIFIKASI: beritahu pasien bahwa pembayaran berhasil ──
+                if ($pembayaran->jadwal && $pembayaran->jadwal->pasien && $pembayaran->jadwal->pasien->id_user) {
+                    $tglStr = \Carbon\Carbon::parse($pembayaran->jadwal->tanggal)->translatedFormat('d F Y');
+                    $jumlahStr = 'Rp ' . number_format($pembayaran->jumlah, 0, ',', '.');
+                    Notifikasi::kirim([
+                        'type'       => 'Pembayaran Berhasil',
+                        'message'    => "Pembayaran QRIS sebesar {$jumlahStr} untuk jadwal pada {$tglStr} berhasil. Nomor struk: {$nomorStruk}.",
+                        'ref_tabel'  => 'pembayaran',
+                        'ref_id'     => $pembayaran->id,
+                        'is_urgent'  => 0,
+                        'created_by' => null,
+                    ], $pembayaran->jadwal->pasien->id_user);
+                }
+                // ─────────────────────────────────────────────────────────
 
                 Log::info("Pembayaran ID {$pembayaran->id} berhasil via QRIS Xendit");
             }
@@ -210,6 +226,21 @@ class XenditController extends Controller
                 'nomor_struk' => $nomorStruk,
                 'pesan'       => 'Konfirmasi manual (sandbox)',
             ]);
+
+            // ── NOTIFIKASI: beritahu pasien bahwa pembayaran berhasil ──
+            if ($pembayaran->jadwal && $pembayaran->jadwal->pasien && $pembayaran->jadwal->pasien->id_user) {
+                $tglStr = \Carbon\Carbon::parse($pembayaran->jadwal->tanggal)->translatedFormat('d F Y');
+                $jumlahStr = 'Rp ' . number_format($pembayaran->jumlah, 0, ',', '.');
+                Notifikasi::kirim([
+                    'type'       => 'Pembayaran Berhasil',
+                    'message'    => "Pembayaran QRIS sebesar {$jumlahStr} untuk jadwal pada {$tglStr} berhasil. Nomor struk: {$nomorStruk}.",
+                    'ref_tabel'  => 'pembayaran',
+                    'ref_id'     => $pembayaran->id,
+                    'is_urgent'  => 0,
+                    'created_by' => Auth::id(),
+                ], $pembayaran->jadwal->pasien->id_user);
+            }
+            // ─────────────────────────────────────────────────────────
         }
 
         return redirect()->route('pasien.pembayaran.struk', $pembayaran->id)

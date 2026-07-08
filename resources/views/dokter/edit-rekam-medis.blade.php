@@ -1,6 +1,5 @@
 @extends('dokter.layouts.dokter')
 @section('title', 'Input Rekam Medis')
-@section('breadcrumb', 'Rekam Medis — Input Data')
 
 @section('content')
 <div class="bg-white p-8 rounded-2xl border border-slate-100 shadow-sm max-w-4xl mx-auto">

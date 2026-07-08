@@ -67,23 +67,59 @@ class NotifikasiController extends Controller
      */
     public function unseenBadge(): JsonResponse
     {
-        $count = NotifikasiPenerima::where('id_user', Auth::id())
+        $userId = Auth::id();
+        $count = NotifikasiPenerima::where('id_user', $userId)
             ->where('is_seen', 0)
             ->count();
 
-        // Tambahan: apakah ada jadwal BARU hari ini untuk dokter?
-        // Dipakai untuk titik merah di sidebar "Jadwal Konsultasi"
-        $hasJadwalBaru = false;
         $user = Auth::user();
-        if ($user && $user->role === 'D' && $user->dokter) {
-            $hasJadwalBaru = \App\Models\Jadwal::where('id_dokter', $user->dokter->id)
-                ->whereDate('created_at', today())
-                ->exists();
+        
+        // Data default untuk dots sidebar
+        $hasJadwalBaru = false;
+        $hasPengaturanDot = false;
+        $hasJadwalPasienDot = false;
+        $hasRekamMedisDot = false;
+
+        if ($user) {
+            // Untuk Dokter
+            if ($user->role === 'D' && $user->dokter) {
+                // Ada jadwal yang masih menunggu / dikonfirmasi
+                $hasJadwalBaru = \App\Models\Jadwal::where('id_dokter', $user->dokter->id)
+                    ->whereIn('status', ['menunggu', 'dikonfirmasi'])
+                    ->exists();
+
+                // Ada notifikasi cuti belum dibaca
+                $hasPengaturanDot = NotifikasiPenerima::where('id_user', $userId)
+                    ->where('is_seen', 0)
+                    ->whereHas('notifikasi', function($q) {
+                        $q->whereIn('type', ['Pengajuan Cuti Disetujui', 'Pengajuan Cuti Ditolak']);
+                    })->exists();
+            }
+            
+            // Untuk Pasien
+            if ($user->role === 'P' && $user->pasien) {
+                // Ada notifikasi jadwal batal otomatis / dibuat admin belum dibaca
+                $hasJadwalPasienDot = NotifikasiPenerima::where('id_user', $userId)
+                    ->where('is_seen', 0)
+                    ->whereHas('notifikasi', function($q) {
+                        $q->whereIn('type', ['Jadwal Tidak Ditangani', 'Jadwal Baru dari Admin']);
+                    })->exists();
+
+                // Ada notifikasi rekam medis baru belum dibaca
+                $hasRekamMedisDot = NotifikasiPenerima::where('id_user', $userId)
+                    ->where('is_seen', 0)
+                    ->whereHas('notifikasi', function($q) {
+                        $q->where('type', 'Rekam Medis Baru');
+                    })->exists();
+            }
         }
 
         return response()->json([
-            'unseen_count'    => $count,
-            'has_jadwal_baru' => $hasJadwalBaru,
+            'unseen_count'          => $count,
+            'has_jadwal_baru'       => $hasJadwalBaru,
+            'has_pengaturan_dot'    => $hasPengaturanDot,
+            'has_jadwal_pasien_dot' => $hasJadwalPasienDot,
+            'has_rekam_medis_dot'   => $hasRekamMedisDot,
         ]);
     }
 }

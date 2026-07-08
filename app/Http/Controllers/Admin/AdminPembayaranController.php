@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Pembayaran;
 use App\Models\Jadwal;
+use App\Models\Notifikasi;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AdminPembayaranController extends Controller
 {
@@ -122,6 +124,27 @@ class AdminPembayaranController extends Controller
             'status'      => $request->status,
             'nomor_struk' => $request->nomor_struk ?: null,
         ]);
+
+        // ── NOTIFIKASI: jika admin konfirmasi bayar jadi LUNAS (terutama cash) ──
+        if ($request->status === 'lunas') {
+            $pembayaran->load('jadwal.pasien.user');
+            if ($pembayaran->jadwal && $pembayaran->jadwal->pasien && $pembayaran->jadwal->pasien->id_user) {
+                $tglStr = \Carbon\Carbon::parse($pembayaran->jadwal->tanggal)->translatedFormat('d F Y');
+                $jumlahStr = 'Rp ' . number_format($pembayaran->jumlah, 0, ',', '.');
+                $metodeLabel = ucfirst($pembayaran->metode);
+                $nomorStruk = $pembayaran->nomor_struk ?? '-';
+
+                Notifikasi::kirim([
+                    'type'       => 'Pembayaran Berhasil',
+                    'message'    => "Pembayaran {$metodeLabel} sebesar {$jumlahStr} untuk jadwal pada {$tglStr} telah dikonfirmasi oleh admin. Nomor struk: {$nomorStruk}.",
+                    'ref_tabel'  => 'pembayaran',
+                    'ref_id'     => $pembayaran->id,
+                    'is_urgent'  => 0,
+                    'created_by' => Auth::id(),
+                ], $pembayaran->jadwal->pasien->id_user);
+            }
+        }
+        // ────────────────────────────────────────────────────────────────────────
 
         return redirect()->route('admin.pembayaran.show', $pembayaran->id)
             ->with('success', 'Data pembayaran berhasil diperbarui.');

@@ -1,6 +1,5 @@
 @extends('dokter.layouts.dokter')
 @section('title', 'Pengaturan Jadwal')
-@section('breadcrumb', 'Pengaturan — Jadwal & Cuti')
 
 @section('content')
 <div class="mb-7">

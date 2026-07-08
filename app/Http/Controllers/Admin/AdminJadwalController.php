@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Jadwal;
 use App\Models\Dokter;
 use App\Models\Pasien;
+use App\Models\Notifikasi;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AdminJadwalController extends Controller
 {
@@ -93,13 +95,48 @@ class AdminJadwalController extends Controller
                 ->withErrors(['jam' => 'Slot jam tersebut sudah terisi untuk dokter dan tanggal yang dipilih.']);
         }
 
-        Jadwal::create([
+        $jadwal = Jadwal::create([
             'id_dokter' => $validated['id_dokter'],
             'id_pasien' => $validated['id_pasien'] ?: null,
             'tanggal'   => $validated['tanggal'],
             'jam'       => (int) $validated['jam'],
             'status'    => $validated['status'],
         ]);
+
+        // ── NOTIFIKASI: Admin membuat jadwal baru untuk dokter & pasien ──
+        if ($jadwal->id_pasien) {
+            $jadwal->load(['dokter.user', 'pasien.user']);
+            
+            $namaPasien = $jadwal->pasien->user->nama ?? 'Pasien';
+            $namaDokter = $jadwal->dokter->user->nama ?? 'Dokter';
+            $jamStr     = sprintf('%02d:00', $jadwal->jam);
+            $tglStr     = \Carbon\Carbon::parse($jadwal->tanggal)->translatedFormat('d F Y');
+
+            // 1. Notif ke Dokter
+            if ($jadwal->dokter && $jadwal->dokter->id_user) {
+                Notifikasi::kirim([
+                    'type'       => 'Jadwal Diarahkan oleh Admin',
+                    'message'    => "Admin telah menjadwalkan konsultasi untuk Anda dengan pasien {$namaPasien} pada {$jamStr}, {$tglStr}.",
+                    'ref_tabel'  => 'jadwal',
+                    'ref_id'     => $jadwal->id,
+                    'is_urgent'  => 1, // Urgent
+                    'created_by' => Auth::id(),
+                ], $jadwal->dokter->id_user);
+            }
+
+            // 2. Notif ke Pasien
+            if ($jadwal->pasien && $jadwal->pasien->id_user) {
+                Notifikasi::kirim([
+                    'type'       => 'Jadwal Baru dari Admin',
+                    'message'    => "Admin telah membuat jadwal konsultasi baru untuk Anda dengan Dr. {$namaDokter} pada {$jamStr}, {$tglStr}.",
+                    'ref_tabel'  => 'jadwal',
+                    'ref_id'     => $jadwal->id,
+                    'is_urgent'  => 1, // Urgent
+                    'created_by' => Auth::id(),
+                ], $jadwal->pasien->id_user);
+            }
+        }
+        // ─────────────────────────────────────────────────────────────────
 
         return redirect()->route('admin.jadwal.index')
             ->with('success', 'Jadwal berhasil ditambahkan.');

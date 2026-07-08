@@ -102,7 +102,7 @@ class PasienController extends Controller
     // =======================================================
     // R: READ (Riwayat Jadwal)
     // =======================================================
-    public function riwayatJadwal()
+    public function riwayatJadwal(Request $request)
     {
         $profilPasien = Auth::user()->pasien;
 
@@ -110,11 +110,26 @@ class PasienController extends Controller
             return view('pasien.riwayat-jadwal', ['riwayatJadwal' => collect([])]);
         }
 
-        $riwayatJadwal = Jadwal::with(['dokter.user', 'dokter.spesialisasi', 'pembayaran'])
-            ->where('id_pasien', $profilPasien->id)
-            ->orderBy('tanggal', 'asc')
+        $query = Jadwal::with(['dokter.user', 'dokter.spesialisasi', 'pembayaran'])
+            ->where('id_pasien', $profilPasien->id);
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->whereHas('dokter.user', function ($sq) use ($search) {
+                    $sq->where('nama', 'like', "%{$search}%");
+                })->orWhere('tanggal', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $riwayatJadwal = $query->orderBy('tanggal', 'asc')
             ->orderBy('jam', 'asc')
-            ->get();
+            ->paginate(15)
+            ->withQueryString();
 
         return view('pasien.riwayat-jadwal', compact('riwayatJadwal'));
     }
@@ -593,6 +608,24 @@ class PasienController extends Controller
         if ($profilPasien && $jadwal->id_pasien == $profilPasien->id) {
             $jadwal->update(['status' => 'dibatalkan']);
             Pembayaran::where('id_jadwal', $jadwal->id)->update(['status' => 'batal']);
+
+            // ── NOTIFIKASI: beritahu dokter bahwa jadwal dibatalkan oleh pasien ──
+            if ($jadwal->dokter && $jadwal->dokter->id_user) {
+                $namaPasien = Auth::user()->nama ?? 'Pasien';
+                $jamStr     = sprintf('%02d:00', $jadwal->jam);
+                $tglStr     = \Carbon\Carbon::parse($jadwal->tanggal)->translatedFormat('d F Y');
+
+                Notifikasi::kirim([
+                    'type'       => 'Jadwal Dibatalkan',
+                    'message'    => "{$namaPasien} membatalkan janji temu pada {$jamStr}, {$tglStr}.",
+                    'ref_tabel'  => 'jadwal',
+                    'ref_id'     => $jadwal->id,
+                    'is_urgent'  => 0,
+                    'created_by' => Auth::id(),
+                ], $jadwal->dokter->id_user);
+            }
+            // ───────────────────────────────────────────────────────────────────
+
             return redirect()->route('pasien.riwayat')
                 ->with('success', 'Jadwal temu berhasil dibatalkan.');
         }

@@ -1,6 +1,5 @@
 @extends('dokter.layouts.dokter')
 @section('title', 'Detail Rekam Medis')
-@section('breadcrumb', 'Rekam Medis — Detail Catatan')
 
 @section('content')
 <div class="max-w-4xl mx-auto">

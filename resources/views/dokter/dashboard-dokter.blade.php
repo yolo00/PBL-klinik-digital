@@ -2,8 +2,6 @@
 
 @section('title', 'Dashboard')
 
-@section('breadcrumb', 'Beranda — Ringkasan Pelayanan Kesehatan')
-
 @section('content')
 
 {{-- Greeting --}}

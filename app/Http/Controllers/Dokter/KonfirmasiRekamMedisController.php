@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Jadwal;
 use App\Models\RekamMedis;
 use App\Models\Resep;
+use App\Models\Notifikasi;
+use App\Models\AkunUser;
 use Illuminate\Http\Request;
 
 class KonfirmasiRekamMedisController extends Controller
@@ -67,7 +69,7 @@ class KonfirmasiRekamMedisController extends Controller
      */
     public function konfirmasi(Request $request, $jadwalId)
     {
-        $jadwal = Jadwal::with(['rekamMedis'])->findOrFail($jadwalId);
+        $jadwal = Jadwal::with(['rekamMedis', 'pasien.user', 'dokter.user', 'pembayaran'])->findOrFail($jadwalId);
         $dokterId = auth()->user()->dokter->id;
 
         if ((int) $jadwal->id_dokter !== (int) $dokterId) {
@@ -91,6 +93,43 @@ class KonfirmasiRekamMedisController extends Controller
 
         // Update status jadwal menjadi selesai
         $jadwal->update(['status' => 'selesai']);
+
+        // ── NOTIFIKASI: beritahu pasien bahwa rekam medis telah dibuat ──
+        if ($jadwal->pasien && $jadwal->pasien->user) {
+            $namaDokter = auth()->user()->nama ?? 'Dokter';
+            $tglStr     = \Carbon\Carbon::parse($jadwal->tanggal)->translatedFormat('d F Y');
+
+            Notifikasi::kirim([
+                'type'       => 'Rekam Medis Baru',
+                'message'    => "Dr. {$namaDokter} telah membuat rekam medis untuk kunjungan Anda pada {$tglStr}.",
+                'ref_tabel'  => 'rekam_medis',
+                'ref_id'     => $jadwal->rekamMedis->id,
+                'is_urgent'  => 0,
+                'created_by' => auth()->id(),
+            ], $jadwal->pasien->id_user);
+        }
+
+        // ── NOTIFIKASI: jika pembayaran cash + pending → beritahu semua admin ──
+        if ($jadwal->pembayaran
+            && $jadwal->pembayaran->metode === 'cash'
+            && $jadwal->pembayaran->status === 'pending'
+        ) {
+            $adminIds   = AkunUser::where('role', 'A')->whereNull('deleted_at')->pluck('id')->toArray();
+            $namaPasien = $jadwal->pasien->user->nama ?? 'Pasien';
+            $namaDokter = $jadwal->dokter->user->nama ?? 'Dokter';
+
+            if (!empty($adminIds)) {
+                Notifikasi::kirim([
+                    'type'       => 'Konfirmasi Pembayaran Cash',
+                    'message'    => "Jadwal {$namaPasien} dengan Dr. {$namaDokter} telah selesai. Metode pembayaran: Cash. Mohon konfirmasi pembayaran.",
+                    'ref_tabel'  => 'pembayaran',
+                    'ref_id'     => $jadwal->pembayaran->id,
+                    'is_urgent'  => 0,
+                    'created_by' => auth()->id(),
+                ], $adminIds);
+            }
+        }
+        // ────────────────────────────────────────────────────────────────
 
         return redirect()
             ->route('dokter.rekam.show', $jadwal->rekamMedis->id)
