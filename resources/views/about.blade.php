@@ -63,9 +63,9 @@
 
                 <!-- Developer 2: Aprillia -->
                 <div class="min-w-[78%] sm:min-w-[50%] md:min-w-0 flex-shrink-0 snap-center md:flex-shrink md:snap-none bg-white rounded-[24px] md:rounded-[32px] p-6 md:p-8 shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-slate-100 hover:border-emerald-200 hover:shadow-[0_8px_30px_rgb(16,185,129,0.12)] group transition-all duration-300 md:transform md:hover:-translate-y-2 text-center">
-                    <img src="{{ asset('images/april.jpeg') }}" alt="Aprillia Bunga"
+                    <img src="{{ asset('images/april.jpeg') }}" alt="Aprillia Bunga Lestari"
                          class="w-16 h-16 md:w-24 md:h-24 rounded-full object-cover mx-auto mb-4 md:mb-6 shadow-lg shadow-rose-500/20 group-hover:scale-110 transition-transform duration-300 border-2 border-rose-100">
-                    <h3 class="font-bold text-[15px] md:text-[20px] text-slate-800 group-hover:text-emerald-700 transition-colors">Aprillia Bunga</h3>
+                    <h3 class="font-bold text-[15px] md:text-[20px] text-slate-800 group-hover:text-emerald-700 transition-colors">Aprillia Bunga Lestari</h3>
                     <div class="mt-3 md:mt-4 space-y-1.5 md:space-y-2">
                         <span class="inline-block bg-sky-50 text-sky-700 text-[11px] md:text-[13px] font-bold px-3 md:px-4 py-1 md:py-1.5 rounded-full border border-sky-200">Frontend Developer</span>
                         <br>

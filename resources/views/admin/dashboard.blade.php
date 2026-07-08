@@ -71,7 +71,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
         {{-- Jadwal Hari Ini --}}
-        <x-ui:card class="bg-gray-200/50 rounded-[32px] p-6 border-slate-100">
+        <x-ui.card class="bg-gray-200/50 rounded-[32px] p-6 border-slate-100">
             <h2 class="text-[18px] font-bold text-slate-800 mb-4 flex items-center gap-3">
                 Jadwal Hari Ini
                 <span class="text-[13px] font-semibold text-blue-600 bg-blue-50 px-2.5 py-0.5 rounded-full">
@@ -79,7 +79,7 @@
                 </span>
             </h2>
 
-            <x-ui:data-table class="bg-white rounded-[20px] shadow-sm border border-slate-100">
+            <x-ui.data-table class="bg-white rounded-[20px] shadow-sm border border-slate-100">
                 <thead class="sr-only"></thead>
                 <table class="w-full text-left">
                     <thead>
@@ -125,11 +125,11 @@
                         @endforelse
                     </tbody>
                 </table>
-            </x-ui:data-table>
-        </x-ui:card>
+            </x-ui.data-table>
+        </x-ui.card>
 
         {{-- Dokter Cuti Hari Ini --}}
-        <x-ui:card class="bg-gray-200/50 rounded-[32px] p-6 border-slate-100">
+        <x-ui.card class="bg-gray-200/50 rounded-[32px] p-6 border-slate-100">
             <h2 class="text-[18px] font-bold text-slate-800 mb-4 flex items-center gap-3">
                 Dokter Cuti Hari Ini
                 @if($dokterCutiHariIni->isNotEmpty())
@@ -139,7 +139,7 @@
                 @endif
             </h2>
 
-            <x-ui:data-table class="bg-white rounded-[20px] shadow-sm border border-slate-100">
+            <x-ui.data-table class="bg-white rounded-[20px] shadow-sm border border-slate-100">
                 <thead class="sr-only"></thead>
                 <table class="w-full text-left">
                     <thead>
@@ -170,8 +170,8 @@
                         @endforelse
                     </tbody>
                 </table>
-            </x-ui:data-table>
-        </x-ui:card>
+            </x-ui.data-table>
+        </x-ui.card>
 
     </div>{{-- end row --}}
 
