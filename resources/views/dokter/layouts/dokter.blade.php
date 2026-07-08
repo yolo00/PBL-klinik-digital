@@ -96,7 +96,7 @@
     </aside>
 
     <div class="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
-        <header class="top-header h-[72px] flex items-center justify-between px-10 shrink-0 sticky top-0 z-20 shadow-sm">
+        <header class="top-header h-[72px] flex items-center justify-end px-10 shrink-0 sticky top-0 z-20 shadow-sm">
 
             <div class="flex items-center gap-4">
                 @include('components.notif-bell')
