@@ -2,93 +2,131 @@
 @section('title', 'Beranda')
 @section('content')
 <body class="min-h-screen bg-slate-50 text-slate-800">
+    <style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
     <main class="w-full">
         <!-- Hero Section -->
-        <div class="px-6 py-12 relative overflow-hidden bg-gradient-to-b from-white to-emerald-50/50 fade-in fade-in-2">
+        <div id="top" class="px-4 md:px-6 py-8 md:py-12 relative overflow-hidden bg-gradient-to-b from-white to-emerald-50/50 fade-in fade-in-2">
             
-            <div class="bg-white/90 backdrop-blur-md rounded-[32px] md:rounded-[40px] p-8 md:p-16 mt-4 grid grid-cols-1 md:grid-cols-12 gap-12 items-center mx-auto max-w-[1400px] shadow-[0_8px_30px_rgb(0,0,0,0.03)] border border-emerald-50 relative z-10">
-                <div class="md:col-span-7 space-y-6 md:pr-10">
-                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-emerald-200 bg-emerald-50">
+            <div class="bg-white/90 backdrop-blur-md rounded-[28px] md:rounded-[40px] p-5 md:p-16 mt-4 grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center mx-auto max-w-[1400px] shadow-[0_8px_30px_rgb(0,0,0,0.03)] border border-emerald-50 relative z-10">
+                <div class="md:col-span-7 space-y-4 md:space-y-6 md:pr-10">
+                    <div class="inline-flex items-center gap-2 px-3 md:px-4 py-1.5 md:py-2 rounded-full border border-emerald-200 bg-emerald-50">
                         <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                        <p class="text-[14px] font-bold text-emerald-700 tracking-wide uppercase">Sistem Informasi Klinik Digital</p>
+                        <p class="text-[12px] md:text-[14px] font-bold text-emerald-700 tracking-wide uppercase">Sistem Informasi Klinik Digital</p>
                     </div>
-                    <h1 class="text-[40px] md:text-[56px] font-bold text-slate-800 leading-[1.1] tracking-tight">Layanan Kesehatan Digital<br><span class="text-emerald-600">Lebih Mudah, Lebih Terintegrasi</span></h1>
-                    <p class="text-[18px] text-slate-600 pt-2 leading-relaxed max-w-[550px] font-medium">UniHealth menghadirkan sistem layanan kesehatan digital yang membantu pasien melakukan pendaftaran, konsultasi, dan pengelolaan rekam medis secara lebih cepat, aman, dan terintegrasi.</p>
-                    <div class="pt-6 flex flex-col sm:flex-row gap-4">
-                        <button class="bg-emerald-600 text-white px-8 py-4 rounded-full font-bold text-[16px] hover:bg-emerald-700 shadow-lg shadow-emerald-500/30 transform hover:-translate-y-0.5 transition-all duration-300">Mulai Konsultasi</button>
-                        <button class="bg-white border-2 border-emerald-100 text-emerald-700 px-8 py-4 rounded-full font-bold text-[16px] hover:bg-emerald-600 hover:text-white hover:border-emerald-600 shadow-sm shadow-emerald-500/20 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 cursor-pointer">Pelajari Lebih Lanjut</button>
+                    <h1 class="text-[28px] md:text-[56px] font-bold text-slate-800 leading-[1.15] md:leading-[1.1] tracking-tight">Layanan Kesehatan Digital<br><span class="text-emerald-600">Lebih Mudah, Lebih Terintegrasi</span></h1>
+                    <p class="text-[14px] md:text-[18px] text-slate-600 pt-2 leading-relaxed max-w-[550px] font-medium">UniHealth menghadirkan sistem layanan kesehatan digital yang membantu pasien melakukan pendaftaran, konsultasi, dan pengelolaan rekam medis secara lebih cepat, aman, dan terintegrasi.</p>
+                    <div class="pt-4 md:pt-6 flex flex-col sm:flex-row gap-3 md:gap-4">
+                        <a href="{{ route('login') }}"
+                           class="bg-emerald-600 text-white px-6 md:px-8 py-3 md:py-4 rounded-full font-bold text-[14px] md:text-[16px] text-center hover:bg-emerald-700 shadow-lg shadow-emerald-500/30 transform hover:-translate-y-0.5 transition-all duration-300">
+                            Mulai Konsultasi
+                        </a>
+                        <a href="#more-info"
+                           onclick="event.preventDefault(); document.getElementById('more-info').scrollIntoView({behavior:'smooth'});"
+                           class="bg-white border-2 border-emerald-100 text-emerald-700 px-6 md:px-8 py-3 md:py-4 rounded-full font-bold text-[14px] md:text-[16px] text-center hover:bg-emerald-600 hover:text-white hover:border-emerald-600 shadow-sm shadow-emerald-500/20 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 cursor-pointer">
+                            Pelajari Lebih Lanjut
+                        </a>
                     </div>
                 </div>
                 
-                <div class="md:col-span-5 bg-gradient-to-br from-emerald-50 to-teal-50/50 rounded-[28px] p-8 flex flex-col gap-5 border border-emerald-100 shadow-[0_4px_20px_rgb(16,185,129,0.08)] relative">
+                <div class="md:col-span-5 bg-gradient-to-br from-emerald-50 to-teal-50/50 rounded-[24px] md:rounded-[28px] p-5 md:p-8 flex flex-col gap-4 md:gap-5 border border-emerald-100 shadow-[0_4px_20px_rgb(16,185,129,0.08)] relative">
 
-                    <div class="bg-white rounded-[20px] p-5 shadow-sm font-bold text-[17px] text-emerald-800 mb-2 border-b-2 border-emerald-100 flex items-center gap-3">
-                        <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    <div class="bg-white rounded-[18px] md:rounded-[20px] p-4 md:p-5 shadow-sm font-bold text-[14px] md:text-[17px] text-emerald-800 mb-1 md:mb-2 border-b-2 border-emerald-100 flex items-center gap-2 md:gap-3">
+                        <svg class="w-5 h-5 md:w-6 md:h-6 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                         Penggunaan Layanan yang Mudah
                     </div>
-                    <div class="bg-white rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow flex gap-4 items-start group border border-slate-50">
-                        <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold flex-shrink-0 group-hover:bg-emerald-600 group-hover:text-white transition-colors">1</div>
-                        <p class="text-[15px] font-medium text-slate-700 pt-1 leading-relaxed">Masuk atau daftar menggunakan akun pasien yang telah tersedia</p>
+                    <div class="bg-white rounded-xl md:rounded-2xl p-4 md:p-5 shadow-sm hover:shadow-md transition-shadow flex gap-3 md:gap-4 items-start group border border-slate-50">
+                        <div class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-[13px] md:text-[16px] flex-shrink-0 group-hover:bg-emerald-600 group-hover:text-white transition-colors">1</div>
+                        <p class="text-[13px] md:text-[15px] font-medium text-slate-700 pt-1 leading-relaxed">Masuk atau daftar menggunakan akun pasien yang telah tersedia</p>
                     </div>
-                    <div class="bg-white rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow flex gap-4 items-start group border border-slate-50">
-                        <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold flex-shrink-0 group-hover:bg-emerald-600 group-hover:text-white transition-colors">2</div>
-                        <p class="text-[15px] font-medium text-slate-700 pt-1 leading-relaxed">Pilih jadwal pemeriksaan berdasarkan dokter, layanan, dan waktu yang tersedia</p>
+                    <div class="bg-white rounded-xl md:rounded-2xl p-4 md:p-5 shadow-sm hover:shadow-md transition-shadow flex gap-3 md:gap-4 items-start group border border-slate-50">
+                        <div class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-[13px] md:text-[16px] flex-shrink-0 group-hover:bg-emerald-600 group-hover:text-white transition-colors">2</div>
+                        <p class="text-[13px] md:text-[15px] font-medium text-slate-700 pt-1 leading-relaxed">Pilih jadwal pemeriksaan berdasarkan dokter, layanan, dan waktu yang tersedia</p>
                     </div>
-                    <div class="bg-white rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow flex gap-4 items-start group border border-slate-50">
-                        <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold flex-shrink-0 group-hover:bg-emerald-600 group-hover:text-white transition-colors">3</div>
-                        <p class="text-[15px] font-medium text-slate-700 pt-1 leading-relaxed">Datang ke fasilitas kesehatan sesuai jadwal pemeriksaan yang telah dipilih</p>
+                    <div class="bg-white rounded-xl md:rounded-2xl p-4 md:p-5 shadow-sm hover:shadow-md transition-shadow flex gap-3 md:gap-4 items-start group border border-slate-50">
+                        <div class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-[13px] md:text-[16px] flex-shrink-0 group-hover:bg-emerald-600 group-hover:text-white transition-colors">3</div>
+                        <p class="text-[13px] md:text-[15px] font-medium text-slate-700 pt-1 leading-relaxed">Datang ke fasilitas kesehatan sesuai jadwal pemeriksaan yang telah dipilih</p>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Layanan Kami -->
-        <div class="px-6 py-20 max-w-[1400px] mx-auto relative z-20 fade-in fade-in-3">
-            <div class="text-center mb-14">
-                <h2 class="inline-block bg-emerald-100/80 text-emerald-800 py-2.5 px-8 rounded-full font-bold text-[16px] border border-emerald-200">Layanan Inti</h2>
-                <p class="mt-5 text-[36px] font-bold text-slate-800 tracking-tight">Layanan Kesehatan Terpercaya Untuk Masyarakat</p>
+        <div class="px-4 md:px-6 py-12 md:py-20 max-w-[1400px] mx-auto relative z-20 fade-in fade-in-3">
+            <div class="text-center mb-10 md:mb-14">
+                <h2 class="inline-block bg-emerald-100/80 text-emerald-800 py-2 px-5 md:py-2.5 md:px-8 rounded-full font-bold text-[13px] md:text-[16px] border border-emerald-200">Layanan Inti</h2>
+                <p class="mt-3 md:mt-5 text-[24px] md:text-[36px] font-bold text-slate-800 tracking-tight">Layanan Kesehatan Terpercaya Untuk Masyarakat</p>
             </div>
-            
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-                <div class="bg-white rounded-[28px] p-8 flex flex-col items-center justify-center text-center shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-slate-100 hover:border-emerald-200 hover:shadow-[0_8px_30px_rgb(16,185,129,0.12)] group transition-all duration-300 transform hover:-translate-y-2">
-                    <img src="https://placehold.co/100x100/ecfdf5/059669?text=KU" alt="Konsultasi Umum" class="w-20 h-20 rounded-[20px] mb-6 group-hover:scale-110 transition-transform shadow-sm">
-                    <span class="font-bold text-[18px] text-slate-800 group-hover:text-emerald-700 transition-colors">Konsultasi Umum</span>
-                    <p class="text-[14px] text-slate-500 mt-3 font-medium leading-relaxed">Konsultasi kesehatan dasar kapan saja.</p>
+
+            <!-- Mobile: swipeable carousel | Desktop: grid -->
+            <div class="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 -mx-4 px-4 no-scrollbar md:grid md:grid-cols-3 md:gap-8 md:overflow-visible md:mx-0 md:px-0 md:pb-0">
+
+                <div class="min-w-[72%] sm:min-w-[45%] md:min-w-0 flex-shrink-0 snap-center md:flex-shrink md:snap-none bg-white rounded-[22px] md:rounded-[28px] p-6 md:p-8 flex flex-col items-center justify-center text-center shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-slate-100 hover:border-emerald-200 hover:shadow-[0_8px_30px_rgb(16,185,129,0.12)] group transition-all duration-300 md:transform md:hover:-translate-y-2">
+                    <div class="w-14 h-14 md:w-20 md:h-20 rounded-2xl bg-emerald-50 flex items-center justify-center mb-4 md:mb-6 group-hover:scale-110 transition-transform">
+                        <svg class="w-7 h-7 md:w-9 md:h-9 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                    </div>
+                    <span class="font-bold text-[15px] md:text-[18px] text-slate-800 group-hover:text-emerald-700 transition-colors">Konsultasi Umum</span>
+                    <p class="text-[12px] md:text-[14px] text-slate-500 mt-2 md:mt-3 font-medium leading-relaxed">Konsultasi kesehatan dasar kapan saja.</p>
                 </div>
-                <div class="bg-white rounded-[28px] p-8 flex flex-col items-center justify-center text-center shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-slate-100 hover:border-emerald-200 hover:shadow-[0_8px_30px_rgb(16,185,129,0.12)] group transition-all duration-300 transform hover:-translate-y-2">
-                    <img src="https://placehold.co/100x100/ecfdf5/059669?text=RM" alt="Rekam Medis" class="w-20 h-20 rounded-[20px] mb-6 group-hover:scale-110 transition-transform shadow-sm">
-                    <span class="font-bold text-[18px] text-slate-800 group-hover:text-emerald-700 transition-colors">Penyimpanan Rekam Medis</span>
-                    <p class="text-[14px] text-slate-500 mt-3 font-medium leading-relaxed">Riwayat kesehatan yang aman dan rapi.</p>
+
+                <div class="min-w-[72%] sm:min-w-[45%] md:min-w-0 flex-shrink-0 snap-center md:flex-shrink md:snap-none bg-white rounded-[22px] md:rounded-[28px] p-6 md:p-8 flex flex-col items-center justify-center text-center shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-slate-100 hover:border-emerald-200 hover:shadow-[0_8px_30px_rgb(16,185,129,0.12)] group transition-all duration-300 md:transform md:hover:-translate-y-2">
+                    <div class="w-14 h-14 md:w-20 md:h-20 rounded-2xl bg-emerald-50 flex items-center justify-center mb-4 md:mb-6 group-hover:scale-110 transition-transform">
+                        <svg class="w-7 h-7 md:w-9 md:h-9 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    </div>
+                    <span class="font-bold text-[15px] md:text-[18px] text-slate-800 group-hover:text-emerald-700 transition-colors">Penyimpanan Rekam Medis</span>
+                    <p class="text-[12px] md:text-[14px] text-slate-500 mt-2 md:mt-3 font-medium leading-relaxed">Riwayat kesehatan yang aman dan rapi.</p>
                 </div>
-                <div class="bg-white rounded-[28px] p-8 flex flex-col items-center justify-center text-center shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-slate-100 hover:border-emerald-200 hover:shadow-[0_8px_30px_rgb(16,185,129,0.12)] group transition-all duration-300 transform hover:-translate-y-2">
-                    <img src="https://placehold.co/100x100/ecfdf5/059669?text=SK" alt="Surat Sakit" class="w-20 h-20 rounded-[20px] mb-6 group-hover:scale-110 transition-transform shadow-sm">
-                    <span class="font-bold text-[18px] text-slate-800 group-hover:text-emerald-700 transition-colors">Menyediakan Surat Sakit</span>
-                    <p class="text-[14px] text-slate-500 mt-3 font-medium leading-relaxed">Penerbitan surat keterangan sah dokter.</p>
+
+                <div class="min-w-[72%] sm:min-w-[45%] md:min-w-0 flex-shrink-0 snap-center md:flex-shrink md:snap-none bg-white rounded-[22px] md:rounded-[28px] p-6 md:p-8 flex flex-col items-center justify-center text-center shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-slate-100 hover:border-emerald-200 hover:shadow-[0_8px_30px_rgb(16,185,129,0.12)] group transition-all duration-300 md:transform md:hover:-translate-y-2">
+                    <div class="w-14 h-14 md:w-20 md:h-20 rounded-2xl bg-emerald-50 flex items-center justify-center mb-4 md:mb-6 group-hover:scale-110 transition-transform">
+                        <svg class="w-7 h-7 md:w-9 md:h-9 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+                    </div>
+                    <span class="font-bold text-[15px] md:text-[18px] text-slate-800 group-hover:text-emerald-700 transition-colors">Menyediakan Surat Sakit</span>
+                    <p class="text-[12px] md:text-[14px] text-slate-500 mt-2 md:mt-3 font-medium leading-relaxed">Penerbitan surat keterangan sah dokter.</p>
                 </div>
+
             </div>
         </div>
 
         <!-- More Information -->
-        <div class="px-6 py-8 max-w-[1400px] mx-auto bg-white mb-20 rounded-[40px] shadow-[0_8px_30px_rgb(0,0,0,0.02)] border border-slate-100 relative fade-in fade-in-4">
+        <div id="more-info" class="px-6 py-8 max-w-[1400px] mx-auto bg-white mb-20 rounded-[40px] shadow-[0_8px_30px_rgb(0,0,0,0.02)] border border-slate-100 relative fade-in fade-in-4">
             <div class="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-16">
                 <!-- Left Column -->
                 <div class="md:col-span-5 flex flex-col h-full bg-emerald-50 rounded-[32px] p-8 md:p-12 border border-emerald-100 relative overflow-hidden text-center md:text-left">
                     
                     <div class="bg-white text-emerald-800 py-3 px-6 rounded-full font-bold w-max mx-auto md:mx-0 shadow-sm border border-emerald-100 text-[15px] mb-10 relative z-10 flex items-center gap-2">
                         <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        Jadwal & Info
+                        Jawal Operasional Klinik
                     </div>
                     
                     <div class="bg-white rounded-[28px] p-8 shadow-[0_4px_20px_rgb(0,0,0,0.03)] flex-1 flex flex-col justify-center border border-emerald-50 relative z-10">
                         <h3 class="font-bold mb-6 text-[20px] text-emerald-900 border-b border-emerald-100 pb-4 text-left">Jam Operasional</h3>
-                        <div class="flex justify-between py-5 border-b border-emerald-50 text-[15px] font-bold text-slate-700 items-center">
-                            <span class="flex items-center gap-3"><div class="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgb(16,185,129,0.5)]"></div>Senin - Jumat</span>
-                            <span>8:00 - 17:00</span>
-                        </div>
-                        <div class="flex justify-between py-5 border-b border-emerald-50 text-[15px] font-bold text-slate-700 items-center">
-                            <span class="flex items-center gap-3"><div class="w-2.5 h-2.5 rounded-full bg-amber-500 shadow-[0_0_8px_rgb(245,158,11,0.5)]"></div>Sabtu</span>
-                            <span>10:00 - 14:00</span>
-                        </div>
+
+                        @foreach ($jadwalKlinik as $jadwal)
+                            <div class="py-5 {{ !$loop->last ? 'border-b border-emerald-50' : '' }}">
+                                <div class="flex justify-between items-center text-[15px] font-bold text-slate-700">
+                                    <span class="flex items-center gap-3">
+                                        <div class="w-2.5 h-2.5 rounded-full {{ $jadwal['data']->is_libur ? 'bg-red-500' : 'bg-emerald-500 shadow-[0_0_8px_rgb(16,185,129,0.5)]' }}"></div>
+                                        {{ $jadwal['hari'] }}
+                                    </span>
+
+                                    @if ($jadwal['data']->is_libur)
+                                        <span class="text-red-500">Tutup</span>
+                                    @else
+                                        <span>{{ $jadwal['data']->jam_buka_format }} - {{ $jadwal['data']->jam_tutup_format }}</span>
+                                    @endif
+                                </div>
+
+                                @if (!$jadwal['data']->is_libur && $jadwal['data']->jam_istirahat_display)
+                                    <div class="text-[13px] text-slate-500 mt-1 pl-5">
+                                        Istirahat: {{ $jadwal['data']->jam_istirahat_display }}
+                                    </div>
+                                @endif
+                            </div>
+                        @endforeach
+
                         <p class="text-[13px] text-emerald-700 font-bold mt-6 bg-emerald-50/80 py-3.5 px-4 rounded-xl border border-emerald-100/50 text-left">Jam operasional dapat berubah di tanggal merah</p>
                     </div>
                 </div>
@@ -134,7 +172,7 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-emerald-950 text-emerald-50/70 py-16 px-8 mt-auto rounded-t-[40px] fade-in fade-in-4">
+    <footer class="bg-emerald-950 text-emerald-50/70 py-16 px-8 mt-auto rounded-t-[20px] md:rounded-t-[40px] fade-in fade-in-4">
         <div class="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-16">
             <div class="md:col-span-5 lg:pr-10">
                 <div class="flex items-center gap-4 mb-6">
@@ -149,16 +187,15 @@
                 <ul class="space-y-4 text-[15px]">
                     <li><a href="/login" class="hover:text-emerald-400 hover:translate-x-1 inline-block transition-transform font-medium">Masuk Akun</a></li>
                     <li><a href="/register" class="hover:text-emerald-400 hover:translate-x-1 inline-block transition-transform font-medium">Pendaftaran Pasien</a></li>
-                    <li><a href="#" class="hover:text-emerald-400 hover:translate-x-1 inline-block transition-transform font-medium">Tentang Kami</a></li>
+                    <li><a href="/about" class="hover:text-emerald-400 hover:translate-x-1 inline-block transition-transform font-medium">Tentang Kami</a></li>
                 </ul>
             </div>
             
             <div class="md:col-span-2">
                 <h4 class="font-bold text-white mb-6 text-[16px]">Layanan</h4>
                 <ul class="space-y-4 text-[15px]">
-                    <li><a href="#" class="hover:text-emerald-400 hover:translate-x-1 inline-block transition-transform font-medium">Konsultasi Umum</a></li>
-                    <li><a href="#" class="hover:text-emerald-400 hover:translate-x-1 inline-block transition-transform font-medium">Ambil Obat</a></li>
-                    <li><a href="#" class="hover:text-emerald-400 hover:translate-x-1 inline-block transition-transform font-medium">Surat Dokter</a></li>
+                    <li><a href="#top" onclick="event.preventDefault(); document.getElementById('top').scrollIntoView({behavior:'smooth'});" class="hover:text-emerald-400 hover:translate-x-1 inline-block transition-transform font-medium cursor-pointer">Konsultasi Umum</a></li>
+                    <li><a href="#top" onclick="event.preventDefault(); document.getElementById('top').scrollIntoView({behavior:'smooth'});" class="hover:text-emerald-400 hover:translate-x-1 inline-block transition-transform font-medium cursor-pointer">Surat Dokter</a></li>
                 </ul>
             </div>
 

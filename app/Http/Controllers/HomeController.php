@@ -81,8 +81,6 @@ class HomeController extends Controller
                 $statusOperasional = 'Buka';
             }
 
-
-
             if ($statusOperasional !== 'Tutup') {
 
                 $jumlahAntrean = Jadwal::whereDate(
@@ -101,15 +99,41 @@ class HomeController extends Controller
                 )->count();
             }
         }
-        
-        return [
 
+        // Jadwal klinik mingguan (grouped) — dipakai di section "More Information"
+        $jadwalOperasional = JadwalSistem::harian()->get();
+        $urutanHari        = JadwalSistem::urutanHari();
+
+        $jadwalOperasional = $jadwalOperasional->sortBy(function ($item) use ($urutanHari) {
+            return $urutanHari[$item->hari] ?? 999;
+        });
+
+        $grupJadwal = [];
+        foreach ($jadwalOperasional as $jadwal) {
+            $key = implode('|', [
+                $jadwal->is_libur,
+                $jadwal->jam_buka,
+                $jadwal->jam_tutup,
+                $jadwal->jam_istirahat_mulai,
+                $jadwal->jam_istirahat_selesai,
+            ]);
+            $grupJadwal[$key]['hari'][] = $jadwal->hari;
+            $grupJadwal[$key]['data']   = $jadwal;
+        }
+
+        $jadwalKlinik = [];
+        foreach ($grupJadwal as $grup) {
+            $hari      = $grup['hari'];
+            $labelHari = count($hari) > 1 ? $hari[0] . ' - ' . end($hari) : $hari[0];
+            $jadwalKlinik[] = ['hari' => $labelHari, 'data' => $grup['data']];
+        }
+
+        return [
             'jadwalHariIni' => $jadwalHariIni,
             'statusOperasional' => $statusOperasional,
             'jumlahAntrean' => $jumlahAntrean,
             'jumlahDokterTersedia' => $jumlahDokterTersedia,
+            'jadwalKlinik' => $jadwalKlinik,
         ];
-
-        
     }
 }
