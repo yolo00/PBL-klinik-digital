@@ -44,9 +44,9 @@
     <input type="checkbox" id="pasien-drawer-toggle" class="hidden peer" />
 
     {{-- Mobile drawer + overlay --}}
-    <div class="fixed inset-0 z-40 md:hidden">
+    <div class="fixed inset-0 z-40 md:hidden pointer-events-none peer-checked:pointer-events-auto">
         {{-- overlay --}}
-        <label for="pasien-drawer-toggle" class="absolute inset-0 bg-black/45 hidden peer-checked:block"></label>
+        <div id="pasien-drawer-overlay" class="absolute inset-0 bg-black/45 hidden"></div>
 
         {{-- drawer panel --}}
         <div id="pasien-drawer-panel" class="absolute left-0 top-0 h-screen w-[280px] bg-emerald-950 text-emerald-50 transform -translate-x-full transition-transform duration-300 ease-in-out peer-checked:translate-x-0">
@@ -58,7 +58,7 @@
 
             <nav class="flex-1 py-8 px-4 space-y-1 overflow-y-auto">
                 {{-- Home --}}
-                <a href="{{ route('pasien.dashboard') }}" onclick="document.getElementById('pasien-drawer-toggle').checked=false;" class="flex items-center gap-4 px-4 py-4 rounded-xl {{ request()->routeIs('pasien.dashboard') ? 'sidebar-active' : 'sidebar-link' }}">
+                <a href="{{ route('pasien.dashboard') }}" onclick="window.__uhDrawerClose['pasien-drawer-toggle']();" class="flex items-center gap-4 px-4 py-4 rounded-xl {{ request()->routeIs('pasien.dashboard') ? 'sidebar-active' : 'sidebar-link' }}">
                     <i class="fa-solid fa-house w-5 text-center"></i>
                     Beranda
                 </a>
@@ -68,18 +68,18 @@
                     <span class="text-[11px] font-bold uppercase tracking-widest">Layanan Pasien</span>
                 </div>
 
-                <a href="{{ route('pasien.buat-janji') }}" onclick="document.getElementById('pasien-drawer-toggle').checked=false;" class="flex items-center gap-4 px-4 py-4 rounded-xl {{ request()->routeIs('pasien.buat-janji') ? 'sidebar-active' : 'sidebar-link' }}">
+                <a href="{{ route('pasien.buat-janji') }}" onclick="window.__uhDrawerClose['pasien-drawer-toggle']();" class="flex items-center gap-4 px-4 py-4 rounded-xl {{ request()->routeIs('pasien.buat-janji') ? 'sidebar-active' : 'sidebar-link' }}">
                     <i class="fa-solid fa-calendar-plus w-5 text-center"></i>
                     Buat Janji Temu
                 </a>
 
-                <a href="{{ route('pasien.riwayat') }}" onclick="document.getElementById('pasien-drawer-toggle').checked=false;" class="flex items-center gap-4 px-4 py-4 rounded-xl {{ request()->routeIs('pasien.riwayat') ? 'sidebar-active' : 'sidebar-link' }}">
+                <a href="{{ route('pasien.riwayat') }}" onclick="window.__uhDrawerClose['pasien-drawer-toggle']();" class="flex items-center gap-4 px-4 py-4 rounded-xl {{ request()->routeIs('pasien.riwayat') ? 'sidebar-active' : 'sidebar-link' }}">
                     <i class="fa-solid fa-clock-rotate-left w-5 text-center"></i>
                     <span class="flex-1">Riwayat Jadwal</span>
                     <span id="sidebar-jadwal-pasien-dot" class="hidden w-2 h-2 rounded-full bg-red-400 shrink-0"></span>
                 </a>
 
-                <a href="{{ route('pasien.rekam-medis') }}" onclick="document.getElementById('pasien-drawer-toggle').checked=false;" class="flex items-center gap-4 px-4 py-4 rounded-xl {{ request()->routeIs('pasien.rekam-medis') || request()->routeIs('pasien.rekam-medis.detail') ? 'sidebar-active' : 'sidebar-link' }}">
+                <a href="{{ route('pasien.rekam-medis') }}" onclick="window.__uhDrawerClose['pasien-drawer-toggle']();" class="flex items-center gap-4 px-4 py-4 rounded-xl {{ request()->routeIs('pasien.rekam-medis') || request()->routeIs('pasien.rekam-medis.detail') ? 'sidebar-active' : 'sidebar-link' }}">
                     <i class="fa-solid fa-file-waveform w-5 text-center"></i>
                     <span class="flex-1">Rekam Medis</span>
                     <span id="sidebar-rekam-medis-dot" class="hidden w-2 h-2 rounded-full bg-red-400 shrink-0"></span>
@@ -131,7 +131,7 @@
     <div class="flex-1 flex flex-col h-screen overflow-hidden">
 
         <!-- ===== HEADER (sticky, hijau medis) ===== -->
-        <header class="h-[72px] bg-[#4ed28e] flex items-center justify-end items-center px-10 shrink-0 sticky top-0 z-20 gap-4">
+        <header class="h-[72px] bg-[#4ed28e] flex items-center justify-end px-4 sm:px-6 md:px-10 shrink-0 sticky top-0 z-20 gap-3 md:gap-4">
             {{-- Mobile hamburger --}}
             <button
                 type="button"
@@ -147,14 +147,10 @@
             @include('components.notif-bell')
             
             <div class="relative group">
-                
                 <div class="flex items-center gap-3 cursor-pointer">
-                    <div class="text-right">
+                    <div class="text-right hidden sm:block">
                         <p class="text-[14px] font-bold text-white group-hover:text-emerald-50 transition">{{ auth()->user()->nama }}</p>
                         <p class="text-[12px] text-emerald-900/70 font-semibold uppercase tracking-wide">Pasien</p>
-                    </div>
-                    <div class="w-10 h-10 rounded-full bg-white/30 flex items-center justify-center text-white shadow-sm group-hover:ring-2 ring-white/40 transition">
-                        <i class="fa-solid fa-user text-[15px]"></i>
                     </div>
                     <svg class="w-4 h-4 text-white ml-1 transition-transform duration-200 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>

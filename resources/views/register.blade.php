@@ -21,7 +21,7 @@
         </a>
 
         <div class="flex justify-center mb-4">
-            <img src="https://placehold.co/100x100/059669/ffffff?text=U" alt="UniHealth Logo" class="w-14 h-14 rounded-[18px] shadow-sm">
+            <img src="{{ asset('images/logo.png') }}" alt="UniHealth Logo" class="w-14 h-14 rounded-[18px] shadow-sm">
         </div>
         
         <p class="text-center text-[13px] font-bold tracking-[0.2em] text-emerald-600 mb-2 uppercase">Pendaftaran Akun Pasien</p>

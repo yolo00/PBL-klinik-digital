@@ -3,7 +3,7 @@
 @section('content')
 
     <section class="mb-10">
-        <h1 class="text-3xl font-extrabold text-gray-900 mb-2">Halo, {{ auth()->user()->nama }} 👋</h1>
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-2">Halo, {{ auth()->user()->nama }} 👋</h1>
         <p class="text-gray-500 mb-6">Selamat datang kembali di sistem layanan Klinik Digital UniHealth.</p>
 
         <div class="bg-gradient-to-r from-blue-600 to-blue-500 p-8 rounded-2xl flex justify-between items-center shadow-lg shadow-blue-100 border border-blue-400/20">
@@ -17,8 +17,8 @@
         </div>
     </section>
 
-    <div class="grid grid-cols-12 gap-6">
-{{-- Ringkasan Statistik --}}
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+        {{-- Ringkasan Statistik --}}
         <div class="col-span-7 bg-white p-7 rounded-2xl shadow-sm border border-gray-100 transition-all duration-300 hover:shadow-md">
             <div class="flex justify-between items-start mb-6">
                 <div>
@@ -49,7 +49,7 @@
             </a>
         </div>
 
-{{-- Janji Berikutnya --}}
+        {{-- Janji Berikutnya --}}
         <div class="col-span-5 bg-white p-7 rounded-2xl shadow-sm border border-gray-100">
             <h2 class="text-xl font-bold text-gray-800 mb-1">Janji Berikutnya</h2>
             <p class="text-sm text-gray-400 mb-6">Jangan lewatkan jadwal Anda</p>
@@ -86,35 +86,35 @@
             @endif
         </div>
 
-{{-- Menunggu Pembayaran --}}
-<div class="col-span-7 bg-white p-7 rounded-2xl shadow-sm border border-gray-100 h-fit self-start">
-    <h2 class="text-xl font-bold text-gray-800 mb-6">Menunggu Pembayaran</h2>
-    
-    @if($pendingPayment)
-    <div class="flex items-center justify-between p-5 bg-slate-50 rounded-2xl border border-blue-50">
-        <div class="flex items-center gap-4">
-            <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center font-bold">
-                <i class="fa-solid fa-file-invoice"></i>
+        {{-- Menunggu Pembayaran --}}
+        <div class="col-span-7 bg-white p-7 rounded-2xl shadow-sm border border-gray-100 h-fit self-start">
+            <h2 class="text-xl font-bold text-gray-800 mb-6">Menunggu Pembayaran</h2>
+            
+            @if($pendingPayment)
+            <div class="flex items-center justify-between p-5 bg-slate-50 rounded-2xl border border-blue-50">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center font-bold">
+                        <i class="fa-solid fa-file-invoice"></i>
+                    </div>
+                    <div>
+                        <p class="font-bold text-gray-800">
+                            Konsultasi - {{ $pendingPayment->jadwal->dokter->user->nama ?? $pendingPayment->jadwal->dokter->nama ?? 'Dokter' }}
+                        </p>
+                        {{-- Ubah d M Y menjadi d F Y di sini --}}
+                        <p class="text-xs text-gray-400 mt-1">
+                            Jadwal: {{ \Carbon\Carbon::parse($pendingPayment->jadwal->tanggal)->locale('id')->translatedFormat('d F Y') }}
+                        </p>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <p class="font-bold text-blue-600 text-xl mb-2">Rp {{ number_format($pendingPayment->jumlah, 0, ',', '.') }}</p>
+                    <a href="{{ route('pasien.pembayaran.qris', $pendingPayment->id) }}" class="bg-emerald-500 text-white px-6 py-2 rounded-xl font-bold hover:bg-emerald-600 transition shadow-md shadow-emerald-100 active:scale-95 inline-block">Bayar</a>
+                </div>
             </div>
-            <div>
-                <p class="font-bold text-gray-800">
-                    Konsultasi - {{ $pendingPayment->jadwal->dokter->user->nama ?? $pendingPayment->jadwal->dokter->nama ?? 'Dokter' }}
-                </p>
-                {{-- Ubah d M Y menjadi d F Y di sini --}}
-                <p class="text-xs text-gray-400 mt-1">
-                    Jadwal: {{ \Carbon\Carbon::parse($pendingPayment->jadwal->tanggal)->locale('id')->translatedFormat('d F Y') }}
-                </p>
-            </div>
+            @else
+                <p class="text-gray-400 text-sm">Tidak ada tagihan tertunda.</p>
+            @endif
         </div>
-        <div class="text-right">
-            <p class="font-bold text-blue-600 text-xl mb-2">Rp {{ number_format($pendingPayment->jumlah, 0, ',', '.') }}</p>
-            <a href="{{ route('pasien.pembayaran.qris', $pendingPayment->id) }}" class="bg-emerald-500 text-white px-6 py-2 rounded-xl font-bold hover:bg-emerald-600 transition shadow-md shadow-emerald-100 active:scale-95 inline-block">Bayar</a>
-        </div>
-    </div>
-    @else
-        <p class="text-gray-400 text-sm">Tidak ada tagihan tertunda.</p>
-    @endif
-</div>
 
         {{-- Informasi Klinik --}}
         <div class="col-span-5 bg-[#3b98e8] p-7 rounded-2xl shadow-xl text-white relative overflow-hidden">
