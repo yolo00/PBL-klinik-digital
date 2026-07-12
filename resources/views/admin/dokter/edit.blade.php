@@ -73,16 +73,16 @@
         {{-- Foto Profil --}}
         <div class="space-y-2">
             <label class="text-[14px] font-medium text-slate-700">Foto Profil <span class="text-slate-400 text-[12px]">(opsional — JPG, PNG maks. 2MB)</span></label>
-            @if($dokter->foto_profil)
+            @if($dokter->user && $dokter->user->foto_profil)
                 <div class="mb-3 p-3 bg-slate-50 border border-slate-200 rounded-[12px] flex items-center gap-3">
-                    <img src="{{ asset($dokter->foto_profil) }}" alt="Foto Profil"
+                    <img src="{{ asset($dokter->user->foto_profil) }}" alt="Foto Profil"
                         class="w-12 h-12 rounded-full object-cover border border-slate-200">
-                    <span class="text-[13px] text-slate-600">Foto saat ini: <strong>{{ basename($dokter->foto_profil) }}</strong></span>
+                    <span class="text-[13px] text-slate-600">Foto saat ini: <strong>{{ basename($dokter->user->foto_profil) }}</strong></span>
                 </div>
             @endif
             <input type="file" name="foto_profil" accept=".jpg,.jpeg,.png"
                 class="w-full px-4 py-3 rounded-[12px] border {{ $errors->has('foto_profil') ? 'border-rose-400' : 'border-slate-200' }} focus:outline-none focus:ring-2 focus:ring-slate-500/20 focus:border-slate-500 text-[14px] transition-all text-slate-700 file:mr-4 file:py-1 file:px-4 file:rounded-full file:border-0 file:text-[13px] file:font-medium file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200">
-            @if($dokter->foto_profil)
+            @if($dokter->user && $dokter->user->foto_profil)
                 <p class="text-[12px] text-slate-400 mt-1">Unggah foto baru untuk menggantikan foto yang sudah ada.</p>
             @endif
         </div>

@@ -18,7 +18,7 @@
             {{-- Avatar --}}
             <div class="w-24 h-24 rounded-2xl bg-blue-50 border-2 border-blue-100 flex items-center justify-center shrink-0 overflow-hidden">
                 @if($user->foto_profil)
-                    <img src="{{ asset('storage/' . $user->foto_profil) }}" alt="Foto" class="w-full h-full object-cover">
+                    <img src="{{ asset($user->foto_profil) }}" alt="Foto" class="w-full h-full object-cover">
                 @else
                     <i class="fa-solid fa-user-doctor text-4xl text-blue-300"></i>
                 @endif

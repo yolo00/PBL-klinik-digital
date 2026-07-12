@@ -176,7 +176,7 @@ class PasienController extends Controller
                 'nama'          => $d->user->nama ?? ($d->user->name ?? 'Dokter Tanpa Nama'),
                 'base_price'    => $d->spesialisasi->base_price ?? 75000,
                 'spesialisasi'  => $d->spesialisasi->nama ?? 'Spesialis Umum',
-                'foto_profil'   => $d->user->foto_profil ? asset('storage/' . $d->user->foto_profil) : 'https://placehold.co/150x150/059669/ffffff?text=U',
+                'foto_profil'   => $d->user->foto_profil ? asset($d->user->foto_profil) : 'https://placehold.co/150x150/059669/ffffff?text=U',
                 'no_hp'         => $d->user->no_hp ?? '-',
                 'jenis_kelamin' => $d->user->jenis_kelamin == 'L' ? 'Laki-laki' : ($d->user->jenis_kelamin == 'P' ? 'Perempuan' : '-'),
                 'hari_aktif'    => $hariAktifStr,

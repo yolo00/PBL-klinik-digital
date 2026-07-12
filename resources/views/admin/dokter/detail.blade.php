@@ -21,8 +21,8 @@
 
             {{-- Foto Profil --}}
             <div class="flex-shrink-0 flex flex-col items-center gap-3">
-                @if($dokter->foto_profil)
-                    <img src="{{ asset($dokter->foto_profil) }}" alt="Foto {{ $dokter->user->nama ?? 'Dokter' }}"
+                @if($dokter->user && $dokter->user->foto_profil)
+                    <img src="{{ asset($dokter->user->foto_profil) }}" alt="Foto {{ $dokter->user->nama ?? 'Dokter' }}"
                         class="w-32 h-32 rounded-[16px] object-cover border-2 border-slate-200 shadow-sm">
                 @else
                     <div class="w-32 h-32 rounded-[16px] bg-slate-100 border-2 border-slate-200 flex flex-col items-center justify-center shadow-sm">

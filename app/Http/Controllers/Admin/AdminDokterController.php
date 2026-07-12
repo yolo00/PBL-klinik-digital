@@ -112,7 +112,7 @@ class AdminDokterController extends Controller
                 $file     = $request->file('foto_profil');
                 $filename = 'foto_' . time() . '_' . $userId . '.' . $file->getClientOriginalExtension();
                 $file->move(public_path('foto_profil'), $filename);
-                DB::table('dokter')->where('id', $dokterId)->update(['foto_profil' => 'foto_profil/' . $filename]);
+                DB::table('akun_user')->where('id', $userId)->update(['foto_profil' => 'foto_profil/' . $filename]);
             }
 
             // Upload tanda tangan jika ada
@@ -251,13 +251,13 @@ class AdminDokterController extends Controller
 
             // Upload foto profil baru jika ada
             if ($request->hasFile('foto_profil')) {
-                if ($dokter->foto_profil && File::exists(public_path($dokter->foto_profil))) {
-                    File::delete(public_path($dokter->foto_profil));
+                if ($dokter->user && $dokter->user->foto_profil && File::exists(public_path($dokter->user->foto_profil))) {
+                    File::delete(public_path($dokter->user->foto_profil));
                 }
                 $file     = $request->file('foto_profil');
                 $filename = 'foto_' . time() . '_' . $dokter->id_user . '.' . $file->getClientOriginalExtension();
                 $file->move(public_path('foto_profil'), $filename);
-                DB::table('dokter')->where('id', $dokter->id)->update(['foto_profil' => 'foto_profil/' . $filename]);
+                DB::table('akun_user')->where('id', $dokter->id_user)->update(['foto_profil' => 'foto_profil/' . $filename]);
             }
 
             // Upload tanda tangan baru jika ada
@@ -348,10 +348,13 @@ class AdminDokterController extends Controller
             $dokter->jadwalDokters()->delete();
 
             // Hapus file-file dari disk
-            foreach (['dokumen_sip', 'foto_profil', 'tanda_tangan'] as $field) {
+            foreach (['dokumen_sip', 'tanda_tangan'] as $field) {
                 if ($dokter->$field && File::exists(public_path($dokter->$field))) {
                     File::delete(public_path($dokter->$field));
                 }
+            }
+            if ($dokter->user && $dokter->user->foto_profil && File::exists(public_path($dokter->user->foto_profil))) {
+                File::delete(public_path($dokter->user->foto_profil));
             }
 
             // Hapus dokter
