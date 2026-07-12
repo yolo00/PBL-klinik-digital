@@ -13,7 +13,7 @@
     </div>
     
     <!-- Pagination Footer -->
-    @if($pagination)
+    @if($pagination && method_exists($pagination, 'firstItem'))
         <div class="px-4 py-4 md:px-6 md:py-5 border-t border-slate-100 bg-slate-50 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <span class="text-sm text-slate-600">
                 Menampilkan 

@@ -51,10 +51,10 @@
     <input type="checkbox" id="dokter-drawer-toggle" class="hidden peer" />
 
     {{-- Mobile drawer + overlay --}}
-    <div class="fixed inset-0 z-40 md:hidden">
-        <label for="dokter-drawer-toggle" class="absolute inset-0 bg-black/45 hidden peer-checked:block"></label>
+    <div class="fixed inset-0 z-40 md:hidden pointer-events-none">
+        <div class="absolute inset-0 bg-black/45 hidden pointer-events-auto cursor-pointer"></div>
 
-        <div id="dokter-drawer-panel" class="absolute left-0 top-0 h-screen w-[280px] bg-[#0b2a57] text-slate-50 transform -translate-x-full transition-transform duration-300 ease-in-out peer-checked:translate-x-0">
+        <div id="dokter-drawer-panel" class="absolute left-0 top-0 h-screen w-[280px] bg-[#0b2a57] text-slate-50 transform -translate-x-full transition-transform duration-300 ease-in-out pointer-events-auto">
             {{-- Drawer logo --}}
             <a href="{{ route('dokter.dashboard') }}" class="flex items-center gap-3 px-8 py-8 border-b border-white/10">
                 <img src="{{ asset('images/logo.png') }}" alt="Logo UniHealth" class="w-11 h-11 rounded-xl shadow-sm border border-blue-100">
