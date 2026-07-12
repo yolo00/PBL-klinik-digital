@@ -1,0 +1,16 @@
+!!!NOTE!!!
+
+Database
+
+klinikdigital1
+Akun tiap role di database:
+Admin : admin@gmail.com			Password : 123123
+Pasien : alex@gmail.com			Password : 123123
+Dokter : tirtapratama@klinik.com	Password : 123123
+
+
+Kalau local, jalankan 
+
+php artisan schedule:work
+
+Untuk otomatis mengubah jadwal yang terlewatkan.

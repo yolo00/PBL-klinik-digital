@@ -22,7 +22,6 @@ yarn-error.log
 /.idea
 /.vscode
 *.zip
-*.sql
 /old_tes
 /wireframe
 /aaaaa
